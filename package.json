@@ -1,0 +1,21 @@
+{
+  "name": "mern-movie-night",
+  "version": "1.0.0",
+  "description": "Application to add, update and view films for movie night",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "server": "nodemon server.js"
+  },
+  "author": "Chad Towle",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "concurrently": "^4.1.0",
+    "express": "^4.16.4",
+    "mongoose": "^5.4.3"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.9"
+  }
+}
