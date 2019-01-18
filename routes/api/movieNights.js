@@ -20,7 +20,9 @@ router.post('/', (req, res) => {
     const newMovieNight = new MovieNight({
         host: req.body.host,
         location: req.body.location,
-        movieViewed: req.body.movieViewed
+        movieChoices: req.body.movieChoices,
+        movieViewed: req.body.movieViewed,
+        movieVotes: req.body.movieVotes
     });
 
     newMovieNight.save().then(movieNight => res.json(movieNight));
@@ -34,4 +36,6 @@ router.delete('/:id', (req, res) => {
     .then(movieNight => movieNight.remove().then(() => res.json({success: true})))
     .catch(err => res.status(404).json({success: false}));
 });
+
+
 module.exports = router;
