@@ -1,10 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-//const RottenTomatoes = require('./RottenTomatoes');
-//const ImdbSchema = require('./Imdb');
-//const MovieRatingSchema = require('./MovieRating');
-
 // Create Schema
 const MovieSchema = new Schema({
     title: {
@@ -19,9 +15,19 @@ const MovieSchema = new Schema({
     actors: [String],
     genres: [String],
     runTime: { type: Number },
-    rottenTomatoes: { type: mongoose.Schema.Types.ObjectId, ref: 'RottenTomatoes' },
-    imdb: { type: mongoose.Schema.Types.ObjectId, ref: 'Imdb' },
-    movieRating: { type: mongoose.Schema.Types.ObjectId, ref: 'MovieRating' }
+    rottenTomatoes: {
+        urlKey: { type: String },
+        tomatoMeter: { type: Number},
+        audienceScore: { type: Number}
+    },
+    imdb: { 
+        imdbId: { type: Number },
+        imdbRating: { type: Number }
+     },
+    movieRating: { 
+        person: { type: String },
+        rating: { type: Number }
+     }
 });
 
 module.exports = Movie = mongoose.model('movie', MovieSchema);
