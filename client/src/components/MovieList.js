@@ -2,19 +2,17 @@ import React, { Component } from 'react';
 import { Container, ListGroup, ListGroupItem, Button } from 'reactstrap';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import uuid from 'uuid';
+import { connect } from 'react-redux';
+import { getMovies } from '../actions/movieActions';
+import PropTypes from 'prop-types';
 
 class MovieList extends Component {
-    state = {
-        movies: [
-            { id: uuid(), title: 'Casablanca'},
-            { id: uuid(), title: 'Citizen Kane'},
-            { id: uuid(), title: 'The Godfather'},
-            { id: uuid(), title: 'The Big Lebowski'},
-        ]
+    componentDidMount() {
+        this.props.getMovies();
     }
 
     render() {
-        const { movies } = this.state;
+        const { movies } = this.props.movie;
         return(
             <Container>
                 <Button
@@ -57,4 +55,13 @@ class MovieList extends Component {
     }
 }
 
-export default MovieList;
+MovieList.propTypes = {
+    getMovies: PropTypes.func.isRequired, 
+    movie: PropTypes.object.isRequired
+}
+
+const mapStateToProps = (state) => ({
+    movie: state.movie
+})
+
+export default connect(mapStateToProps, { getMovies })(MovieList);
