@@ -26,13 +26,13 @@ class AppNavbar extends Component {
             <div>
                 <Navbar color="dark" dark expand="sm" className="mb-5">
                     <Container>
-                        <NavbarBrand href="/">ShoppingList</NavbarBrand>
+                        <NavbarBrand href="/">Movie Night</NavbarBrand>
                         <NavbarToggler onClick={this.toggle} />
                         <Collapse isOpen={this.state.isOpen} navbar>
                             <Nav className="ml-auto" navbar>
                                 <NavItem>
-                                    <NavLink href="https://github.com/towlebooth/">
-                                        Github
+                                    <NavLink href="https://www.facebook.com/groups/203651996320293/">
+                                        FB Group
                                     </NavLink>
                                 </NavItem>
                             </Nav>
