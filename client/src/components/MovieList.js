@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { Container, ListGroup, ListGroupItem, Button } from 'reactstrap';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import uuid from 'uuid';
 import { connect } from 'react-redux';
-import { getMovies } from '../actions/movieActions';
+import { getMovies, deleteMovie } from '../actions/movieActions';
 import PropTypes from 'prop-types';
 
 class MovieList extends Component {
@@ -11,23 +10,15 @@ class MovieList extends Component {
         this.props.getMovies();
     }
 
+    onDeleteClick = (id) => {
+        this.props.deleteMovie(id);
+    }
+
     render() {
         const { movies } = this.props.movie;
         return(
             <Container>
-                <Button
-                    color="dark"
-                    style={{marginBottom: '2rem'}}
-                    onClick={() => {
-                        const title = prompt('Enter Movie');
-                        if(title) {
-                            this.setState(state => ({
-                                movies: [...state.movies, { id: uuid(), title }]
-                            }));
-                        }
-                    }}
-                >Add Item</Button>
-
+                
                 <ListGroup>
                     <TransitionGroup className="movie-list">
                         {movies.map(({ id, title }) => (
@@ -37,11 +28,7 @@ class MovieList extends Component {
                                         className="remove-btn"
                                         color="danger"
                                         size="sm"
-                                        onClick={() => {                                      
-                                            this.setState(state => ({
-                                                movies: state.movies.filter(movie => movie.id !== id)
-                                            }));
-                                        }}
+                                        onClick={this.onDeleteClick.bind(this, id)}
                                         >&times;
                                     </Button>
                                     {title}
@@ -64,4 +51,4 @@ const mapStateToProps = (state) => ({
     movie: state.movie
 })
 
-export default connect(mapStateToProps, { getMovies })(MovieList);
+export default connect(mapStateToProps, { getMovies, deleteMovie })(MovieList);

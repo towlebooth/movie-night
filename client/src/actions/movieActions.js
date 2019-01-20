@@ -4,4 +4,18 @@ export const getMovies = () => {
     return {
         type: GET_MOVIES
     }
+};
+
+export const deleteMovie = (id) => {
+    return {
+        type: DELETE_MOVIE,
+        payload: id
+    }
 }
+
+export const addMovie = (movie) => {
+    return {
+        type: ADD_MOVIE,
+        payload: movie
+    }
+};

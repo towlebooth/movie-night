@@ -15,6 +15,16 @@ export default function(state = initialState, action) {
         case GET_MOVIES:
             return {
                 ...state
+            };
+        case DELETE_MOVIE:
+            return {
+                ...state,
+                movies: state.movies.filter(movie => movie.id !== action.payload)
+            }
+        case ADD_MOVIE:
+            return {
+                ...state,
+                movies: [action.payload, ...state.movies]
             }
         default:
             return state;
