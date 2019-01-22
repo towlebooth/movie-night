@@ -9,7 +9,7 @@ const Movie = require('../../models/Movie');
 // @access Public
 router.get('/', (req, res) => {
     Movie.find()
-        .sort({ date: -1 })  //descending
+        .sort({ releaseDate: -1 })  //descending
         .then(movies => res.json(movies))
 });
 

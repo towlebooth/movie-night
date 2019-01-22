@@ -21,17 +21,18 @@ class MovieList extends Component {
                 
                 <ListGroup>
                     <TransitionGroup className="movie-list">
-                        {movies.map(({ id, title }) => (
-                            <CSSTransition key={id} timeout={500} classNames="fade">
+                        {movies.map(({ _id, title, releaseDate }) => (
+                            <CSSTransition key={_id} timeout={500} classNames="fade">
                                 <ListGroupItem>
                                     <Button
                                         className="remove-btn"
                                         color="danger"
                                         size="sm"
-                                        onClick={this.onDeleteClick.bind(this, id)}
+                                        onClick={this.onDeleteClick.bind(this, _id)}
                                         >&times;
                                     </Button>
                                     {title}
+                                    {releaseDate}
                                 </ListGroupItem>
                             </CSSTransition>
                         ))}

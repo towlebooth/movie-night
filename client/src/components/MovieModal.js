@@ -11,7 +11,6 @@ import {
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import { addMovie } from '../actions/movieActions';
-import uuid from 'uuid';
 
 class MovieModal extends Component {
     state = {
@@ -33,8 +32,8 @@ class MovieModal extends Component {
         e.preventDefault();
 
         const newMovie = {
-            id: uuid(),
-            title: this.state.name
+            title: this.state.name,
+            releaseDate: this.state.releaseDate
         }
 
         // add movie via addMovie action
@@ -44,7 +43,10 @@ class MovieModal extends Component {
         this.toggle();
     }
 
+    
+
     render() {
+
         return(
             <div>
                 <Button
@@ -69,6 +71,7 @@ class MovieModal extends Component {
                                     placeholder="Add movie"
                                     onChange={this.onChange}
                                 ></Input>
+                                
                                 <Button
                                     color="dark"
                                     style={{marginTop: '2rem'}}
