@@ -4,10 +4,12 @@ const bodyParser = require('body-parser');
 
 const movieNights = require('./routes/api/movieNights');
 const movies = require('./routes/api/movies');
+const users = require('./routes/api/users');
 
 const app = express();
 
 // Bodyparser Middlewear
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // DB config
@@ -22,6 +24,7 @@ mongoose
 // Use Routes
 app.use('/api/movieNights', movieNights);
 app.use('/api/movies', movies);
+app.use('/api/users', users);
 
 const port = process.env.PORT || 5000;
 
