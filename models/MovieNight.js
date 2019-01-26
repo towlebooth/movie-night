@@ -8,11 +8,11 @@ const MovieNightSchema = new Schema({
     },
     host: { type: String },
     location: { type: String },
-    movieChoices: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }],
-    movieViewed: { type: mongoose.Schema.Types.ObjectId, ref: 'Movie' },
+    movieChoices: [{ type: Schema.Types.ObjectId, ref: 'movie' }],
+    movieViewed: { type: Schema.Types.ObjectId, ref: 'movie' },
     movieVotes: [{
-        voter: { type: String },
-        movie: { type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }
+        voter: { type: Schema.Types.ObjectId, ref: 'users' },
+        movie: { type: Schema.Types.ObjectId, ref: 'movie' }
     }]
 });
 

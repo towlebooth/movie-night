@@ -24,10 +24,11 @@ const MovieSchema = new Schema({
         imdbId: { type: Number },
         imdbRating: { type: Number }
      },
-    movieRating: { 
-        person: { type: String },
-        rating: { type: Number }
-     }
+    movieRating: [{ 
+        person: { type: Schema.Types.ObjectId, ref: 'users' },
+        rating: { type: Number },
+        comment: { type: String }
+     }]
 });
 
 module.exports = Movie = mongoose.model('movie', MovieSchema);
