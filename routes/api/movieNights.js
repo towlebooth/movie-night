@@ -1,13 +1,14 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
 
 // MovieNight model
 const MovieNight = require('../../models/MovieNight');
 
 // @route GET api/movieNight
 // @desc Get all movieNights
-// @access Public
-router.get('/', (req, res) => {
+// @access Private
+router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
     MovieNight.find()
         .sort({ date: -1 })  //descending
         .then(movieNights => res.json(movieNights))
