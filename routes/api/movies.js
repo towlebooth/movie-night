@@ -17,6 +17,63 @@ router.get('/', (req, res) => {
         .then(movies => res.json(movies))
 });
 
+// @route   GET api/movies/all
+// @desc    Get all movies
+// @access  Public
+router.get('/all', (req, res) => {
+    const errors = {};
+  
+    Movie.find()
+      .populate('user', ['name', 'avatar'])
+      .then(movies => {
+        if (!movies) {
+          errors.nomovie = 'There are no movies';
+          return res.status(404).json(errors);
+        }
+  
+        res.json(movies);
+      })
+      .catch(err => res.status(404).json({ movies: 'There are no movies' }));
+  });
+
+// @route   GET api/movie/title/:title
+// @desc    Get movie by title
+// @access  Public
+router.get('/title/:title', (req, res) => {
+    const errors = {};
+  
+    Movie.findOne({ title: req.params.title })
+      //.populate('user', ['name', 'avatar'])
+      .then(movie => {
+        if (!movie) {
+          errors.nomovie = 'There is no movie with this title: ' + req.params.title;
+          res.status(404).json(errors);
+        }
+  
+        res.json(movie);
+      })
+      .catch(err => res.status(404).json(err));
+  });
+
+// @route   GET api/movie/:movie_id
+// @desc    Get movie by id
+// @access  Public
+router.get('/:movie_id', (req, res) => {
+    const errors = {};
+  
+    Movie.findOne({ _id: req.params.movie_id })
+      //.populate('user', ['name', 'avatar'])
+      .then(movie => {
+        if (!movie) {
+          errors.nomovie = 'There is no movie with this id: ' + req.params.movie_id;
+          res.status(404).json(errors);
+        }
+  
+        res.json(movie);
+      })
+      .catch(err => res.status(404).json(err));
+  });
+
 // @route POST api/movies
 // @desc Create a movie
 // @access Public
@@ -37,7 +94,6 @@ router.post(
         if(req.body.releaseDate) movieFields.releaseDate = req.body.releaseDate;
         if(req.body.runTime) movieFields.runTime = req.body.runTime;
 
-        console.log('writers: ' + req.body.writers);
         // writers - split into array
         if(typeof req.body.writers !== 'undefined') {
             movieFields.writers = req.body.writers.split(',');
@@ -75,7 +131,6 @@ router.post(
         Movie.findOne({ title: req.body.title })
             .then(movie => {
                 if(movie) {
-                    console.log('Movie exists: ' + movie)
                     // update
                     Movie.findOneAndUpdate(
                         { title: req.body.title },
