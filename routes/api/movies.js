@@ -165,13 +165,32 @@ router.post(
     }
 );
 
-// @route DELETE api/movieNight
-// @desc Delete a movieNight
+// @route DELETE api/movie
+// @desc Delete a movie
 // @access Public
-router.delete('/:id', (req, res) => {
-    Movie.findById(req.params.id)
-    .then(movie => movie.remove().then(() => res.json({success: true})))
-    .catch(err => res.status(404).json({success: false}));
-});
+router.delete('/:id', passport.authenticate('jwt', { session: false }), 
+    (req, res) => {
+        Movie.findById(req.params.id)
+        .then(movie => movie.remove().then(() => res.json({success: true})))
+        .catch(err => res.status(404).json({success: false}));
+    }
+);
+
+/*
+// @route   DELETE api/profile
+// @desc    Delete user and profile
+// @access  Private
+router.delete(
+    '/',
+    passport.authenticate('jwt', { session: false }),
+    (req, res) => {
+      Profile.findOneAndRemove({ user: req.user.id }).then(() => {
+        User.findOneAndRemove({ _id: req.user.id }).then(() =>
+          res.json({ success: true })
+        );
+      });
+    }
+  );
+  */
 
 module.exports = router;
