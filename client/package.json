@@ -5,6 +5,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "bootstrap": "^4.2.1",
+    "classnames": "^2.2.6",
     "globalize": "^1.4.0",
     "moment": "^2.24.0",
     "react": "^16.7.0",
