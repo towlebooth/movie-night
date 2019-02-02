@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios'
 import {
     Button,
     Modal,
@@ -43,7 +44,10 @@ class MovieModal extends Component {
         this.toggle();
     }
 
-    
+    //handleClick () {
+    //    axios.get('http://www.omdbapi.com/?i=tt3896198&apikey=3ff32cc3')
+     //     .then(response => console.log(response))
+    //}
 
     render() {
 
