@@ -11,7 +11,7 @@ import {
     Input
 } from 'reactstrap';
 import { connect } from 'react-redux';
-import { addMovie } from '../actions/movieActions';
+import { createMovie } from '../actions/movieActions';
 
 class MovieModal extends Component {
     state = {
@@ -37,8 +37,8 @@ class MovieModal extends Component {
             releaseDate: this.state.releaseDate
         }
 
-        // add movie via addMovie action
-        this.props.addMovie(newMovie);
+        // add movie via createMovie action
+        this.props.createMovie(newMovie);
 
         // close modal
         this.toggle();
@@ -95,4 +95,4 @@ const mapStateToProps = (state) => ({
     movie: state.movie
 });
 
-export default connect(mapStateToProps, { addMovie })(MovieModal);
+export default connect(mapStateToProps, { createMovie })(MovieModal);

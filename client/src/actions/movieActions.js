@@ -1,5 +1,11 @@
 import axios from 'axios';
-import { GET_MOVIES, ADD_MOVIE, DELETE_MOVIE, MOVIES_LOADING } from './types';
+import { 
+    GET_MOVIES, 
+    GET_MOVIE, 
+    DELETE_MOVIE, 
+    MOVIES_LOADING,
+    GET_ERRORS
+} from './types';
 
 export const getMovies = () => dispatch => {
     dispatch(setMoviesLoading());
@@ -9,8 +15,34 @@ export const getMovies = () => dispatch => {
             dispatch({
                 type: GET_MOVIES,
                 payload: res.data
-            }))
+            })
+        )
+        .catch(err =>
+            dispatch({
+              type: GET_MOVIES,
+              payload: null
+            })
+          );
 };
+
+// Get movie by title
+export const getMovieByTitle = title => dispatch => {
+    dispatch(setMoviesLoading());
+    axios
+      .get(`/api/movie/title/${title}`)
+      .then(res =>
+        dispatch({
+          type: GET_MOVIE,
+          payload: res.data
+        })
+      )
+      .catch(err =>
+        dispatch({
+          type: GET_MOVIE,
+          payload: null
+        })
+      );
+  };
 
 export const deleteMovie = (id) => dispatch => {
     axios.delete(`/api/movies/${id}`).then(res =>
@@ -20,15 +52,16 @@ export const deleteMovie = (id) => dispatch => {
         }))
 }
 
-export const addMovie = (movie) => dispatch => {
+export const createMovie = (movieData, history) => dispatch => {
     axios
-        .post('/api/movies', movie)
-        .then(res => 
+        .post('/api/movies', movieData)
+        .then(res => history.push('/dashboard'))
+        .catch(err =>
             dispatch({
-                type: ADD_MOVIE,
-                payload: res.data
+              type: GET_ERRORS,
+              payload: err.response.data
             })
-        )
+          );
 };
 
 export const setMoviesLoading = () => {

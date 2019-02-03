@@ -113,9 +113,9 @@ router.post(
 
         // rottenTomatoes
         movieFields.rottenTomatoes = {};        
-        if(req.body.urlKey) movieFields.rottenTomatoes.urlKey = req.body.urlKey;
-        if(req.body.tomatoMeter) movieFields.rottenTomatoes.tomatoMeter = req.body.tomatoMeter;
-        if(req.body.audienceScore) movieFields.rottenTomatoes.audienceScore = req.body.audienceScore;
+        if(req.body.rottenTomatoesUrlKey) movieFields.rottenTomatoes.urlKey = req.body.rottenTomatoesUrlKey;
+        if(req.body.rottenTomatoesTomatoMeter) movieFields.rottenTomatoes.tomatoMeter = req.body.rottenTomatoesTomatoMeter;
+        if(req.body.rottenTomatoesAudienceScore) movieFields.rottenTomatoes.audienceScore = req.body.rottenTomatoesAudienceScore;
 
         // imdb
         movieFields.imdb = {};        
@@ -123,6 +123,7 @@ router.post(
         if(req.body.imdbRating) movieFields.imdb.imdbRating = req.body.imdbRating;
 
         // movieRating
+        // TODO: THIS SEEMS INCORRECT - ARRAY OF THESE?  SEPERATE JOIN THING?
         movieFields.movieRating = {};        
         if(req.body.user) movieFields.movieRating.user = req.user.id;
         if(req.body.rating) movieFields.movieRating.rating = req.body.rating;

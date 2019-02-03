@@ -12,6 +12,8 @@ import Landing from './components/layout/Landing';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import Dashboard from './components/dashboard/Dashboard';
+import CreateProfile from './components/create-profile/CreateProfile';
+import CreateMovie from './components/create-movie/CreateMovie';
 
 import MovieList from './components/MovieList';
 import MovieModal from './components/MovieModal';
@@ -45,29 +47,36 @@ if (localStorage.jwtToken) {
 }
 
 class App extends Component {
-  render() {
-    return (
-      
-      <Provider store={store}>
-        <Router>
-          <div className="App">
-              <Navbar />
-              <Route exact path="/" component={Landing} />
-              <div className="container">
-                <Route exact path="/register" component={ Register } />
-                <Route exact path="/login" component={ Login } />
-                <PrivateRoute exact path="/dashboard" component={ Dashboard } />
-              </div>
-              <Container>
-                <MovieModal />
-                <MovieList />
-              </Container>
-              <Footer />
-          </div>
-        </Router>
-      </Provider>
-    );
-  }
+    render() {
+        return (          
+            <Provider store={store}>
+                <Router>
+                    <div className="App">
+                        <Navbar />
+                        <Route exact path="/" component={Landing} />
+                        <div className="container">
+                            <Route exact path="/register" component={ Register } />
+                            <Route exact path="/login" component={ Login } />
+                            <Switch>
+                                <PrivateRoute exact path="/dashboard" component={ Dashboard } />
+                            </Switch>
+                            <Switch>
+                                <PrivateRoute exact path="/create-profile" component={ CreateProfile } />
+                            </Switch>
+                            <Switch>
+                                <PrivateRoute exact path="/create-movie" component={ CreateMovie } />
+                            </Switch>
+                        </div>
+                        <Container>
+                            <MovieModal />
+                            <MovieList />
+                        </Container>
+                        <Footer />
+                    </div>
+                </Router>
+            </Provider>
+        );
+    }
 }
 
 export default App;
