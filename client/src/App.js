@@ -14,10 +14,11 @@ import Login from './components/auth/Login';
 import Dashboard from './components/dashboard/Dashboard';
 import CreateProfile from './components/create-profile/CreateProfile';
 import CreateMovie from './components/create-movie/CreateMovie';
+import Movie from './components/movie/Movie';
 
-import MovieList from './components/MovieList';
-import MovieModal from './components/MovieModal';
-import { Container } from 'reactstrap';
+//import MovieList from './components/movie/MovieList';
+//import MovieModal from './components/MovieModal';
+//import { Container } from 'reactstrap';
 
 import { Provider } from 'react-redux';
 import store from './store';
@@ -66,11 +67,8 @@ class App extends Component {
                             <Switch>
                                 <PrivateRoute exact path="/create-movie" component={ CreateMovie } />
                             </Switch>
-                        </div>
-                        <Container>
-                            <MovieModal />
-                            <MovieList />
-                        </Container>
+                            <Route path="/movie/:title" component={Movie} />
+                        </div>                        
                         <Footer />
                     </div>
                 </Router>
@@ -80,3 +78,8 @@ class App extends Component {
 }
 
 export default App;
+
+{/* <Container>
+    <MovieModal />
+    <MovieList />
+</Container> */}

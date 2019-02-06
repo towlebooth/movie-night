@@ -41,9 +41,7 @@ router.get('/all', (req, res) => {
 // @access  Public
 router.get('/title/:title', (req, res) => {
     const errors = {};
-  
     Movie.findOne({ title: req.params.title })
-      //.populate('user', ['name', 'avatar'])
       .then(movie => {
         if (!movie) {
           errors.nomovie = 'There is no movie with this title: ' + req.params.title;
@@ -93,6 +91,7 @@ router.post(
         if(req.body.title) movieFields.title = req.body.title;
         if(req.body.releaseDate) movieFields.releaseDate = req.body.releaseDate;
         if(req.body.runTime) movieFields.runTime = req.body.runTime;
+        if(req.body.posterUrl) movieFields.posterUrl = req.body.posterUrl;
 
         // writers - split into array
         if(typeof req.body.writers !== 'undefined') {

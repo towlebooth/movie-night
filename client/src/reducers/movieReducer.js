@@ -1,7 +1,8 @@
-import { GET_MOVIES, ADD_MOVIE, DELETE_MOVIE, MOVIES_LOADING } from '../actions/types';
+import { GET_MOVIES, GET_MOVIE, ADD_MOVIE, DELETE_MOVIE, MOVIES_LOADING } from '../actions/types';
 
 const initialState = {
     movies: [],
+    movie: {},
     loading: false
 }
 
@@ -11,6 +12,12 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 movies: action.payload,
+                loading: false
+            }
+        case GET_MOVIE:
+            return {
+                ...state,
+                movie: action.payload,
                 loading: false
             }
         case DELETE_MOVIE:

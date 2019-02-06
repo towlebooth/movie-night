@@ -29,7 +29,7 @@ export const getMovies = () => dispatch => {
 export const getMovieByTitle = title => dispatch => {
     dispatch(setMoviesLoading());
     axios
-      .get(`/api/movie/title/${title}`)
+      .get(`/api/movies/title/${title}`)
       .then(res =>
         dispatch({
           type: GET_MOVIE,
@@ -38,11 +38,13 @@ export const getMovieByTitle = title => dispatch => {
       )
       .catch(err =>
         dispatch({
-          type: GET_MOVIE,
-          payload: null
-        })
-      );
+            type: GET_ERRORS,
+            payload: err.response.data
+          })
+        );
   };
+
+  
 
 export const deleteMovie = (id) => dispatch => {
     axios.delete(`/api/movies/${id}`).then(res =>

@@ -15,13 +15,14 @@ const MovieSchema = new Schema({
     actors: [String],
     genres: [String],
     runTime: { type: Number },
+    posterUrl: { type: String },
     rottenTomatoes: {
         urlKey: { type: String },
         tomatoMeter: { type: Number},
         audienceScore: { type: Number}
     },
     imdb: { 
-        imdbId: { type: Number },
+        imdbId: { type: String },
         imdbRating: { type: Number }
      },
     movieRating: [{ 

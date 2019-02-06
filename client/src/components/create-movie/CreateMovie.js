@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import TextFieldGroup from '../common/TextFieldGroup';
-import TextAreaFieldGroup from '../common/TextAreaFieldGroup';
 import { createMovie } from '../../actions/movieActions';
 
 class CreateMovie extends Component {
@@ -17,6 +16,7 @@ class CreateMovie extends Component {
       actors: '',
       genres: '',
       runTime: '',
+      posterUrl: '',
       rottenTomatoesUrlKey: '',
       rottenTomatoesTomatoMeter: '',
       rottenTomatoesAudienceScore: '',
@@ -46,6 +46,7 @@ class CreateMovie extends Component {
         actors: this.state.actors,
         genres: this.state.genres,
         runTime: this.state.runTime,
+        posterUrl: this.state.posterUrl,
         rottenTomatoesUrlKey: this.state.rottenTomatoesUrlKey,
         rottenTomatoesTomatoMeter: this.state.rottenTomatoesTomatoMeter,
         rottenTomatoesAudienceScore: this.state.rottenTomatoesAudienceScore,
@@ -62,19 +63,6 @@ class CreateMovie extends Component {
 
   render() {
     const { errors } = this.state;
-
-    // Select options for status
-    const options = [
-      { label: '* Select Professional Status', value: 0 },
-      { label: 'Developer', value: 'Developer' },
-      { label: 'Junior Developer', value: 'Junior Developer' },
-      { label: 'Senior Developer', value: 'Senior Developer' },
-      { label: 'Manager', value: 'Manager' },
-      { label: 'Student or Learning', value: 'Student or Learning' },
-      { label: 'Instructor or Teacher', value: 'Instructor or Teacher' },
-      { label: 'Intern', value: 'Intern' },
-      { label: 'Other', value: 'Other' }
-    ];
 
     return (
       <div className="create-movie">
@@ -93,7 +81,6 @@ class CreateMovie extends Component {
                   value={this.state.title}
                   onChange={this.onChange}
                   error={errors.title}
-                  //info="A unique handle for your profile URL. Your full name, company name, nickname"
                 />
                 <TextFieldGroup
                   name="releaseDate"
@@ -145,6 +132,14 @@ class CreateMovie extends Component {
                   info="Runtime of movie in minutes"
                 />
                 <TextFieldGroup
+                  placeholder="Poster URL"
+                  name="posterUrl"
+                  value={this.state.posterUrl}
+                  onChange={this.onChange}
+                  error={errors.posterUrl}
+                  info="URL of movie poster (eg. https://m.media-amazon.com/images/M/MV5BMTg2MzI1MTg3OF5BMl5BanBnXkFtZTgwNTU3NDA2MTI@._V1_SX300.jpg"
+                />
+                <TextFieldGroup
                   placeholder="Rotten Tomatoes Url Key"
                   name="rottenTomatoesUrlKey"
                   value={this.state.rottenTomatoesUrlKey}
@@ -155,9 +150,9 @@ class CreateMovie extends Component {
                 <TextFieldGroup
                   placeholder="TomatoMeter"
                   name="rottenTomatoesTomatoMeter"
-                  value={this.state.TomatoMeter}
+                  value={this.state.rottenTomatoesTomatoMeter}
                   onChange={this.onChange}
-                  error={errors.TomatoMeter}
+                  error={errors.rottenTomatoesTomatoMeter}
                   info="TomatoMeter from Rotten Tomatoes (1-100)"
                 />
                 <TextFieldGroup

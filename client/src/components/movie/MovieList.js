@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { Container, ListGroup, ListGroupItem, Button } from 'reactstrap';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { connect } from 'react-redux';
-import { getMovies, deleteMovie } from '../actions/movieActions';
+import { Link } from 'react-router-dom';
+import moment from 'moment';
+import { getMovies, deleteMovie } from '../../actions/movieActions';
 import PropTypes from 'prop-types';
 
 class MovieList extends Component {
@@ -31,8 +33,7 @@ class MovieList extends Component {
                                         onClick={this.onDeleteClick.bind(this, _id)}
                                         >&times;
                                     </Button>
-                                    {title}
-                                    {releaseDate}
+                                    &nbsp;<Link to={`/movie/${title}`}>{title}</Link> ({moment(releaseDate).format('YYYY')})
                                 </ListGroupItem>
                             </CSSTransition>
                         ))}
