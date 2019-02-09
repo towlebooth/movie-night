@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getMovieByTitle, getMovies } from '../../actions/movieActions';
 import moment from 'moment';
-import Spinner from '../common/Spinner';
+//import Spinner from '../common/Spinner';
 
 class Movie extends Component {
   componentDidMount() {
@@ -26,7 +26,7 @@ class Movie extends Component {
         <div>
             <h3>{movie.title}</h3>
             <h5>{formattedYear}</h5>
-            <img 
+            {/* <img 
                 src={movie.posterUrl} 
                 alt={movie.title}
                 style={{width: '100px', marginRight: '5px'}}
@@ -37,7 +37,7 @@ class Movie extends Component {
             <h5>Starring {movie.actors}</h5>
             <h5>Genres {movie.genres}</h5>
             <h5>Runtime {movie.runTime}</h5>
-            {/* <h5><Link to={`https://www.imdb.com/title/${movie.imdb.imdbId}`}>IMDB Rating {movie.imdb.imdbRating}</Link></h5> */}
+            <h5><Link to={`https://www.imdb.com/title/${movie.imdb.imdbId}`}>IMDB Rating {movie.imdb.imdbRating}</Link></h5> */}
         </div>
     )
 
