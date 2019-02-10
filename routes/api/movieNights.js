@@ -55,7 +55,7 @@ router.post(
     '/', 
     passport.authenticate('jwt', { session: false }), 
     (req, res) => {
-        const { errors, isValid } = validateMovieInput(req.body);
+        const { errors, isValid } = validateMovieNightInput(req.body);
 
         // check validation
         if(!isValid) {
@@ -68,29 +68,29 @@ router.post(
         if(req.body.location) movieNightFields.location = req.body.location;
         if(req.body.movieViewed) movieNightFields.movieViewed = req.body.movieViewed;
         
-        // movieChoicesRoundOne - split into array
-        if(typeof req.body.movieChoicesRoundOne !== 'undefined') {
-            movieNightFields.movieChoicesRoundOne = req.body.movieChoicesRoundOne.split(',');
-        }
-        // movieChoicesRoundTwo - split into array
-        if(typeof req.body.movieChoicesRoundTwo !== 'undefined') {
-            movieNightFields.movieChoicesRoundTwo = req.body.movieChoicesRoundTwo.split(',');
-        }
-        // movieChoicesRoundThree - split into array
-        if(typeof req.body.movieChoicesRoundThree !== 'undefined') {
-            movieNightFields.movieChoicesRoundThree = req.body.movieChoicesRoundThree.split(',');
-        }
+        // // movieChoicesRoundOne - split into array
+        // if(typeof req.body.movieChoicesRoundOne !== 'undefined') {
+        //     movieNightFields.movieChoicesRoundOne = req.body.movieChoicesRoundOne.split(',');
+        // }
+        // // movieChoicesRoundTwo - split into array
+        // if(typeof req.body.movieChoicesRoundTwo !== 'undefined') {
+        //     movieNightFields.movieChoicesRoundTwo = req.body.movieChoicesRoundTwo.split(',');
+        // }
+        // // movieChoicesRoundThree - split into array
+        // if(typeof req.body.movieChoicesRoundThree !== 'undefined') {
+        //     movieNightFields.movieChoicesRoundThree = req.body.movieChoicesRoundThree.split(',');
+        // }
 
         // movieVotesRoundOne - split into array
-        if(typeof req.body.movieVotesRoundOne !== 'undefined') {
-            const votesArray = req.body.movieVotesRoundOne.split(',');
-            votesArray.foreach((vote) => {
-                const voteObject = {};
-                voteObject.voter = vote.voter;
-                voteObject.movie = vote.movie;
-                movieNightFields.movieVotesRoundOne.add(voteObject);
-            });
-        }
+        // if(typeof req.body.movieVotesRoundOne !== 'undefined') {
+        //     const votesArray = req.body.movieVotesRoundOne.split(',');
+        //     votesArray.foreach((vote) => {
+        //         const voteObject = {};
+        //         voteObject.voter = vote.voter;
+        //         voteObject.movie = vote.movie;
+        //         movieNightFields.movieVotesRoundOne.add(voteObject);
+        //     });
+        // }
 
         MovieNight.findOne({ date: req.body.date })
             .then(movieNight => {

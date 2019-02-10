@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import TextFieldGroup from '../common/TextFieldGroup';
+import SelectListGroup from '../common/SelectListGroup';
 import { createMovieNight } from '../../actions/movieNightActions';
 import { 
     MOVIE_DB_API_KEY, 
@@ -32,6 +33,7 @@ class CreateMovieNight extends Component {
             imageBaseUrl: undefined,
             posterSizeXS: undefined,
             posterSizeS: undefined,
+            searchResults: [],
             errors: {}
         };
 
@@ -180,7 +182,8 @@ class CreateMovieNight extends Component {
         { label: 'Plymouth', value: 'Plymouth' },
         { label: 'Minneapolis', value: 'Minneapolis' },
         { label: 'Oakdale', value: 'Oakdale' },
-        { label: 'Eden Prairie', value: 'Eden Prairie' }
+        { label: 'Eden Prairie', value: 'Eden Prairie' },
+        { label: 'Inver Grove Heights', value: 'Inver Grove Heights' }
     ];
 
     return (
@@ -222,119 +225,6 @@ class CreateMovieNight extends Component {
                                 error={errors.location}
                                 info=""
                             />
-                            <TextFieldGroup
-                                placeholder="* Movie Title"
-                                name="title"
-                                value={this.state.title}
-                                onChange={this.onChange}
-                                error={errors.title}
-                            />
-                            
-                            <TextFieldGroup
-                            placeholder="IMDB ID"
-                            name="imdbId"
-                            value={this.state.imdbId}
-                            onChange={this.onChange}
-                            error={errors.imdbId}
-                            info="The last piece of the url to a movie on IMDB (eg. tt0087332 from url https://www.imdb.com/title/tt0087332/"
-                            />
-                            <TextFieldGroup
-                            placeholder="TMDB ID"
-                            name="tmdbId"
-                            type="text"
-                            value={this.state.tmdbId}
-                            onChange={this.onChange}
-                            error={errors.tmdbId}
-                            info=""
-                            />
-                            {/* <TextFieldGroup
-                            placeholder="Writers"
-                            name="writers"
-                            value={this.state.writers}
-                            onChange={this.onChange}
-                            error={errors.writers}
-                            info="List of writer names seperated by commas (eg. Phil Lord, Christopher Miller)"
-                            />
-                            <TextFieldGroup
-                            placeholder="Directors"
-                            name="directors"
-                            value={this.state.directors}
-                            onChange={this.onChange}
-                            error={errors.directors}
-                            info="List of director names seperated by commas (eg. Joel Coen, Ethan Coen)"
-                            />
-                            <TextFieldGroup
-                            placeholder="Actors"
-                            name="actors"
-                            value={this.state.actors}
-                            onChange={this.onChange}
-                            error={errors.actors}
-                            info="List of actor names seperated by commas (eg. Bill Murray, Dan Aykroyd, Sigourney Weaver)"
-                            />
-                            <TextFieldGroup
-                            placeholder="Genres"
-                            name="genres"
-                            value={this.state.genres}
-                            onChange={this.onChange}
-                            error={errors.genres}
-                            info="List of genre names seperated by commas (eg. Action, Suspense, Drama)"
-                            />
-                            <TextFieldGroup
-                            placeholder="Runtime"
-                            name="runTime"
-                            value={this.state.runTime}
-                            onChange={this.onChange}
-                            error={errors.runTime}
-                            info="Runtime of movie in minutes"
-                            />
-                            <TextFieldGroup
-                            placeholder="Poster URL"
-                            name="posterUrl"
-                            value={this.state.posterUrl}
-                            onChange={this.onChange}
-                            error={errors.posterUrl}
-                            info="URL of movie poster (eg. https://m.media-amazon.com/images/M/MV5BMTg2MzI1MTg3OF5BMl5BanBnXkFtZTgwNTU3NDA2MTI@._V1_SX300.jpg"
-                            />
-                            <TextFieldGroup
-                            placeholder="Rotten Tomatoes Url Key"
-                            name="rottenTomatoesUrlKey"
-                            value={this.state.rottenTomatoesUrlKey}
-                            onChange={this.onChange}
-                            error={errors.rottenTomatoesUrlKey}
-                            info="The last piece of the url to a movie on Rotten Tomatoes (eg. the_big_lebowski from url https://www.rottentomatoes.com/m/the_big_lebowski"
-                            />
-                            <TextFieldGroup
-                            placeholder="TomatoMeter"
-                            name="rottenTomatoesTomatoMeter"
-                            value={this.state.rottenTomatoesTomatoMeter}
-                            onChange={this.onChange}
-                            error={errors.rottenTomatoesTomatoMeter}
-                            info="TomatoMeter from Rotten Tomatoes (1-100)"
-                            />
-                            <TextFieldGroup
-                            placeholder="Rotten Tomatoes Audience Score"
-                            name="rottenTomatoesAudienceScore"
-                            value={this.state.rottenTomatoesAudienceScore}
-                            onChange={this.onChange}
-                            error={errors.rottenTomatoesAudienceScore}
-                            info="Audience Score from Rotten Tomatoes (1-100)"
-                            />
-                            <TextFieldGroup
-                            placeholder="IMDB ID"
-                            name="imdbId"
-                            value={this.state.imdbId}
-                            onChange={this.onChange}
-                            error={errors.imdbId}
-                            info="The last piece of the url to a movie on IMDB (eg. tt0087332 from url https://www.imdb.com/title/tt0087332/"
-                            />
-                            <TextFieldGroup
-                            placeholder="IMDB Rating"
-                            name="imdbRating"
-                            value={this.state.imdbRating}
-                            onChange={this.onChange}
-                            error={errors.imdbRating}
-                            info="Rating out of 10 on IMDB (eg. 7.8)"
-                            /> */}
                             
                             <input
                             type="submit"
@@ -349,10 +239,10 @@ class CreateMovieNight extends Component {
                 <div className="row">
                     <div className="col-md-8 m-auto">
                         <h1 className="display-4 text-center">Search For Movie</h1>
-                        <p className="lead text-center">
+                        {/* <p className="lead text-center">
                             Is this movie in omdb?
-                        </p>
-                        <small className="d-block pb-3">* = required fields</small>
+                        </p> 
+                        <small className="d-block pb-3">* = required fields</small>*/}
                         <form onSubmit={this.getMovieFromApi}>
                             <TextFieldGroup
                                 placeholder="* Movie Title"

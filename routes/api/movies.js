@@ -74,7 +74,7 @@ router.get('/:movie_id', (req, res) => {
 
 // @route POST api/movies
 // @desc Create a movie
-// @access Public
+// @access Private
 router.post(
     '/', 
     passport.authenticate('jwt', { session: false }), 

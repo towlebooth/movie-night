@@ -8,7 +8,9 @@ const MovieNightSchema = new Schema({
     },
     host: { type: String },
     location: { type: String },
-    movieChoices: [{ type: Schema.Types.ObjectId, ref: 'movie' }],
+    movieChoicesRoundOne: [{ type: Schema.Types.ObjectId, ref: 'movie' }],
+    movieChoicesRoundTwo: [{ type: Schema.Types.ObjectId, ref: 'movie' }],
+    movieChoicesRoundThree: [{ type: Schema.Types.ObjectId, ref: 'movie' }],
     movieViewed: { type: Schema.Types.ObjectId, ref: 'movie' },
     movieVotesRoundOne: [{
         voter: { type: Schema.Types.ObjectId, ref: 'users' },

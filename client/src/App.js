@@ -14,6 +14,7 @@ import Login from './components/auth/Login';
 import Dashboard from './components/dashboard/Dashboard';
 import CreateProfile from './components/create-profile/CreateProfile';
 import CreateMovie from './components/create-movie/CreateMovie';
+import CreateMovieNight from './components/create-movie-night/CreateMovieNight';
 import Movie from './components/movie/Movie';
 
 //import MovieList from './components/movie/MovieList';
@@ -66,6 +67,9 @@ class App extends Component {
                             </Switch>
                             <Switch>
                                 <PrivateRoute exact path="/create-movie" component={ CreateMovie } />
+                            </Switch>
+                            <Switch>
+                                <PrivateRoute exact path="/create-movie-night" component={ CreateMovieNight } />
                             </Switch>
                             <Route path="/movie/:title" component={Movie} />
                         </div>                        
