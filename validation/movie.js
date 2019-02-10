@@ -14,15 +14,6 @@ module.exports = function validateMovieInput(data) {
       errors.title = 'Movie title is required';
   }
 
-  /*
-  if(!isEmpty(data.website)) {
-      if(!validator.isURL(data.website)) {
-          errors.website = 'Not a valid url';
-      }
-  }
-  */
-
-
   return {
     errors,
     isValid: isEmpty(errors)

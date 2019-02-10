@@ -2,11 +2,6 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 
-var proxy = require('express-http-proxy');
-var app = require('express')();
- 
-app.use('/omdb', proxy('www.omdbapi.com/?apikey=3ff32cc3&t=Caddyshack'));
-
 // Load validation
 const validateMovieInput = require('../../validation/movie');
 

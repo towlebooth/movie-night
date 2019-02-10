@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, ListGroup, ListGroupItem, Button } from 'reactstrap';
+import { Container, Row, Col, ListGroup, ListGroupItem, Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 //import axios from 'axios';
@@ -24,6 +24,9 @@ class CreateMovie extends Component {
         imdbId: '',
         tmdbId: undefined,
         searchResults: [],
+        imageBaseUrl: undefined,
+        posterSizeXS: undefined,
+        posterSizeS: undefined,
         //   writers: '',
         //   directors: '',
         //   actors: '',
@@ -66,6 +69,19 @@ class CreateMovie extends Component {
             await fetch(`${MOVIE_DB_BASE_URL}configuration?api_key=${MOVIE_DB_API_KEY}`);
         const configData = await api_configuration_call.json();
         console.log(configData);
+        if (configData.images) {
+            this.setState({
+                imageBaseUrl: configData.images.base_url,
+                posterSizeXS: configData.images.poster_sizes[0],
+                posterSizeS: configData.images.poster_sizes[1]
+            });
+        } else {
+            this.setState({
+                imageBaseUrl: undefined,
+                posterSizeXS: undefined,
+                posterSizeS: undefined
+            });
+        }
 
         const api_call = 
         await fetch(`${MOVIE_DB_BASE_URL}movie/${searchResultId}?api_key=${MOVIE_DB_API_KEY}`);
@@ -129,7 +145,7 @@ class CreateMovie extends Component {
             title: this.state.title,
             releaseDate: this.state.releaseDate,
             imdbId: this.state.imdbId,
-            tmdbId: this.state.tmdbId,
+            tmdbId: this.state.tmdbId
             // writers: this.state.writers,
             // directors: this.state.directors,
             // actors: this.state.actors,
@@ -182,22 +198,29 @@ class CreateMovie extends Component {
                 </div>
 
                 <div className="row">
-                <Container>
-                    <ListGroup>
-                        {this.state.searchResults.map(({ id, title, release_date, overview, poster_path }) => (
-                            <ListGroupItem key={id}>
-                            <Button
-                                className="select-btn"
-                                color="secondary"
-                                size="sm"
-                                onClick={this.onSelectClick.bind(this, id)}
-                                >Select
-                            </Button>
-                            &nbsp;<Link to={`/movie/${title}`}>{title}</Link> ({moment(release_date).format('YYYY')}) {overview}
-                        </ListGroupItem>
-                        ))}
-                    </ListGroup>
-                </Container>
+                    <Container>
+                        <ListGroup>
+                            {this.state.searchResults.map(({ id, title, release_date, overview, poster_path }) => (
+                                <ListGroupItem key={id}>
+                                <Row>
+                                    <Col xs="4">
+                                        <img src={this.state.imageBaseUrl + this.state.posterSizeXS + poster_path} style={{width: 120}}></img>
+                                    </Col>
+                                    <Col xs="8">
+                                        <Button 
+                                            className="select-btn"
+                                            color="secondary"
+                                            size="sm"
+                                            onClick={this.onSelectClick.bind(this, id)}
+                                            >Select
+                                        </Button>
+                                        &nbsp;<Link to={`/movie/${title}`}>{title}</Link> ({moment(release_date).format('YYYY')}) {overview}
+                                    </Col>
+                                </Row>
+                            </ListGroupItem>
+                            ))}
+                        </ListGroup>
+                    </Container>
                 </div>
 
                 <div className="row">

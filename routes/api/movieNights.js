@@ -5,6 +5,8 @@ const passport = require('passport');
 // MovieNight model
 const MovieNight = require('../../models/MovieNight');
 
+const validateMovieNightInput = require('../../validation/movieNight');
+
 // @route GET api/movieNight
 // @desc Get all movieNights
 // @access Private
@@ -14,20 +16,109 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
         .then(movieNights => res.json(movieNights))
 });
 
-// @route POST api/movieNights
-// @desc Create a movieNight
-// @access Public
-router.post('/', (req, res) => {
-    const newMovieNight = new MovieNight({
-        host: req.body.host,
-        location: req.body.location,
-        movieChoices: req.body.movieChoices,
-        movieViewed: req.body.movieViewed,
-        movieVotes: req.body.movieVotes
-    });
+// @route   GET api/movieNight/date/:date
+// @desc    Get movieNight by date
+// @access  Public
+router.get('/date/:date', (req, res) => {
+    const errors = {};
+    Movie.Night.findOne({ date: req.params.date })
+      .then(movieNight => {
+        if (!movieNight) {
+          errors.nomovienight = 'There is no movie niht with this date: ' + req.params.date;
+          res.status(404).json(errors);
+        }
+  
+        res.json(movieNight);
+      })
+      .catch(err => res.status(404).json(err));
+  });
 
-    newMovieNight.save().then(movieNight => res.json(movieNight));
-});
+// // @route POST api/movieNights
+// // @desc Create a movieNight
+// // @access Public
+// router.post('/', (req, res) => {
+//     const newMovieNight = new MovieNight({
+//         host: req.body.host,
+//         location: req.body.location,
+//         movieChoices: req.body.movieChoices,
+//         movieViewed: req.body.movieViewed,
+//         movieVotes: req.body.movieVotes
+//     });
+
+//     newMovieNight.save().then(movieNight => res.json(movieNight));
+// });
+
+// @route POST api/movieNight
+// @desc Create a movieNight
+// @access Private
+router.post(
+    '/', 
+    passport.authenticate('jwt', { session: false }), 
+    (req, res) => {
+        const { errors, isValid } = validateMovieInput(req.body);
+
+        // check validation
+        if(!isValid) {
+            // return any errors with 400 status
+            return res.status(400).json(errors);
+        }
+        const movieNightFields = {};
+        if(req.body.date) movieNightFields.date = req.body.date;
+        if(req.body.host) movieNightFields.host = req.body.host;
+        if(req.body.location) movieNightFields.location = req.body.location;
+        if(req.body.movieViewed) movieNightFields.movieViewed = req.body.movieViewed;
+        
+        // movieChoicesRoundOne - split into array
+        if(typeof req.body.movieChoicesRoundOne !== 'undefined') {
+            movieNightFields.movieChoicesRoundOne = req.body.movieChoicesRoundOne.split(',');
+        }
+        // movieChoicesRoundTwo - split into array
+        if(typeof req.body.movieChoicesRoundTwo !== 'undefined') {
+            movieNightFields.movieChoicesRoundTwo = req.body.movieChoicesRoundTwo.split(',');
+        }
+        // movieChoicesRoundThree - split into array
+        if(typeof req.body.movieChoicesRoundThree !== 'undefined') {
+            movieNightFields.movieChoicesRoundThree = req.body.movieChoicesRoundThree.split(',');
+        }
+
+        // movieVotesRoundOne - split into array
+        if(typeof req.body.movieVotesRoundOne !== 'undefined') {
+            const votesArray = req.body.movieVotesRoundOne.split(',');
+            votesArray.foreach((vote) => {
+                const voteObject = {};
+                voteObject.voter = vote.voter;
+                voteObject.movie = vote.movie;
+                movieNightFields.movieVotesRoundOne.add(voteObject);
+            });
+        }
+
+        MovieNight.findOne({ date: req.body.date })
+            .then(movieNight => {
+                if(movieNight) {
+                    // update
+                    Movie.findOneAndUpdate(
+                        { date: req.body.date },
+                        { $set: movieNightFields }, 
+                        { new: true }
+                    )
+                    .then(movieNight => res.json(movieNight));
+                } else { // create
+                    // check if date exists
+                    MovieNight.findOne({ date: req.body.date })
+                        .then(movieNight => {
+                            if(movieNight) {
+                                errors.handle = 'A movie night with that date already exists';
+                                res.status(400).json(errors);
+                            }
+
+                            // save MovieNight
+                            new MovieNight(movieNightFields).save().then(movieNight => res.json(movieNight));
+                        }
+                    );
+                }
+            });
+    }
+);
 
 // @route DELETE api/movieNight
 // @desc Delete a movieNight
