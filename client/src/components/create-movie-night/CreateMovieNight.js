@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import TextFieldGroup from '../common/TextFieldGroup';
-import { createMovie } from '../../actions/movieActions';
+import { createMovieNight } from '../../actions/movieNightActions';
 import { 
     MOVIE_DB_API_KEY, 
     MOVIE_DB_BASE_URL,
@@ -15,15 +15,20 @@ import {
     OMDB_API_KEY
  } from '../common/keys';
 
-class CreateMovie extends Component {
+class CreateMovieNight extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            title: '',
-            releaseDate: '',
-            imdbId: '',
-            tmdbId: undefined,
-            searchResults: [],
+            date: '',
+            host: '',
+            location: '',
+            movieViewed: undefined,
+            movieChoicesRoundOne: [],
+            movieChoicesRoundTwo: [],
+            movieChoicesRoundThree: [],
+            movieVotesRoundOne: [],
+            movieVotesRoundTwo: [],
+            movieVotesRoundThree: [],
             imageBaseUrl: undefined,
             posterSizeXS: undefined,
             posterSizeS: undefined,
@@ -126,25 +131,20 @@ class CreateMovie extends Component {
     onSubmit(e) {
         e.preventDefault();
 
-        const movieData = {
-            title: this.state.title,
-            releaseDate: this.state.releaseDate,
-            imdbId: this.state.imdbId,
-            tmdbId: this.state.tmdbId
-            // writers: this.state.writers,
-            // directors: this.state.directors,
-            // actors: this.state.actors,
-            // genres: this.state.genres,
-            // runTime: this.state.runTime,
-            // posterUrl: this.state.posterUrl,
-            // rottenTomatoesUrlKey: this.state.rottenTomatoesUrlKey,
-            // rottenTomatoesTomatoMeter: this.state.rottenTomatoesTomatoMeter,
-            // rottenTomatoesAudienceScore: this.state.rottenTomatoesAudienceScore,
-            // imdbId: this.state.imdbId,
-            // imdbRating: this.state.imdbRating
+        const movieNightData = {
+            date: this.state.date,
+            host: this.state.host,
+            location: this.state.location,
+            movieViewed: this.state.movieViewed,
+            movieChoicesRoundOne: this.state.movieChoicesRoundOne,
+            movieChoicesRoundTwo: this.state.movieChoicesRoundTwo,
+            movieChoicesRoundThree: this.state.movieChoicesRoundThree,
+            movieVotesRoundOne: this.state.movieVotesRoundOne,
+            movieVotesRoundTwo: this.state.movieVotesRoundTwo,
+            movieVotesRoundThree: this.state.movieVotesRoundThree
         };
 
-        this.props.createMovie(movieData, this.props.history);
+        this.props.createMovieNight(movieNightData, this.props.history);
     }
 
   onChange(e) {
@@ -154,84 +154,82 @@ class CreateMovie extends Component {
   render() {
     const { errors } = this.state;
 
+    // Select options for host name
+    const hostOptions = [
+        { label: '* Select Host', value: 0 },
+        { label: 'Jackson', value: 'Jackson' },
+        { label: 'Angie', value: 'Angie' },
+        { label: 'Eric', value: 'Eric' },
+        { label: 'Jill', value: 'Jill' },
+        { label: 'Caroline', value: 'Caroline' },
+        { label: 'Rick', value: 'Rick' },
+        { label: 'Cathy', value: 'Cathy' },
+        { label: 'Chad', value: 'Chad' },
+        { label: 'Stacey', value: 'Stacey' },
+        { label: 'Zach', value: 'Zach' },
+        { label: 'Laura', value: 'Laura' },
+        { label: 'Jennifer', value: 'Jennifer' }
+    ];
+
+    // Select options for location
+    const locationOptions = [
+        { label: '* Select Location', value: 0 },
+        { label: 'Woodbury', value: 'Woodbury' },
+        { label: 'Saint Paul', value: 'Saint Paul' },
+        { label: 'New Brighton', value: 'New Brighton' },
+        { label: 'Plymouth', value: 'Plymouth' },
+        { label: 'Minneapolis', value: 'Minneapolis' },
+        { label: 'Oakdale', value: 'Oakdale' },
+        { label: 'Eden Prairie', value: 'Eden Prairie' }
+    ];
+
     return (
-        <div className="create-movie">
+        <div className="create-movie-night">
             <div className="container">                
-                <div className="row">
-                    <div className="col-md-8 m-auto">
-                        <h1 className="display-4 text-center">Search For Movie</h1>
-                        <p className="lead text-center">
-                            Is this movie in omdb?
-                        </p>
-                        <small className="d-block pb-3">* = required fields</small>
-                        <form onSubmit={this.getMovieFromApi}>
-                            <TextFieldGroup
-                                placeholder="* Movie Title"
-                                name="titleForSearch"
-                                value={this.state.titleForSearch}
-                                onChange={this.onChange}
-                                error={errors.titleForSearch}
-                            />
-                            
-                            <input
-                                type="submit"
-                                value="Search"
-                                className="btn btn-info btn-block mt-4"
-                            />
-                        </form>
-                    </div>
-                </div>
-
-                <div className="row">
-                    <Container>
-                        <ListGroup>
-                            {this.state.searchResults.map(({ id, title, release_date, overview, poster_path }) => (
-                                <ListGroupItem key={id}>
-                                <Row>
-                                    <Col xs="4">
-                                        <img src={this.state.imageBaseUrl + this.state.posterSizeXS + poster_path} style={{width: 120}}></img>
-                                    </Col>
-                                    <Col xs="8">
-                                        <Button 
-                                            className="select-btn"
-                                            color="secondary"
-                                            size="sm"
-                                            onClick={this.onSelectClick.bind(this, id)}
-                                            >Select
-                                        </Button>
-                                        &nbsp;<Link to={`/movie/${title}`}>{title}</Link> ({moment(release_date).format('YYYY')}) {overview}
-                                    </Col>
-                                </Row>
-                            </ListGroupItem>
-                            ))}
-                        </ListGroup>
-                    </Container>
-                </div>
 
                 <div className="row">
                     <div className="col-md-8 m-auto">
-                        <h1 className="display-4 text-center">Create Your Movie</h1>
+                        <h1 className="display-4 text-center">Create Your Movie Night</h1>
                         <p className="lead text-center">
-                            Let's get some information to make your movie stand out
+                            Let's get some information to make your movie night stand out
                         </p>
                         <small className="d-block pb-3">* = required fields</small>
                         <form onSubmit={this.onSubmit}>
                             <TextFieldGroup
-                            placeholder="* Movie Title"
-                            name="title"
-                            value={this.state.title}
-                            onChange={this.onChange}
-                            error={errors.title}
+                                name="date"
+                                placeholder="Date"
+                                type="date"
+                                value={this.state.date}
+                                onChange={this.onChange}
+                                error={errors.date}
+                                info="Date of movie night"
+                            />
+                            <SelectListGroup
+                                placeholder="Host"
+                                name="host"
+                                value={this.state.host}
+                                onChange={this.onChange}
+                                options={hostOptions}
+                                error={errors.host}
+                                info=""
+                            />
+                            <SelectListGroup
+                                placeholder="Location"
+                                name="location"
+                                value={this.state.location}
+                                onChange={this.onChange}
+                                options={locationOptions}
+                                error={errors.location}
+                                info=""
                             />
                             <TextFieldGroup
-                            name="releaseDate"
-                            placeholder="Date movie was released"
-                            type="date"
-                            value={this.state.releaseDate}
-                            onChange={this.onChange}
-                            error={errors.releaseDate}
-                            info="Release date of movie"
+                                placeholder="* Movie Title"
+                                name="title"
+                                value={this.state.title}
+                                onChange={this.onChange}
+                                error={errors.title}
                             />
+                            
                             <TextFieldGroup
                             placeholder="IMDB ID"
                             name="imdbId"
@@ -346,24 +344,76 @@ class CreateMovie extends Component {
                         </form>
                     </div>
                 </div>
+
+
+                <div className="row">
+                    <div className="col-md-8 m-auto">
+                        <h1 className="display-4 text-center">Search For Movie</h1>
+                        <p className="lead text-center">
+                            Is this movie in omdb?
+                        </p>
+                        <small className="d-block pb-3">* = required fields</small>
+                        <form onSubmit={this.getMovieFromApi}>
+                            <TextFieldGroup
+                                placeholder="* Movie Title"
+                                name="titleForSearch"
+                                value={this.state.titleForSearch}
+                                onChange={this.onChange}
+                                error={errors.titleForSearch}
+                            />
+                            
+                            <input
+                                type="submit"
+                                value="Search"
+                                className="btn btn-info btn-block mt-4"
+                            />
+                        </form>
+                    </div>
+                </div>
+
+                <div className="row">
+                    <Container>
+                        <ListGroup>
+                            {this.state.searchResults.map(({ id, title, release_date, overview, poster_path }) => (
+                                <ListGroupItem key={id}>
+                                <Row>
+                                    <Col xs="4">
+                                        <img src={this.state.imageBaseUrl + this.state.posterSizeXS + poster_path} style={{width: 120}}></img>
+                                    </Col>
+                                    <Col xs="8">
+                                        <Button 
+                                            className="select-btn"
+                                            color="secondary"
+                                            size="sm"
+                                            onClick={this.onSelectClick.bind(this, id)}
+                                            >Select
+                                        </Button>
+                                        &nbsp;<Link to={`/movie/${title}`}>{title}</Link> ({moment(release_date).format('YYYY')}) {overview}
+                                    </Col>
+                                </Row>
+                            </ListGroupItem>
+                            ))}
+                        </ListGroup>
+                    </Container>
+                </div>
+
+
             </div>
         </div>
     );
   }
 }
 
-CreateMovie.propTypes = {
-  movie: PropTypes.object.isRequired,
-  errors: PropTypes.object.isRequired,
-  omdb: PropTypes.object
+CreateMovieNight.propTypes = {
+  movieNight: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  movie: state.movie,
-  errors: state.errors,
-  omdb: state.omdb
+  movieNight: state.movieNight,
+  errors: state.errors
 });
 
-export default connect(mapStateToProps, { createMovie })(
-  withRouter(CreateMovie)
+export default connect(mapStateToProps, { createMovieNight })(
+  withRouter(CreateMovieNight)
 );
