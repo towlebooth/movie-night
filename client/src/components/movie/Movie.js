@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 //import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getMovieByTitle, getMovies } from '../../actions/movieActions';
+import { getMovieByTitle } from '../../actions/movieActions';
 import moment from 'moment';
 //import Spinner from '../common/Spinner';
 
 class Movie extends Component {
-  componentDidMount() {
-      //this.props.getMovies();      
+  componentDidMount() {  
       this.props.getMovieByTitle(this.props.match.params.title);
   }
 

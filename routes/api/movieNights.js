@@ -21,10 +21,10 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
 // @access  Public
 router.get('/date/:date', (req, res) => {
     const errors = {};
-    Movie.Night.findOne({ date: req.params.date })
+    MovieNight.findOne({ date: req.params.date })
       .then(movieNight => {
         if (!movieNight) {
-          errors.nomovienight = 'There is no movie niht with this date: ' + req.params.date;
+          errors.nomovienight = 'There is no movie night with this date: ' + req.params.date;
           res.status(404).json(errors);
         }
   

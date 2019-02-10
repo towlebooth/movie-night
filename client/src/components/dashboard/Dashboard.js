@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getCurrentProfile } from '../../actions/profileActions';
-import Spinner from '../common/Spinner';
+//import Spinner from '../common/Spinner';
 import MovieList from '../movie/MovieList';
+import MovieNightList from '../movie-night/MovieNightList';
 import MovieModal from '../MovieModal';
 import { Container } from 'reactstrap';
 
@@ -14,8 +15,8 @@ class Dashboard extends Component {
   }
 
   render() {
-    const { user } = this.props.auth;
-    const { profile, loading } = this.props.profile;
+    // const { user } = this.props.auth;
+    // const { profile, loading } = this.props.profile;
 
     let dashboardContent;
 
@@ -45,6 +46,7 @@ class Dashboard extends Component {
 
     dashboardContent = 
       <Container>
+        <MovieNightList />
         <MovieModal />
         <MovieList />
       </Container>;

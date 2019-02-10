@@ -16,10 +16,7 @@ import CreateProfile from './components/create-profile/CreateProfile';
 import CreateMovie from './components/create-movie/CreateMovie';
 import CreateMovieNight from './components/create-movie-night/CreateMovieNight';
 import Movie from './components/movie/Movie';
-
-//import MovieList from './components/movie/MovieList';
-//import MovieModal from './components/MovieModal';
-//import { Container } from 'reactstrap';
+import MovieNight from './components/movie-night/MovieNight';
 
 import { Provider } from 'react-redux';
 import store from './store';
@@ -72,6 +69,7 @@ class App extends Component {
                                 <PrivateRoute exact path="/create-movie-night" component={ CreateMovieNight } />
                             </Switch>
                             <Route path="/movie/:title" component={Movie} />
+                            <Route path="/movieNight/:date" component={MovieNight} />
                         </div>                        
                         <Footer />
                     </div>
@@ -82,8 +80,3 @@ class App extends Component {
 }
 
 export default App;
-
-{/* <Container>
-    <MovieModal />
-    <MovieList />
-</Container> */}

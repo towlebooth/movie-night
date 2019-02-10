@@ -189,7 +189,7 @@ class CreateMovie extends Component {
                                 <ListGroupItem key={id}>
                                 <Row>
                                     <Col xs="4">
-                                        <img src={this.state.imageBaseUrl + this.state.posterSizeXS + poster_path} style={{width: 120}}></img>
+                                        <img src={this.state.imageBaseUrl + this.state.posterSizeXS + poster_path} style={{width: 120}} alt={title}></img>
                                     </Col>
                                     <Col xs="8">
                                         <Button 
