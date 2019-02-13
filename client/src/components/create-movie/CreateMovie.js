@@ -88,23 +88,23 @@ class CreateMovie extends Component {
             const omdbData = await api_omdb_call.json();
             console.log(omdbData);
 
-        if (titleForSearch && movieId) {
-            this.setState({
-                title: data.title,
-                releaseDate: data.release_date,
-                imdbId: data.imdb_id,
-                tmdbId: data.id.toString(),
-                error: ""
-            });
-        } else {
-            this.setState({
-                title: undefined,
-                releaseDate: undefined,
-                imdbId: undefined,
-                tmdbId: undefined,
-                error: "There was an error"
-            });
-        }
+        // if (titleForSearch && movieId) {
+        //     this.setState({
+        //         title: data.title,
+        //         releaseDate: data.release_date,
+        //         imdbId: data.imdb_id,
+        //         tmdbId: data.id.toString(),
+        //         error: ""
+        //     });
+        // } else {
+        //     this.setState({
+        //         title: undefined,
+        //         releaseDate: undefined,
+        //         imdbId: undefined,
+        //         tmdbId: undefined,
+        //         error: "There was an error"
+        //     });
+        // }
     };
 
     onSelectClick = async (id) => {

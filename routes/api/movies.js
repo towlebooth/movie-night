@@ -72,6 +72,23 @@ router.get('/:movie_id', (req, res) => {
       .catch(err => res.status(404).json(err));
   });
 
+// @route   GET api/movie/imdbId/:imdbId
+// @desc    Get movie by imdbId
+// @access  Public
+router.get('/imdbId/:imdbId', (req, res) => {
+  const errors = {};
+  Movie.findOne({ imdbId: req.params.imdbId })
+    .then(movie => {
+      if (!movie) {
+        errors.nomovie = 'There is no movie with this imdbId: ' + req.params.imdbId;
+        res.status(404).json(errors);
+      }
+
+      res.json(movie);
+    })
+    .catch(err => res.status(404).json(err));
+});
+
 // @route POST api/movies
 // @desc Create a movie
 // @access Private

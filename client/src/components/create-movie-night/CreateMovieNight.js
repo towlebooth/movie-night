@@ -9,11 +9,10 @@ import PropTypes from 'prop-types';
 import TextFieldGroup from '../common/TextFieldGroup';
 import SelectListGroup from '../common/SelectListGroup';
 import { createMovieNight } from '../../actions/movieNightActions';
+import { createMovieNoRedirect, getMovies } from '../../actions/movieActions';
 import { 
     MOVIE_DB_API_KEY, 
-    MOVIE_DB_BASE_URL,
-    OMDB_BASE_URL,
-    OMDB_API_KEY
+    MOVIE_DB_BASE_URL
  } from '../common/keys';
 
 class CreateMovieNight extends Component {
@@ -34,11 +33,27 @@ class CreateMovieNight extends Component {
             posterSizeXS: undefined,
             posterSizeS: undefined,
             searchResults: [],
+            titleFirst: undefined,
+            releaseDateFirst: undefined,
+            imdbIdFirst: undefined,
+            tmdbIdFirst: undefined,
+            titleSecond: undefined,
+            releaseDateSecond: undefined,
+            imdbIdSecond: undefined,
+            tmdbIdSecond: undefined,
+            titleThird: undefined,
+            releaseDateThird: undefined,
+            imdbIdThird: undefined,
+            tmdbIdThird: undefined,
             errors: {}
         };
 
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+    }
+
+    componentDidMount() {  
+        this.props.getMovies();
     }
 
     componentWillReceiveProps(nextProps) {
@@ -78,40 +93,30 @@ class CreateMovieNight extends Component {
         }
 
         const api_call = 
-        await fetch(`${MOVIE_DB_BASE_URL}movie/${searchResultId}?api_key=${MOVIE_DB_API_KEY}`);
+            await fetch(`${MOVIE_DB_BASE_URL}movie/${searchResultId}?api_key=${MOVIE_DB_API_KEY}`);
         const data = await api_call.json();
-        const movieId = data.id;
+        //const movieId = data.id;
         console.log(data);
 
-        const imdbId = data.imdb_id;
+        //const imdbId = data.imdb_id;
 
-        const api_credits_call =
-            await fetch(`${MOVIE_DB_BASE_URL}movie/${movieId}/credits?api_key=${MOVIE_DB_API_KEY}`);
-            const creditsData = await api_credits_call.json();
-            console.log(creditsData);
-
-        const api_omdb_call =
-            await fetch(`${OMDB_BASE_URL}apikey=${OMDB_API_KEY}&i=${imdbId}`);
-            const omdbData = await api_omdb_call.json();
-            console.log(omdbData);
-
-        if (titleForSearch && movieId) {
-            this.setState({
-                title: data.title,
-                releaseDate: data.release_date,
-                imdbId: data.imdb_id,
-                tmdbId: data.id.toString(),
-                error: ""
-            });
-        } else {
-            this.setState({
-                title: undefined,
-                releaseDate: undefined,
-                imdbId: undefined,
-                tmdbId: undefined,
-                error: "There was an error"
-            });
-        }
+        // if (titleForSearch && movieId) {
+        //     this.setState({
+        //         title: data.title,
+        //         releaseDate: data.release_date,
+        //         imdbId: data.imdb_id,
+        //         tmdbId: data.id.toString(),
+        //         error: ""
+        //     });
+        // } else {
+        //     this.setState({
+        //         title: undefined,
+        //         releaseDate: undefined,
+        //         imdbId: undefined,
+        //         tmdbId: undefined,
+        //         error: "There was an error"
+        //     });
+        // }
     };
 
     onSelectClick = async (id) => {
@@ -121,10 +126,42 @@ class CreateMovieNight extends Component {
         console.log(data);
 
         this.setState({
-                title: data.title,
-                releaseDate: data.release_date,
-                imdbId: data.imdb_id,
-                tmdbId: data.id.toString(),
+                titleFirst: data.title,
+                releaseDateFirst: data.release_date,
+                imdbIdFirst: data.imdb_id,
+                tmdbIdFirst: data.id.toString(),
+                searchResults: [],
+                error: ""
+            });
+    }
+
+    onSelectClick2 = async (id) => {
+        const api_call = 
+        await fetch(`${MOVIE_DB_BASE_URL}movie/${id}?api_key=${MOVIE_DB_API_KEY}`);
+        const data = await api_call.json();
+        console.log(data);
+
+        this.setState({
+                titleSecond: data.title,
+                releaseDateSecond: data.release_date,
+                imdbIdSecond: data.imdb_id,
+                tmdbIdSecond: data.id.toString(),
+                searchResults: [],
+                error: ""
+            });
+    }
+
+    onSelectClick3 = async (id) => {
+        const api_call = 
+        await fetch(`${MOVIE_DB_BASE_URL}movie/${id}?api_key=${MOVIE_DB_API_KEY}`);
+        const data = await api_call.json();
+        console.log(data);
+
+        this.setState({
+                titleThird: data.title,
+                releaseDateThird: data.release_date,
+                imdbIdThird: data.imdb_id,
+                tmdbIdThird: data.id.toString(),
                 searchResults: [],
                 error: ""
             });
@@ -133,6 +170,68 @@ class CreateMovieNight extends Component {
     onSubmit(e) {
         e.preventDefault();
 
+        // get all movies
+        //this.props.getMovies();
+        const { movies } = this.props.movie;
+        console.log(movies);
+
+        //[{ type: Schema.Types.ObjectId, ref: 'movie' }]
+        const movieChoicesRoundOne = [];
+        let firstSelectionInDB = false;
+        let secondSelectionInDB = false;
+        let thirdSelectionInDB = false;
+
+        // check to see if selected movies exist in db
+        //movies.foreach((movie) => {
+        let i;
+        for (i = 0; i < movies.length; i++) {
+            if (movies[i].imdbId === this.state.imdbIdFirst) {
+                firstSelectionInDB = true;
+                movieChoicesRoundOne.add(movies[i]._id);
+            }
+        };
+
+            // if (movie.imdbId === this.state.imdbIdSecond) {
+            //     secondSelectionInDB = true;
+            //     movieChoicesRoundOne.add(movie._id);
+            // }
+
+            // if (movie.imdbId === this.state.imdbIdThird) {
+            //     thirdSelectionInDB = true;
+            //     movieChoicesRoundOne.add(movie._id);
+            // }
+        
+
+        if (!firstSelectionInDB) {
+            // save first movie to database
+            const movieData = {
+                title: this.state.titleFirst,
+                releaseDate: this.state.releaseDateFirst,
+                imdbId: this.state.imdbIdFirst,
+                tmdbId: this.state.tmdbIdFirst
+            };
+            this.props.createMovieNoRedirect(movieData);
+        }
+
+        // TODO: not getting movies?  Does it need to be async / await or is it another issue?
+        this.props.getMovies();
+        const { refreshedMovies } = this.props.movie;
+        for (i = 0; i < refreshedMovies.length; i++) {
+            if (refreshedMovies[i].imdbId === this.state.imdbIdFirst) {
+                firstSelectionInDB = true;
+                console.log('adding movie to movie night')
+                console.log(refreshedMovies[i])
+                movieChoicesRoundOne.add(refreshedMovies[i]._id);
+            }
+        };
+
+
+
+        // save those that don't already exist in db
+
+
+
+        // save movie night
         const movieNightData = {
             date: this.state.date,
             host: this.state.host,
@@ -146,12 +245,14 @@ class CreateMovieNight extends Component {
             movieVotesRoundThree: this.state.movieVotesRoundThree
         };
 
-        this.props.createMovieNight(movieNightData, this.props.history);
+        console.log(movieNightData);
+
+        //this.props.createMovieNight(movieNightData, this.props.history);
     }
 
-  onChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
-  }
+    onChange(e) {
+        this.setState({ [e.target.name]: e.target.value });
+    }
 
   render() {
     const { errors } = this.state;
@@ -225,6 +326,13 @@ class CreateMovieNight extends Component {
                                 error={errors.location}
                                 info=""
                             />
+                            <h6>Choice 1</h6>
+                            <p>{this.state.titleFirst} ({moment(this.state.releaseDateFirst).format('YYYY')})</p>
+                            <h6>Choice 2</h6>
+                            <p>{this.state.titleSecond} ({moment(this.state.releaseDateSecond).format('YYYY')})</p>
+                            <h6>Choice 3</h6>
+                            <p>{this.state.titleThird} ({moment(this.state.releaseDateThird).format('YYYY')})</p>
+
                             
                             <input
                             type="submit"
@@ -239,10 +347,6 @@ class CreateMovieNight extends Component {
                 <div className="row">
                     <div className="col-md-8 m-auto">
                         <h1 className="display-4 text-center">Search For Movie</h1>
-                        {/* <p className="lead text-center">
-                            Is this movie in omdb?
-                        </p> 
-                        <small className="d-block pb-3">* = required fields</small>*/}
                         <form onSubmit={this.getMovieFromApi}>
                             <TextFieldGroup
                                 placeholder="* Movie Title"
@@ -278,6 +382,20 @@ class CreateMovieNight extends Component {
                                             onClick={this.onSelectClick.bind(this, id)}
                                             >Select
                                         </Button>
+                                        <Button 
+                                            className="select-btn2"
+                                            color="secondary"
+                                            size="sm"
+                                            onClick={this.onSelectClick2.bind(this, id)}
+                                            >Select
+                                        </Button>
+                                        <Button 
+                                            className="select-btn3"
+                                            color="secondary"
+                                            size="sm"
+                                            onClick={this.onSelectClick3.bind(this, id)}
+                                            >Select
+                                        </Button>
                                         &nbsp;<Link to={`/movie/${title}`}>{title}</Link> ({moment(release_date).format('YYYY')}) {overview}
                                     </Col>
                                 </Row>
@@ -296,14 +414,16 @@ class CreateMovieNight extends Component {
 
 CreateMovieNight.propTypes = {
   movieNight: PropTypes.object.isRequired,
-  errors: PropTypes.object.isRequired
+  errors: PropTypes.object.isRequired,
+  movie: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
   movieNight: state.movieNight,
+  movie: state.movie,
   errors: state.errors
 });
 
-export default connect(mapStateToProps, { createMovieNight })(
+export default connect(mapStateToProps, { createMovieNight, createMovieNoRedirect, getMovies })(
   withRouter(CreateMovieNight)
 );

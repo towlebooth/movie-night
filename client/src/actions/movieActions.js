@@ -44,7 +44,24 @@ export const getMovieByTitle = title => dispatch => {
         );
   };
 
-  
+  // Get movie by imdbId
+export const getMovieByImdbId = imdbId => dispatch => {
+  dispatch(setMoviesLoading());
+  axios
+    .get(`/api/movies/imdbId/${imdbId}`)
+    .then(res =>
+      dispatch({
+        type: GET_MOVIE,
+        payload: res.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+          type: GET_ERRORS,
+          payload: err.response.data
+        })
+      );
+};
 
 export const deleteMovie = (id) => dispatch => {
     axios.delete(`/api/movies/${id}`).then(res =>
@@ -58,6 +75,19 @@ export const createMovie = (movieData, history) => dispatch => {
     axios
         .post('/api/movies', movieData)
         .then(res => history.push('/dashboard'))
+        .catch(err =>
+            dispatch({
+              type: GET_ERRORS,
+              payload: err.response.data
+            })
+          );
+};
+
+// save movie without redirecting to dashboard
+export const createMovieNoRedirect = (movieData) => dispatch => {
+  console.log(movieData);
+    axios
+        .post('/api/movies', movieData)
         .catch(err =>
             dispatch({
               type: GET_ERRORS,
