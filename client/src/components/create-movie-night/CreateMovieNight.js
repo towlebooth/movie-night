@@ -167,7 +167,7 @@ class CreateMovieNight extends Component {
             });
     }
 
-    onSubmit(e) {
+    onSubmit = async (e)  =>{
         e.preventDefault();
 
         // get all movies
@@ -181,28 +181,36 @@ class CreateMovieNight extends Component {
         let secondSelectionInDB = false;
         let thirdSelectionInDB = false;
 
+        if (this.state.imdbIdFirst) {
+            movieChoicesRoundOne.push(this.state.imdbIdFirst)
+        }
+
+        if (this.state.imdbIdSecond) {
+            movieChoicesRoundOne.push(this.state.imdbIdSecond)
+        }
+
+        if (this.state.imdbIdThird) {
+            movieChoicesRoundOne.push(this.state.imdbIdThird)
+        }
+
+        this.state.movieChoicesRoundOne = movieChoicesRoundOne;
+
         // check to see if selected movies exist in db
-        //movies.foreach((movie) => {
         let i;
         for (i = 0; i < movies.length; i++) {
-            if (movies[i].imdbId === this.state.imdbIdFirst) {
-                firstSelectionInDB = true;
-                movieChoicesRoundOne.add(movies[i]._id);
+            if (this.state.imdbIdFirst && movies[i].imdbId === this.state.imdbIdFirst) {
+                firstSelectionInDB = true;                
+            }
+            if (this.state.imdbIdSecond && movies[i].imdbId === this.state.imdbIdSecond) {
+                secondSelectionInDB = true;
+            }
+            if (this.state.imdbIdThird && movies[i].imdbId === this.state.imdbIdThird) {
+                thirdSelectionInDB = true;
             }
         };
+    
 
-            // if (movie.imdbId === this.state.imdbIdSecond) {
-            //     secondSelectionInDB = true;
-            //     movieChoicesRoundOne.add(movie._id);
-            // }
-
-            // if (movie.imdbId === this.state.imdbIdThird) {
-            //     thirdSelectionInDB = true;
-            //     movieChoicesRoundOne.add(movie._id);
-            // }
-        
-
-        if (!firstSelectionInDB) {
+         if (!firstSelectionInDB && this.state.imdbIdFirst) {
             // save first movie to database
             const movieData = {
                 title: this.state.titleFirst,
@@ -210,33 +218,39 @@ class CreateMovieNight extends Component {
                 imdbId: this.state.imdbIdFirst,
                 tmdbId: this.state.tmdbIdFirst
             };
-            this.props.createMovieNoRedirect(movieData);
+            await this.saveMovie(movieData);
         }
 
-        // TODO: not getting movies?  Does it need to be async / await or is it another issue?
-        this.props.getMovies();
-        const { refreshedMovies } = this.props.movie;
-        for (i = 0; i < refreshedMovies.length; i++) {
-            if (refreshedMovies[i].imdbId === this.state.imdbIdFirst) {
-                firstSelectionInDB = true;
-                console.log('adding movie to movie night')
-                console.log(refreshedMovies[i])
-                movieChoicesRoundOne.add(refreshedMovies[i]._id);
-            }
-        };
+        if (!secondSelectionInDB && this.state.imdbIdSecond) {
+            // save second movie to database
+            const movieData = {
+                title: this.state.titleSecond,
+                releaseDate: this.state.releaseDateSecond,
+                imdbId: this.state.imdbIdSecond,
+                tmdbId: this.state.tmdbIdSecond
+            };
+            await this.saveMovie(movieData);
+        }
 
-
-
-        // save those that don't already exist in db
-
-
+        if (!thirdSelectionInDB && this.state.imdbIdThird) {
+            // save third movie to database
+            const movieData = {
+                title: this.state.titleThird,
+                releaseDate: this.state.releaseDateThird,
+                imdbId: this.state.imdbIdThird,
+                tmdbId: this.state.tmdbIdThird
+            };
+            await this.saveMovie(movieData);
+        }
 
         // save movie night
         const movieNightData = {
             date: this.state.date,
             host: this.state.host,
             location: this.state.location,
-            movieViewed: this.state.movieViewed,
+            // TODO: only set movieViewed here prior to launch
+            //movieViewed: this.state.movieViewed,
+            movieViewed: this.state.imdbIdFirst,
             movieChoicesRoundOne: this.state.movieChoicesRoundOne,
             movieChoicesRoundTwo: this.state.movieChoicesRoundTwo,
             movieChoicesRoundThree: this.state.movieChoicesRoundThree,
@@ -247,7 +261,14 @@ class CreateMovieNight extends Component {
 
         console.log(movieNightData);
 
-        //this.props.createMovieNight(movieNightData, this.props.history);
+        if (movieNightData.date && movieNightData.host) {
+            this.props.createMovieNight(movieNightData, this.props.history);
+        }
+    }
+
+    // save first movie to database
+    saveMovie = async (movieData) => {        
+        this.props.createMovieNoRedirect(movieData);
     }
 
     onChange(e) {

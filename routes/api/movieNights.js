@@ -68,10 +68,10 @@ router.post(
         if(req.body.location) movieNightFields.location = req.body.location;
         if(req.body.movieViewed) movieNightFields.movieViewed = req.body.movieViewed;
         
-        // // movieChoicesRoundOne - split into array
-        // if(typeof req.body.movieChoicesRoundOne !== 'undefined') {
-        //     movieNightFields.movieChoicesRoundOne = req.body.movieChoicesRoundOne.split(',');
-        // }
+        // movieChoicesRoundOne - split into array
+        if(typeof req.body.movieChoicesRoundOne !== 'undefined') {
+            movieNightFields.movieChoicesRoundOne = req.body.movieChoicesRoundOne; //.split(',');
+        }
         // // movieChoicesRoundTwo - split into array
         // if(typeof req.body.movieChoicesRoundTwo !== 'undefined') {
         //     movieNightFields.movieChoicesRoundTwo = req.body.movieChoicesRoundTwo.split(',');
