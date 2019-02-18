@@ -33,7 +33,7 @@ class MovieNightList extends Component {
                                         onClick={this.onDeleteClick.bind(this, _id)}
                                         >&times;
                                     </Button>
-                                    &nbsp;<Link to={`/movieNight/${date}`}>{moment(date).format('YYYY-MM-DD')}</Link> {host} {location}
+                                    &nbsp;<Link to={`/movieNight/${moment.utc(date).format('YYYY-MM-DD')}`}>{moment.utc(date).format('YYYY-MM-DD')}</Link> {host} {location}
                                 </ListGroupItem>
                             </CSSTransition>
                         ))}

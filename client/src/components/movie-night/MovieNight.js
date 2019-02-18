@@ -13,17 +13,27 @@ class MovieNight extends Component {
 
   render() {
     const {movieNight} = this.props.movieNight;
+    console.log(movieNight);
     
     //console.log('movie night date: ' + movieNight.date)
 
     let movieNightContent;
-    movieNightContent = (
-        <div>
-            <h3>{moment(movieNight.date).format('dddd, MMMM Do YYYY')}</h3>
-            <h5>{movieNight.host}</h5>
-            <h5>{movieNight.location}</h5>
-        </div>
-    )
+    if (!movieNight.date) {
+        movieNightContent = (
+          <div>
+            <h3>No movie found for the date of {this.props.match.params.date}</h3>
+          </div>
+        )
+    }
+    else {
+      movieNightContent = (
+          <div>
+              <h3>{moment.utc(movieNight.date).format('dddd, MMMM Do YYYY')}</h3>
+              <h5>{movieNight.host}</h5>
+              <h5>{movieNight.location}</h5>
+          </div>
+      )
+    }
 
     return (
       <div className="dashboard">
