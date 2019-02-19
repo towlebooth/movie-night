@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getMovieNightByDate } from '../../actions/movieNightActions';
+import { getMovieByImdbId } from '../../actions/movieActions';
+import MovieChoice from './../movie/MovieChoice';
 import moment from 'moment';
 //import Spinner from '../common/Spinner';
 
@@ -13,9 +15,23 @@ class MovieNight extends Component {
 
   render() {
     const {movieNight} = this.props.movieNight;
+    const {movieSelected} = {};
+    const {movieChoice1} = {};
+    const {movieChoice2} = {};
+    const {movieChoice3} = {};
+
+    // if (movieNight.movieChoicesRoundOne[0]) {
+    //     this.props.get
+      
+    //   // TODO: get the movies here or just send over imdbId?
+
+    //   //movieChoice1 = 
+    // }
+    console.log('Movie Night: ')
     console.log(movieNight);
-    
-    //console.log('movie night date: ' + movieNight.date)
+    if (movieNight.movieChoicesRoundOne) {
+        console.log(movieNight.movieChoicesRoundOne[0])
+    }
 
     let movieNightContent;
     if (!movieNight.date) {
@@ -31,6 +47,7 @@ class MovieNight extends Component {
               <h3>{moment.utc(movieNight.date).format('dddd, MMMM Do YYYY')}</h3>
               <h5>{movieNight.host}</h5>
               <h5>{movieNight.location}</h5>
+              <MovieChoice imdbId={movieNight.movieChoicesRoundOne[0]}></MovieChoice>
           </div>
       )
     }
@@ -52,7 +69,8 @@ class MovieNight extends Component {
 MovieNight.propTypes = {
     getMovieNightByDate: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
-    movieNight: PropTypes.object.isRequired
+    movieNight: PropTypes.object.isRequired,
+    getMovieByImdbId: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -60,4 +78,4 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps, { getMovieNightByDate })(MovieNight);
+export default connect(mapStateToProps, { getMovieNightByDate, getMovieByImdbId })(MovieNight);
