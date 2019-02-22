@@ -4,12 +4,73 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getMovieByImdbId } from '../../actions/movieActions';
 import moment from 'moment';
+import { 
+    MOVIE_DB_API_KEY, 
+    MOVIE_DB_BASE_URL
+ } from '../common/keys';
 
 class MovieChoice extends Component {
-    componentDidMount() {
-        this.props.getMovieByImdbId(this.props.imdbId);
-        //console.log(this.props.imdbId)
+    componentDidMount = async () => {
+        this.getMovieFromApi();
     }
+
+    getMovieFromApi = async () => {
+
+        const api_searchMovie_call =
+            await fetch(`${MOVIE_DB_BASE_URL}find/${this.props.imdbId}?api_key=${MOVIE_DB_API_KEY}&language=en-US&external_source=imdb_id`);
+            const searchData = await api_searchMovie_call.json();
+            console.log(searchData);
+            
+        if (searchData.movie_results[0]) {
+            const searchResultId = searchData.movie_results[0].id;
+            //this.setState({searchResults: searchData.results});
+
+            const api_configuration_call = 
+                await fetch(`${MOVIE_DB_BASE_URL}configuration?api_key=${MOVIE_DB_API_KEY}`);
+            const configData = await api_configuration_call.json();
+            console.log(configData);
+            if (configData.images) {
+                this.setState({
+                    imageBaseUrl: configData.images.base_url,
+                    posterSizeXS: configData.images.poster_sizes[0],
+                    posterSizeS: configData.images.poster_sizes[1]
+                });
+            } else {
+                this.setState({
+                    imageBaseUrl: undefined,
+                    posterSizeXS: undefined,
+                    posterSizeS: undefined
+                });
+            }
+
+            const api_call = 
+                await fetch(`${MOVIE_DB_BASE_URL}movie/${searchResultId}?api_key=${MOVIE_DB_API_KEY}`);
+            const data = await api_call.json();
+            //const movieId = data.id;
+            console.log(data);
+
+        }
+
+        //const imdbId = data.imdb_id;
+
+        // if (titleForSearch && movieId) {
+        //     this.setState({
+        //         title: data.title,
+        //         releaseDate: data.release_date,
+        //         imdbId: data.imdb_id,
+        //         tmdbId: data.id.toString(),
+        //         error: ""
+        //     });
+        // } else {
+        //     this.setState({
+        //         title: undefined,
+        //         releaseDate: undefined,
+        //         imdbId: undefined,
+        //         tmdbId: undefined,
+        //         error: "There was an error"
+        //     });
+        // }
+    };
 
     render() {
         const {movie} = this.props.movie;
@@ -32,7 +93,7 @@ class MovieChoice extends Component {
 
 MovieChoice.propTypes = {
     getMovieByImdbId: PropTypes.func.isRequired, 
-    imdbId: PropTypes.object.isRequired,
+    imdbId: PropTypes.string.isRequired,
     movie: PropTypes.object.isRequired
 }
 

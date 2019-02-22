@@ -68,7 +68,7 @@ class App extends Component {
                             <Switch>
                                 <PrivateRoute exact path="/create-movie-night" component={ CreateMovieNight } />
                             </Switch>
-                            <Route path="/movie/:title" component={Movie} />
+                            <Route path="/movie/:imdbId" component={Movie} />
                             <Route path="/movieNight/:date" component={MovieNight} />
                         </div>                        
                         <Footer />

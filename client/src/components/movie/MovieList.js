@@ -23,7 +23,7 @@ class MovieList extends Component {
                 
                 <ListGroup>
                     <TransitionGroup className="movie-list">
-                        {movies.map(({ _id, title, releaseDate }) => (
+                        {movies.map(({ _id, title, releaseDate, imdbId }) => (
                             <CSSTransition key={_id} timeout={500} classNames="fade">
                                 <ListGroupItem>
                                     <Button
@@ -33,7 +33,7 @@ class MovieList extends Component {
                                         onClick={this.onDeleteClick.bind(this, _id)}
                                         >&times;
                                     </Button>
-                                    &nbsp;<Link to={`/movie/${title}`}>{title}</Link> ({moment(releaseDate).format('YYYY')})
+                                    &nbsp;<Link to={`/movie/${imdbId}`}>{title}</Link> ({moment(releaseDate).format('YYYY')})
                                 </ListGroupItem>
                             </CSSTransition>
                         ))}
