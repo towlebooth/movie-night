@@ -18,6 +18,7 @@ class MovieDetail extends Component {
             releaseDate: undefined,
             imdbId: undefined,
             runtime: undefined,
+            genres: undefined,
             poster_path: undefined,
             backdrop_path: undefined,
             imageBaseUrl: undefined,
@@ -89,6 +90,7 @@ class MovieDetail extends Component {
                     imdbId: data.imdb_id,
                     overview: data.overview,
                     runtime: data.runtime,
+                    genres: data.genres,
                     poster_path: data.poster_path,
                     backdrop_path: data.backdrop_path,
                     error: ""
@@ -100,6 +102,7 @@ class MovieDetail extends Component {
                     imdbId: undefined,
                     overview: undefined,
                     runtime: undefined,
+                    genres: undefined,
                     poster_path: undefined,
                     backdrop_path: undefined,
                     error: "There was an error"
@@ -116,6 +119,16 @@ class MovieDetail extends Component {
         // format year
         const formattedYear = (moment(this.state.releaseDate).format('YYYY'));
 
+        // format genres
+         var genres = "";
+         if (this.state.genres && this.state.genres.length > 0) {
+             var genreArray = this.state.genres;
+             console.log(genreArray)
+             genreArray.forEach((genre) => {
+                 genres = genres + genre.name + ', '
+             });
+             genres = genres.slice(0, -2);
+         }
 
         return(
             <div className='movieDetail'>
@@ -127,7 +140,8 @@ class MovieDetail extends Component {
                     <Col xs="8">
                         <h3>{this.state.title} ({formattedYear})</h3>
                         <p>{this.state.overview}</p>
-                        <p>{this.state.runtime}</p>
+                        <p>Runtime: {this.state.runtime} minutes</p>
+                        <p>Genres: {genres}</p>
                     </Col>
                 </Row>
             </div>
