@@ -19,6 +19,7 @@ class MovieDetail extends Component {
             imdbId: undefined,
             runtime: undefined,
             genres: undefined,
+            crew: [],
             poster_path: undefined,
             backdrop_path: undefined,
             imageBaseUrl: undefined,
@@ -49,7 +50,6 @@ class MovieDetail extends Component {
             
         if (searchData.movie_results[0]) {
             const searchResultId = searchData.movie_results[0].id;
-            //this.setState({searchResults: searchData.results});
 
             const api_configuration_call = 
                 await fetch(`${MOVIE_DB_BASE_URL}configuration?api_key=${MOVIE_DB_API_KEY}`);
@@ -108,13 +108,42 @@ class MovieDetail extends Component {
                     error: "There was an error"
                 });
             }
+
+            const api_credits_call = 
+                await fetch(`${MOVIE_DB_BASE_URL}movie/${searchResultId}/credits?api_key=${MOVIE_DB_API_KEY}`);
+            const credits = await api_credits_call.json();
+            const cast = credits.cast;
+            const crew = credits.crew;
+
+            if (crew) {
+                var directors = crew.filter(function (c) {
+                    return c.job == "Director";
+                });
+    
+                var writers = crew.filter(function (c) {
+                    return c.job == "Writer" ||
+                        c.job == "Story" ||
+                        c.job == "Screenplay";
+                });
+    
+                var crewForDisplay = directors;
+                crewForDisplay.push.apply(directors, writers);
+                
+                if (crewForDisplay.length > 0) {
+                    this.setState({
+                        crew: crewForDisplay
+                    });
+                } else {
+                    this.setState({
+                        crew: []
+                    });
+                }
+            }            
         }
     };
 
     render() {
-        //const { errors } = this.state;
         const {movie} = this.props.movie;
-        console.log(movie)
 
         // format year
         const formattedYear = (moment(this.state.releaseDate).format('YYYY'));
@@ -123,7 +152,6 @@ class MovieDetail extends Component {
          var genres = "";
          if (this.state.genres && this.state.genres.length > 0) {
              var genreArray = this.state.genres;
-             console.log(genreArray)
              genreArray.forEach((genre) => {
                  genres = genres + genre.name + ', '
              });
@@ -142,6 +170,12 @@ class MovieDetail extends Component {
                         <p>{this.state.overview}</p>
                         <p>Runtime: {this.state.runtime} minutes</p>
                         <p>Genres: {genres}</p>
+                        <p>Select Crew:</p>
+                        <ListGroup>
+                            {this.state.crew.map(({ credit_id, name, job }) => (
+                                <ListGroupItem key={credit_id}>{name}: {job}</ListGroupItem>
+                            ))}
+                        </ListGroup>
                     </Col>
                 </Row>
             </div>
