@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 //import { Link } from 'react-router-dom';
-import { Container, Row, Col, ListGroup, ListGroupItem, Button } from 'reactstrap';
+import { Row, Col, ListGroup, ListGroupItem } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getMovieByImdbId } from '../../actions/movieActions';
 import moment from 'moment';
 import { 
     MOVIE_DB_API_KEY, 
-    MOVIE_DB_BASE_URL
+    MOVIE_DB_BASE_URL,
+    OMDB_BASE_URL,
+    OMDB_API_KEY
  } from '../common/keys';
 
 class MovieDetail extends Component {
@@ -20,6 +22,7 @@ class MovieDetail extends Component {
             runtime: undefined,
             genres: undefined,
             crew: [],
+            cast: [],
             poster_path: undefined,
             backdrop_path: undefined,
             imageBaseUrl: undefined,
@@ -29,7 +32,9 @@ class MovieDetail extends Component {
             posterSizeL: undefined,
             posterSizeXL: undefined,
             posterSizeXXL: undefined,
-            
+            rated: undefined,
+            ratings: [],
+
             error: undefined,
             errors: {}
         };
@@ -40,21 +45,22 @@ class MovieDetail extends Component {
     }
 
     getMovieFromApi = async () => {
-        const {movie} = this.props.movie;
-        console.log(this.props.movie);
-        console.log(this.props.imdbId);
+        //const {movie} = this.props.movie;
+
+        // movie by imdbId
         const api_searchMovie_call =
             await fetch(`${MOVIE_DB_BASE_URL}find/${this.props.imdbId}?api_key=${MOVIE_DB_API_KEY}&language=en-US&external_source=imdb_id`);
         const searchData = await api_searchMovie_call.json();
-        console.log(searchData);
+        //console.log(searchData);
             
         if (searchData.movie_results[0]) {
             const searchResultId = searchData.movie_results[0].id;
 
+            // configuration - images, etc
             const api_configuration_call = 
                 await fetch(`${MOVIE_DB_BASE_URL}configuration?api_key=${MOVIE_DB_API_KEY}`);
             const configData = await api_configuration_call.json();
-            console.log(configData);
+            //console.log(configData);
             if (configData.images) {
                 this.setState({
                     imageBaseUrl: configData.images.base_url,
@@ -78,6 +84,7 @@ class MovieDetail extends Component {
                 });
             }
 
+            // movie details
             const api_call = 
                 await fetch(`${MOVIE_DB_BASE_URL}movie/${searchResultId}?api_key=${MOVIE_DB_API_KEY}`);
             const data = await api_call.json();
@@ -109,21 +116,22 @@ class MovieDetail extends Component {
                 });
             }
 
+            // credits - cast and crew
             const api_credits_call = 
                 await fetch(`${MOVIE_DB_BASE_URL}movie/${searchResultId}/credits?api_key=${MOVIE_DB_API_KEY}`);
             const credits = await api_credits_call.json();
-            const cast = credits.cast;
+            let cast = credits.cast;
             const crew = credits.crew;
 
             if (crew) {
                 var directors = crew.filter(function (c) {
-                    return c.job == "Director";
+                    return c.job === "Director";
                 });
     
                 var writers = crew.filter(function (c) {
-                    return c.job == "Writer" ||
-                        c.job == "Story" ||
-                        c.job == "Screenplay";
+                    return c.job === "Writer" ||
+                        c.job === "Story" ||
+                        c.job === "Screenplay";
                 });
     
                 var crewForDisplay = directors;
@@ -138,12 +146,41 @@ class MovieDetail extends Component {
                         crew: []
                     });
                 }
-            }            
+            } 
+            
+            if (cast && cast.length > 0) {
+                cast = cast.slice(0,10);
+                
+                this.setState({
+                    cast: cast
+                });
+            } else {
+                this.setState({
+                    cast: []
+                });
+            }
+
+            const api_omdb_call =
+                await fetch(`${OMDB_BASE_URL}apikey=${OMDB_API_KEY}&i=${this.props.imdbId}`);
+            const omdbData = await api_omdb_call.json();
+            //console.log(omdbData);
+
+            if (this.props.imdbId && omdbData) {
+                this.setState({
+                    rated: omdbData.Rated,
+                    ratings: omdbData.Ratings
+                });
+            } else {
+                this.setState({
+                    rated: undefined,
+                    ratings: []
+                });
+            }
         }
     };
 
     render() {
-        const {movie} = this.props.movie;
+        //const {movie} = this.props.movie;
 
         // format year
         const formattedYear = (moment(this.state.releaseDate).format('YYYY'));
@@ -162,7 +199,7 @@ class MovieDetail extends Component {
             <div className='movieDetail'>
                 <Row>
                     <Col xs="4">
-                            <img src={this.state.imageBaseUrl + this.state.posterSizeL + this.state.poster_path} style={{width: 185}} alt={movie.title}></img>
+                            <img src={this.state.imageBaseUrl + this.state.posterSizeL + this.state.poster_path} style={{width: 185}} alt={this.state.title}></img>
 
                         </Col>
                     <Col xs="8">
@@ -170,10 +207,23 @@ class MovieDetail extends Component {
                         <p>{this.state.overview}</p>
                         <p>Runtime: {this.state.runtime} minutes</p>
                         <p>Genres: {genres}</p>
+                        <p>Rated: {this.state.rated}</p>
+                        <p>Ratings:</p>
+                        <ListGroup>
+                            {this.state.ratings.map(({ Source, Value }) => (
+                                <ListGroupItem>{Source}: {Value}</ListGroupItem>
+                            ))}
+                        </ListGroup>
                         <p>Select Crew:</p>
                         <ListGroup>
                             {this.state.crew.map(({ credit_id, name, job }) => (
                                 <ListGroupItem key={credit_id}>{name}: {job}</ListGroupItem>
+                            ))}
+                        </ListGroup>
+                        <p>Select Cast:</p>
+                        <ListGroup>
+                            {this.state.cast.map(({ cast_id, name, character }) => (
+                                <ListGroupItem key={cast_id}>{name}: {character}</ListGroupItem>
                             ))}
                         </ListGroup>
                     </Col>

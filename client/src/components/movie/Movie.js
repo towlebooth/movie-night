@@ -10,17 +10,11 @@ import moment from 'moment';
 class Movie extends Component {
   componentDidMount() {  
       console.log(this.props.match.params.imdbId)
-      // FUCK IT TODO: pass imdbId in querystring
       this.props.getMovieByImdbId(this.props.match.params.imdbId);
   }
 
   render() {
     const {movie} = this.props.movie;
-
-    // format year
-    const formattedYear = (moment(movie.releaseDate).format('YYYY'));
-    
-    console.log('imdb: ' + movie.imdb)
 
     return (
       <div className="dashboard">
