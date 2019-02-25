@@ -44,6 +44,15 @@ class MovieDetail extends Component {
         this.getMovieFromApi();
     }
 
+    componentWillReceiveProps(nextProps){
+        console.log('componentWillRecieveProps')
+        console.log(nextProps.value)
+        if(nextProps.value !== this.props.value){
+            //this.setState({count:nextProps.value});
+            this.getMovieFromApi();
+        }
+    }
+
     getMovieFromApi = async () => {
         //const {movie} = this.props.movie;
 

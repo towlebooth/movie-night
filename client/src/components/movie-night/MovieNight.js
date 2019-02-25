@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getMovieNightByDate } from '../../actions/movieNightActions';
 import { getMovieByImdbId } from '../../actions/movieActions';
-import MovieChoice from './../movie/MovieChoice';
+//import MovieChoice from './../movie/MovieChoice';
+import MovieDetail from './../movie/MovieDetail';
 import moment from 'moment';
 //import Spinner from '../common/Spinner';
 
@@ -13,12 +14,16 @@ class MovieNight extends Component {
       this.props.getMovieNightByDate(this.props.match.params.date);
   }
 
+  // componentWillReceiveProps() {
+  //   this.props.getMovieNightByDate(this.props.match.params.date);
+  // }
+
   render() {
     const {movieNight} = this.props.movieNight;
-    const {movieSelected} = {};
-    const {movieChoice1} = {};
-    const {movieChoice2} = {};
-    const {movieChoice3} = {};
+    // const {movieSelected} = {};
+    // const {movieChoice1} = {};
+    // const {movieChoice2} = {};
+    // const {movieChoice3} = {};
 
     // if (movieNight.movieChoicesRoundOne[0]) {
     //     this.props.get
@@ -27,7 +32,6 @@ class MovieNight extends Component {
 
     //   //movieChoice1 = 
     // }
-    console.log('Movie Night: ')
     console.log(movieNight);
     if (movieNight.movieChoicesRoundOne) {
         console.log(movieNight.movieChoicesRoundOne[0])
@@ -47,7 +51,7 @@ class MovieNight extends Component {
               <h3>{moment.utc(movieNight.date).format('dddd, MMMM Do YYYY')}</h3>
               <h5>{movieNight.host}</h5>
               <h5>{movieNight.location}</h5>
-              <MovieChoice imdbId={movieNight.movieChoicesRoundOne[0]}></MovieChoice>
+              <MovieDetail imdbId={movieNight.movieViewed}></MovieDetail>
           </div>
       )
     }

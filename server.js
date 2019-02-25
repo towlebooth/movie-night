@@ -6,6 +6,8 @@ const passport = require('passport');
 const movieNights = require('./routes/api/movieNights');
 const movies = require('./routes/api/movies');
 const users = require('./routes/api/users');
+const hostingOrders = require('./routes/api/hostingOrders');
+
 
 const app = express();
 
@@ -32,6 +34,7 @@ require('./config/passport')(passport);
 app.use('/api/movieNights', movieNights);
 app.use('/api/movies', movies);
 app.use('/api/users', users);
+app.use('/api/hostingOrders', hostingOrders);
 
 const port = process.env.PORT || 5000;
 

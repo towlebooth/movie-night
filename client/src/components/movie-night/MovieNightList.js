@@ -26,14 +26,15 @@ class MovieNightList extends Component {
                         {movieNights.map(({ _id, date, host, location }) => (
                             <CSSTransition key={_id} timeout={500} classNames="fade">
                                 <ListGroupItem>
-                                    <Button
+                                    {/* <Button
                                         className="remove-btn"
                                         color="danger"
                                         size="sm"
                                         onClick={this.onDeleteClick.bind(this, _id)}
                                         >&times;
                                     </Button>
-                                    &nbsp;<Link to={`/movieNight/${moment.utc(date).format('YYYY-MM-DD')}`}>{moment.utc(date).format('YYYY-MM-DD')}</Link> {host} {location}
+                                    &nbsp; */}
+                                    <Link to={`/movieNight/${moment.utc(date).format('YYYY-MM-DD')}`}>{moment.utc(date).format('YYYY-MM-DD')}</Link> {host} {location}
                                 </ListGroupItem>
                             </CSSTransition>
                         ))}

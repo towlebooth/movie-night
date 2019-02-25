@@ -4,10 +4,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getCurrentProfile } from '../../actions/profileActions';
 //import Spinner from '../common/Spinner';
-import MovieList from '../movie/MovieList';
+//import MovieList from '../movie/MovieList';
 import MovieNightList from '../movie-night/MovieNightList';
-import MovieModal from '../MovieModal';
+//import MovieModal from '../MovieModal';
 import { Container } from 'reactstrap';
+import HostingOrder from '../hosting-order/HostingOrder';
 
 class Dashboard extends Component {
   componentDidMount() {
@@ -46,9 +47,10 @@ class Dashboard extends Component {
 
     dashboardContent = 
       <Container>
+        <HostingOrder />
         <MovieNightList />
-        <MovieModal />
-        <MovieList />
+        {/* <MovieModal /> */}
+        {/* <MovieList /> */}
       </Container>;
 
 
