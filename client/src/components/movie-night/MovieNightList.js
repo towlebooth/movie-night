@@ -34,7 +34,7 @@ class MovieNightList extends Component {
                                         >&times;
                                     </Button>
                                     &nbsp; */}
-                                    <Link to={`/movieNight/${moment.utc(date).format('YYYY-MM-DD')}`}>{moment.utc(date).format('YYYY-MM-DD')}</Link> {host} {location}
+                                    <Link to={`/movieNight/${moment.utc(date).format('YYYY-MM-DD')}`}>{moment.utc(date).format('YYYY-MM-DD')}</Link> | {host} | {location}
                                 </ListGroupItem>
                             </CSSTransition>
                         ))}
