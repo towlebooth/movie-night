@@ -292,7 +292,8 @@ class CreateMovieNight extends Component {
         { label: 'Stacey', value: 'Stacey' },
         { label: 'Zach', value: 'Zach' },
         { label: 'Laura', value: 'Laura' },
-        { label: 'Jennifer', value: 'Jennifer' }
+        { label: 'Jennifer', value: 'Jennifer' },
+        { label: 'Theater', value: 'Theater' }
     ];
 
     // Select options for location
@@ -305,7 +306,9 @@ class CreateMovieNight extends Component {
         { label: 'Minneapolis', value: 'Minneapolis' },
         { label: 'Oakdale', value: 'Oakdale' },
         { label: 'Eden Prairie', value: 'Eden Prairie' },
-        { label: 'Inver Grove Heights', value: 'Inver Grove Heights' }
+        { label: 'Inver Grove Heights', value: 'Inver Grove Heights' },
+        { label: 'Marcus Cinema, Oakdale', value: 'Marcus Cinema, Oakdale' },
+        { label: 'Alamo Drafthouse, Woodbury', value: 'Alamo Drafthouse, Woodbury' }
     ];
 
     return (

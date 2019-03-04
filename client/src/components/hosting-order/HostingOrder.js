@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Container, ListGroup, ListGroupItem } from 'reactstrap';
 import { connect } from 'react-redux';
 //import { Link } from 'react-router-dom';
-//import moment from 'moment';
+import moment from 'moment';
 import { getHostingOrders } from '../../actions/hostingOrderActions';
 import { getMovieNights } from '../../actions/movieNightActions';
 import PropTypes from 'prop-types';
@@ -24,16 +24,31 @@ class HostingOrder extends Component {
             let recentMovieNights = movieNights.slice(0, 8);
             console.log(recentMovieNights);
             hostingOrders.forEach((hostingOrder) => {
-                recentMovieNights.forEach((movieNight) => {
-                    if (movieNight.host == hostingOrder.host) {
-                        var movieNightHostingOrder = {
-                            _id: hostingOrder._id, 
-                            host: hostingOrder.host, 
-                            order: hostingOrder.order, 
-                            mostRecentDate: movieNight.date};
-                        movieNightHostingOrders.push(movieNightHostingOrder);
-                    }
-                });
+                             
+                var i;
+                for (i = 0; i < recentMovieNights.length; i++) { 
+                    if (recentMovieNights[i].host == hostingOrder.host) {
+                    var orderDate = moment.utc(recentMovieNights[i].date).format('YYYY-MM-DD')
+                    var movieNightHostingOrder = {
+                        _id: hostingOrder._id, 
+                        host: hostingOrder.host, 
+                        order: hostingOrder.order, 
+                        mostRecentDate: orderDate};
+                    movieNightHostingOrders.push(movieNightHostingOrder);
+                    break;
+                }
+            }
+
+                // recentMovieNights.forEach((movieNight) => {
+                //     if (movieNight.host == hostingOrder.host) {
+                //         var movieNightHostingOrder = {
+                //             _id: hostingOrder._id, 
+                //             host: hostingOrder.host, 
+                //             order: hostingOrder.order, 
+                //             mostRecentDate: movieNight.date};
+                //         movieNightHostingOrders.push(movieNightHostingOrder);
+                //     }
+                // });
             });
             console.log(movieNightHostingOrders)
         //     var i;
