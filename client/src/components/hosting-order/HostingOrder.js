@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, ListGroup, ListGroupItem } from 'reactstrap';
 import { connect } from 'react-redux';
-//import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { getHostingOrders } from '../../actions/hostingOrderActions';
 import { getMovieNights } from '../../actions/movieNightActions';
@@ -18,8 +18,6 @@ class HostingOrder extends Component {
         const { movieNights } = this.props.movieNight;
         let movieNightHostingOrders = [];
 
-        // create objects with host name and last movie night date
-        // TODO: switch to for loop so we can break once we set one combo per host
         if (hostingOrders && movieNights) {
             let recentMovieNights = movieNights.slice(0, 8);
             console.log(recentMovieNights);
@@ -28,46 +26,24 @@ class HostingOrder extends Component {
                 var i;
                 for (i = 0; i < recentMovieNights.length; i++) { 
                     if (recentMovieNights[i].host == hostingOrder.host) {
-                    var orderDate = moment.utc(recentMovieNights[i].date).format('YYYY-MM-DD')
-                    var movieNightHostingOrder = {
-                        _id: hostingOrder._id, 
-                        host: hostingOrder.host, 
-                        order: hostingOrder.order, 
-                        mostRecentDate: orderDate};
-                    movieNightHostingOrders.push(movieNightHostingOrder);
-                    break;
+                        var orderDate = moment.utc(recentMovieNights[i].date).format('YYYY-MM-DD')
+                        var movieNightHostingOrder = {
+                            _id: hostingOrder._id, 
+                            host: hostingOrder.host, 
+                            order: hostingOrder.order, 
+                            mostRecentDate: orderDate};
+                        movieNightHostingOrders.push(movieNightHostingOrder);
+                        break;
+                    }
                 }
-            }
-
-                // recentMovieNights.forEach((movieNight) => {
-                //     if (movieNight.host == hostingOrder.host) {
-                //         var movieNightHostingOrder = {
-                //             _id: hostingOrder._id, 
-                //             host: hostingOrder.host, 
-                //             order: hostingOrder.order, 
-                //             mostRecentDate: movieNight.date};
-                //         movieNightHostingOrders.push(movieNightHostingOrder);
-                //     }
-                // });
             });
-            console.log(movieNightHostingOrders)
-        //     var i;
-        //     for (i = 0; i < hostingOrders.length; i++) { 
-        //         var thing = {};
-        //         thing = {}
-        //     }
         }
         return(
             <Container>                
                 <ListGroup>
-                    {/* {hostingOrders.map(({ _id, host, order }) => (
-                        <ListGroupItem key={_id}>
-                            {host} {order}
-                        </ListGroupItem>
-                    ))} */}
                     {movieNightHostingOrders.map(({ _id, host, order, mostRecentDate }) => (
                         <ListGroupItem key={_id}>
-                            {host} {order} {mostRecentDate}
+                            {host} last hosted on <Link to={`/movieNight/${moment.utc(mostRecentDate).format('YYYY-MM-DD')}`}>{moment.utc(mostRecentDate).format('MMMM Do YYYY')}</Link> 
                         </ListGroupItem>
                     ))}
                 </ListGroup>
@@ -75,7 +51,7 @@ class HostingOrder extends Component {
         );
     }
 }
-
+//moment().format('MMMM Do YYYY, h:mm:ss a')
 HostingOrder.propTypes = {
     getHostingOrders: PropTypes.func.isRequired, 
     hostingOrder: PropTypes.object.isRequired,

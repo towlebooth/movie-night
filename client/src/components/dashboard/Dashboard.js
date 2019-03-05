@@ -48,6 +48,7 @@ class Dashboard extends Component {
     dashboardContent = 
       <Container>
         <HostingOrder />
+        <p></p>
         <MovieNightList />
         {/* <MovieModal /> */}
         {/* <MovieList /> */}
