@@ -38,7 +38,7 @@ export default function(state = initialState, action) {
             }
             case MOVIENIGHTS_LOADING:
             return {
-                ...state,
+                ...initialState, // clear our stored data when before we load new data
                 loading: true
             }
         default:
