@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Container, Row, Col, ListGroup, ListGroupItem, Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
-//import axios from 'axios';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -69,15 +68,23 @@ class CreateMovieNight extends Component {
         const api_searchMovie_call =
             await fetch(`${MOVIE_DB_BASE_URL}search/movie?api_key=${MOVIE_DB_API_KEY}&language=en-US&query=${titleForSearch}&page=1&include_adult=false`);
             const searchData = await api_searchMovie_call.json();
-            console.log(searchData);
-            console.log(searchData.results[0])
-            const searchResultId = searchData.results[0].id;
-            this.setState({searchResults: searchData.results});
+
+            var searchResultId;
+
+            if (searchData.results) 
+            {
+                searchResultId = searchData.results[0].id;
+
+                // limit search results to 5
+                var results = searchData.results;
+                var limitedResults = results.slice(0,5);
+                this.setState({searchResults: limitedResults});
+            }
 
         const api_configuration_call = 
             await fetch(`${MOVIE_DB_BASE_URL}configuration?api_key=${MOVIE_DB_API_KEY}`);
         const configData = await api_configuration_call.json();
-        console.log(configData);
+        //console.log(configData);
         if (configData.images) {
             this.setState({
                 imageBaseUrl: configData.images.base_url,
@@ -95,34 +102,13 @@ class CreateMovieNight extends Component {
         const api_call = 
             await fetch(`${MOVIE_DB_BASE_URL}movie/${searchResultId}?api_key=${MOVIE_DB_API_KEY}`);
         const data = await api_call.json();
-        //console.log(data);
-
-        //const imdbId = data.imdb_id;
-
-        // if (titleForSearch && movieId) {
-        //     this.setState({
-        //         title: data.title,
-        //         releaseDate: data.release_date,
-        //         imdbId: data.imdb_id,
-        //         tmdbId: data.id.toString(),
-        //         error: ""
-        //     });
-        // } else {
-        //     this.setState({
-        //         title: undefined,
-        //         releaseDate: undefined,
-        //         imdbId: undefined,
-        //         tmdbId: undefined,
-        //         error: "There was an error"
-        //     });
-        // }
     };
 
     onSelectClick = async (id) => {
         const api_call = 
         await fetch(`${MOVIE_DB_BASE_URL}movie/${id}?api_key=${MOVIE_DB_API_KEY}`);
         const data = await api_call.json();
-        console.log(data);
+        //console.log(data);
 
         this.setState({
                 titleFirst: data.title,
@@ -138,7 +124,7 @@ class CreateMovieNight extends Component {
         const api_call = 
         await fetch(`${MOVIE_DB_BASE_URL}movie/${id}?api_key=${MOVIE_DB_API_KEY}`);
         const data = await api_call.json();
-        console.log(data);
+        //console.log(data);
 
         this.setState({
                 titleSecond: data.title,
@@ -154,7 +140,7 @@ class CreateMovieNight extends Component {
         const api_call = 
         await fetch(`${MOVIE_DB_BASE_URL}movie/${id}?api_key=${MOVIE_DB_API_KEY}`);
         const data = await api_call.json();
-        console.log(data);
+        //console.log(data);
 
         this.setState({
                 titleThird: data.title,
@@ -170,11 +156,9 @@ class CreateMovieNight extends Component {
         e.preventDefault();
 
         // get all movies
-        //this.props.getMovies();
         const { movies } = this.props.movie;
-        console.log(movies);
+        //console.log(movies);
 
-        //[{ type: Schema.Types.ObjectId, ref: 'movie' }]
         const movieChoicesRoundOne = [];
         let firstSelectionInDB = false;
         let secondSelectionInDB = false;
@@ -258,7 +242,7 @@ class CreateMovieNight extends Component {
             movieVotesRoundThree: this.state.movieVotesRoundThree
         };
 
-        console.log(movieNightData);
+        //console.log(movieNightData);
 
         if (movieNightData.date && movieNightData.host) {
             this.props.createMovieNight(movieNightData, this.props.history);
@@ -316,9 +300,9 @@ class CreateMovieNight extends Component {
 
                 <div className="row">
                     <div className="col-md-8 m-auto">
-                        <h1 className="display-4 text-center">Create Your Movie Night</h1>
+                        <h3 className="display-4 text-center">Create Your Movie Night</h3>
                         <p className="lead text-center">
-                            Let's get some information to make your movie night stand out
+                            {/* Let's get some information to make your movie night stand out */}
                         </p>
                         <small className="d-block pb-3">* = required fields</small>
                         <form onSubmit={this.onSubmit}>
@@ -349,6 +333,77 @@ class CreateMovieNight extends Component {
                                 error={errors.location}
                                 info=""
                             />
+                            <div className="row">
+                                &nbsp;
+                            </div>
+                            <div className="row">
+                                <div className="col-md-8 m-auto">
+                                    <h4 className="display-4 text-center">Search For Movie</h4>
+                                    <form onSubmit={this.getMovieFromApi}>
+                                        <TextFieldGroup
+                                            placeholder="* Movie Title"
+                                            name="titleForSearch"
+                                            value={this.state.titleForSearch}
+                                            onChange={this.onChange}
+                                            error={errors.titleForSearch}
+                                        />
+                                        
+                                        <input
+                                            type="submit"
+                                            value="Search"
+                                            className="btn btn-info btn-block mt-4"
+                                        />
+                                    </form>
+                                </div>
+                            </div>
+                            <div className="row">
+                                &nbsp;
+                            </div>
+
+                            <div className="row">
+                                <Container>
+                                    <ListGroup>
+                                        {this.state.searchResults.map(({ id, title, release_date, overview, poster_path }) => (
+                                            <ListGroupItem key={id}>
+                                            <Row>
+                                                <Col xs="4">
+                                                    <img src={this.state.imageBaseUrl + this.state.posterSizeXS + poster_path} style={{width: 120}} alt={title}></img>
+                                                </Col>
+                                                <Col xs="8">
+                                                    <Button 
+                                                        className="select-btn"
+                                                        color="secondary"
+                                                        size="sm"
+                                                        onClick={this.onSelectClick.bind(this, id)}
+                                                        >Make Choice 1
+                                                    </Button>
+                                                    &nbsp;
+                                                    <Button 
+                                                        className="select-btn2"
+                                                        color="secondary"
+                                                        size="sm"
+                                                        onClick={this.onSelectClick2.bind(this, id)}
+                                                        >Make Choice 2
+                                                    </Button>
+                                                    &nbsp;
+                                                    <Button 
+                                                        className="select-btn3"
+                                                        color="secondary"
+                                                        size="sm"
+                                                        onClick={this.onSelectClick3.bind(this, id)}
+                                                        >Make Choice 3
+                                                    </Button>
+                                                    <p>{title} ({moment(release_date).format('YYYY')})</p>
+                                                    <p>{overview}</p>
+                                                </Col>
+                                            </Row>
+                                        </ListGroupItem>
+                                        ))}
+                                    </ListGroup>
+                                </Container>
+                            </div>
+
+
                             <h6>Choice 1</h6>
                             <p>{this.state.titleFirst} ({moment(this.state.releaseDateFirst).format('YYYY')})</p>
                             <h6>Choice 2</h6>
@@ -366,67 +421,7 @@ class CreateMovieNight extends Component {
                     </div>
                 </div>
 
-
-                <div className="row">
-                    <div className="col-md-8 m-auto">
-                        <h1 className="display-4 text-center">Search For Movie</h1>
-                        <form onSubmit={this.getMovieFromApi}>
-                            <TextFieldGroup
-                                placeholder="* Movie Title"
-                                name="titleForSearch"
-                                value={this.state.titleForSearch}
-                                onChange={this.onChange}
-                                error={errors.titleForSearch}
-                            />
-                            
-                            <input
-                                type="submit"
-                                value="Search"
-                                className="btn btn-info btn-block mt-4"
-                            />
-                        </form>
-                    </div>
-                </div>
-
-                <div className="row">
-                    <Container>
-                        <ListGroup>
-                            {this.state.searchResults.map(({ id, title, release_date, overview, poster_path }) => (
-                                <ListGroupItem key={id}>
-                                <Row>
-                                    <Col xs="4">
-                                        <img src={this.state.imageBaseUrl + this.state.posterSizeXS + poster_path} style={{width: 120}} alt={title}></img>
-                                    </Col>
-                                    <Col xs="8">
-                                        <Button 
-                                            className="select-btn"
-                                            color="secondary"
-                                            size="sm"
-                                            onClick={this.onSelectClick.bind(this, id)}
-                                            >Select
-                                        </Button>
-                                        <Button 
-                                            className="select-btn2"
-                                            color="secondary"
-                                            size="sm"
-                                            onClick={this.onSelectClick2.bind(this, id)}
-                                            >Select
-                                        </Button>
-                                        <Button 
-                                            className="select-btn3"
-                                            color="secondary"
-                                            size="sm"
-                                            onClick={this.onSelectClick3.bind(this, id)}
-                                            >Select
-                                        </Button>
-                                        &nbsp;<Link to={`/movie/${title}`}>{title}</Link> ({moment(release_date).format('YYYY')}) {overview}
-                                    </Col>
-                                </Row>
-                            </ListGroupItem>
-                            ))}
-                        </ListGroup>
-                    </Container>
-                </div>
+                
 
 
             </div>
