@@ -19,7 +19,8 @@ class MovieNight extends Component {
   // }
 
   render() {
-    const {movieNight} = this.props.movieNight;
+    const { movieNight, loading } = this.props.movieNight
+    if (loading) return <div><h3>Loading ...</h3></div>
     // const {movieSelected} = {};
     // const {movieChoice1} = {};
     // const {movieChoice2} = {};
