@@ -95,8 +95,7 @@ class CreateMovieNight extends Component {
         const api_call = 
             await fetch(`${MOVIE_DB_BASE_URL}movie/${searchResultId}?api_key=${MOVIE_DB_API_KEY}`);
         const data = await api_call.json();
-        //const movieId = data.id;
-        console.log(data);
+        //console.log(data);
 
         //const imdbId = data.imdb_id;
 

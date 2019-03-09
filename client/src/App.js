@@ -16,6 +16,7 @@ import CreateProfile from './components/create-profile/CreateProfile';
 import CreateMovie from './components/create-movie/CreateMovie';
 import CreateMovieNight from './components/create-movie-night/CreateMovieNight';
 import Movie from './components/movie/Movie';
+import MovieSearch from './components/movie/MovieSearch';
 import MovieNight from './components/movie-night/MovieNight';
 
 import { Provider } from 'react-redux';
@@ -67,6 +68,9 @@ class App extends Component {
                             </Switch>
                             <Switch>
                                 <PrivateRoute exact path="/create-movie-night" component={ CreateMovieNight } />
+                            </Switch>
+                            <Switch>
+                                <PrivateRoute exact path="/movie-search" component={ MovieSearch } />
                             </Switch>
                             <Route path="/movie/:imdbId" component={Movie} />
                             <Route path="/movieNight/:date" component={MovieNight} />
