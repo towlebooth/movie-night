@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-//import { Link } from 'react-router-dom';
 import { Row, Col, ListGroup, ListGroupItem } from 'reactstrap';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getMovieByImdbId } from '../../actions/movieActions';
@@ -217,6 +217,7 @@ class MovieDetail extends Component {
                         <p>Runtime: {this.state.runtime} minutes</p>
                         <p>Genres: {genres}</p>
                         <p>Rated: {this.state.rated}</p>
+                        <p><a href={`https://www.imdb.com/title/${this.props.imdbId}`} target="_blank">IMDB</a></p>
                         <p>Ratings:</p>
                         <ListGroup>
                             {this.state.ratings.map(({ Source, Value }) => (
