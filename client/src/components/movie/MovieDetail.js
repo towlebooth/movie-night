@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Row, Col, ListGroup, ListGroupItem } from 'reactstrap';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getMovieByImdbId } from '../../actions/movieActions';
+import { getMovieNights } from '../../actions/movieNightActions';
 import moment from 'moment';
 import { 
     MOVIE_DB_API_KEY, 
@@ -42,13 +42,12 @@ class MovieDetail extends Component {
     
     componentDidMount = async () => {
         this.getMovieFromApi();
+        //this.props.getMovieNights();
+        console.log(this.props.movieNight);
     }
 
     componentWillReceiveProps(nextProps){
-        console.log('componentWillRecieveProps')
-        console.log(nextProps.value)
         if(nextProps.value !== this.props.value){
-            //this.setState({count:nextProps.value});
             this.getMovieFromApi();
         }
     }
@@ -98,7 +97,7 @@ class MovieDetail extends Component {
                 await fetch(`${MOVIE_DB_BASE_URL}movie/${searchResultId}?api_key=${MOVIE_DB_API_KEY}`);
             const data = await api_call.json();
             
-            console.log(data);
+            //console.log(data);
             if (this.props.imdbId && searchResultId) {
                 this.setState({
                     title: data.title,
@@ -207,12 +206,16 @@ class MovieDetail extends Component {
         return(
             <div className='movieDetail'>
                 <Row>
+                    <Col xs="12">
+                    <h3>{this.state.title} ({formattedYear})</h3>
+                    </Col>
+                </Row>
+                <Row>
                     <Col xs="4">
                             <img src={this.state.imageBaseUrl + this.state.posterSizeL + this.state.poster_path} style={{width: 185}} alt={this.state.title}></img>
-
-                        </Col>
+                    </Col>
                     <Col xs="8">
-                        <h3>{this.state.title} ({formattedYear})</h3>
+                        {/* <h3>{this.state.title} ({formattedYear})</h3> */}
                         <p>{this.state.overview}</p>
                         <p>Runtime: {this.state.runtime} minutes</p>
                         <p>Genres: {genres}</p>
@@ -244,13 +247,16 @@ class MovieDetail extends Component {
 }
 
 MovieDetail.propTypes = {
-    getMovieByImdbId: PropTypes.func.isRequired, 
+    getMovieByImdbId: PropTypes.func.isRequired,
+    getMovieNights: PropTypes.func.isRequired,
     imdbId: PropTypes.string,
-    movie: PropTypes.object.isRequired
+    movie: PropTypes.object.isRequired,
+    movieNight: PropTypes.object
 }
 
 const mapStateToProps = (state) => ({
-    movie: state.movie
+    movie: state.movie,
+    movieNight: state.movieNight
 })
 
-export default connect(mapStateToProps, { getMovieByImdbId })(MovieDetail);
+export default connect(mapStateToProps, { getMovieByImdbId, getMovieNights })(MovieDetail);

@@ -12,7 +12,7 @@ const validateMovieNightInput = require('../../validation/movieNight');
 // @access Private
 router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
     MovieNight.find()
-        .sort({ date: -1 })  //descending
+        .sort({ date: -1 })  // descending
         .then(movieNights => res.json(movieNights))
 });
 
@@ -32,21 +32,6 @@ router.get('/date/:date', (req, res) => {
       })
       .catch(err => res.status(404).json(err));
   });
-
-// // @route POST api/movieNights
-// // @desc Create a movieNight
-// // @access Public
-// router.post('/', (req, res) => {
-//     const newMovieNight = new MovieNight({
-//         host: req.body.host,
-//         location: req.body.location,
-//         movieChoices: req.body.movieChoices,
-//         movieViewed: req.body.movieViewed,
-//         movieVotes: req.body.movieVotes
-//     });
-
-//     newMovieNight.save().then(movieNight => res.json(movieNight));
-// });
 
 // @route POST api/movieNight
 // @desc Create a movieNight

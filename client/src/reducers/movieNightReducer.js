@@ -36,7 +36,7 @@ export default function(state = initialState, action) {
                 ...state,
                 movieNights: [action.payload, ...state.movieNights]
             }
-            case MOVIENIGHTS_LOADING:
+        case MOVIENIGHTS_LOADING:
             return {
                 ...initialState, // clear our stored data when before we load new data
                 loading: true

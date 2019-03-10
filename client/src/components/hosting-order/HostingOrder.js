@@ -20,12 +20,12 @@ class HostingOrder extends Component {
 
         if (hostingOrders && movieNights) {
             let recentMovieNights = movieNights.slice(0, 8);
-            console.log(recentMovieNights);
+            //console.log(recentMovieNights);
             hostingOrders.forEach((hostingOrder) => {
                              
                 var i;
                 for (i = 0; i < recentMovieNights.length; i++) { 
-                    if (recentMovieNights[i].host == hostingOrder.host) {
+                    if (recentMovieNights[i].host === hostingOrder.host) {
                         var orderDate = moment.utc(recentMovieNights[i].date).format('YYYY-MM-DD')
                         var movieNightHostingOrder = {
                             _id: hostingOrder._id, 
@@ -41,7 +41,7 @@ class HostingOrder extends Component {
         return(
             <Container>                
                 <ListGroup>
-                    {movieNightHostingOrders.map(({ _id, host, order, mostRecentDate }) => (
+                    {movieNightHostingOrders.map(({ _id, host, mostRecentDate }) => (
                         <ListGroupItem key={_id}>
                             {host} last hosted on <Link to={`/movieNight/${moment.utc(mostRecentDate).format('YYYY-MM-DD')}`}>{moment.utc(mostRecentDate).format('MMMM Do YYYY')}</Link> 
                         </ListGroupItem>
@@ -51,7 +51,7 @@ class HostingOrder extends Component {
         );
     }
 }
-//moment().format('MMMM Do YYYY, h:mm:ss a')
+
 HostingOrder.propTypes = {
     getHostingOrders: PropTypes.func.isRequired, 
     hostingOrder: PropTypes.object.isRequired,

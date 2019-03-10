@@ -7,7 +7,7 @@ import {
 
 export const getHostingOrders = () => dispatch => {
     dispatch(setHostingOrdersLoading());
-    console.log('made it to HO actions');
+    //console.log('made it to HO actions');
     axios
         .get('/api/hostingOrders/')
         .then(res => 

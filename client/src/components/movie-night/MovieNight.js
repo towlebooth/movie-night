@@ -1,42 +1,19 @@
 import React, { Component } from 'react';
-//import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getMovieNightByDate } from '../../actions/movieNightActions';
 import { getMovieByImdbId } from '../../actions/movieActions';
-//import MovieChoice from './../movie/MovieChoice';
 import MovieDetail from './../movie/MovieDetail';
 import moment from 'moment';
-//import Spinner from '../common/Spinner';
 
 class MovieNight extends Component {
   componentDidMount() {     
       this.props.getMovieNightByDate(this.props.match.params.date);
   }
 
-  // componentWillReceiveProps() {
-  //   this.props.getMovieNightByDate(this.props.match.params.date);
-  // }
-
   render() {
     const { movieNight, loading } = this.props.movieNight
     if (loading) return <div><h3>Loading ...</h3></div>
-    // const {movieSelected} = {};
-    // const {movieChoice1} = {};
-    // const {movieChoice2} = {};
-    // const {movieChoice3} = {};
-
-    // if (movieNight.movieChoicesRoundOne[0]) {
-    //     this.props.get
-      
-    //   // TODO: get the movies here or just send over imdbId?
-
-    //   //movieChoice1 = 
-    // }
-    console.log(movieNight);
-    if (movieNight.movieChoicesRoundOne) {
-        console.log(movieNight.movieChoicesRoundOne[0])
-    }
 
     let movieNightContent;
     if (!movieNight.date) {
