@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import TextFieldGroup from '../common/TextFieldGroup';
-import { getMovies } from '../../actions/movieActions';
+import { getMovies, searchForMovieByTitle } from '../../actions/movieActions';
 import { 
     MOVIE_DB_API_KEY, 
     MOVIE_DB_BASE_URL
@@ -26,7 +26,7 @@ import {
     }
 
     componentDidMount() {  
-        //this.props.getMovies();
+        
     }
 
     componentWillReceiveProps(nextProps) {
@@ -38,58 +38,16 @@ import {
     onSelectClick = async (id) => {
         const api_call = await fetch(`${MOVIE_DB_BASE_URL}movie/${id}?api_key=${MOVIE_DB_API_KEY}`);
         const data = await api_call.json();
-        console.log(data);
 
+        // redirect to movie detail
         this.props.history.push(`/movie/${data.imdb_id}`)
-
-        this.setState({
-                titleFirst: data.title,
-                releaseDateFirst: data.release_date,
-                imdbIdFirst: data.imdb_id,
-                tmdbIdFirst: data.id.toString(),
-                searchResults: [],
-                error: ""
-            });
     }
 
     getMovieFromApi = async (e) => {
         e.preventDefault();
         const titleForSearch = e.target.elements.titleForSearch.value;
 
-        const api_searchMovie_call =
-            await fetch(`${MOVIE_DB_BASE_URL}search/movie?api_key=${MOVIE_DB_API_KEY}&language=en-US&query=${titleForSearch}&page=1&include_adult=false`);
-            const searchData = await api_searchMovie_call.json();
-            //console.log(searchData);
-
-            var searchResultId;
-
-            if (searchData.results) 
-            {
-                searchResultId = searchData.results[0].id;
-
-                // limit search results to 5
-                var results = searchData.results;
-                var limitedResults = results.slice(0,5);
-                this.setState({searchResults: limitedResults});
-            }
-
-        const api_configuration_call = 
-            await fetch(`${MOVIE_DB_BASE_URL}configuration?api_key=${MOVIE_DB_API_KEY}`);
-        const configData = await api_configuration_call.json();
-        //console.log(configData);
-        if (configData.images) {
-            this.setState({
-                imageBaseUrl: configData.images.base_url,
-                posterSizeXS: configData.images.poster_sizes[0],
-                posterSizeS: configData.images.poster_sizes[1]
-            });
-        } else {
-            this.setState({
-                imageBaseUrl: undefined,
-                posterSizeXS: undefined,
-                posterSizeS: undefined
-            });
-        }        
+        this.props.searchForMovieByTitle(titleForSearch);
     };
 
     onChange(e) {
@@ -98,6 +56,42 @@ import {
 
     render() {
         const { errors } = this.state;
+        var movieSearchResults = [];    
+        let searchResultsContent;   
+
+        if (this.props.movieSearchResults && this.props.movieSearchResults[0]) {
+            movieSearchResults = this.props.movieSearchResults;
+
+            searchResultsContent = (
+                
+                <Container>
+                    <Row>
+                        <Col>
+                            &nbsp;
+                        </Col>
+                    </Row>
+                    <ListGroup>
+                        {movieSearchResults.map(({ id, title, release_date, overview, poster_path, imageBaseUrl, posterSizeXS }) => (
+                            <ListGroupItem key={id}>
+                            <Row>
+                                <Col xs="4">
+                                    <img src={imageBaseUrl + posterSizeXS + poster_path} style={{width: 120}} alt={title}></img>
+                                </Col>
+                                <Col xs="8">
+                                    <Button variant="primary" onClick={this.onSelectClick.bind(this, id)}>{title}</Button> ({moment(release_date).format('YYYY')})
+                                    <p>{overview}</p>
+                                </Col>
+                            </Row>
+                        </ListGroupItem>
+                        ))}
+                    </ListGroup>
+                </Container>
+              )
+        } else {
+            searchResultsContent = (
+                <p></p>
+            )
+        }
         
         return (
             <div className="movie-search">
@@ -123,33 +117,9 @@ import {
                             </form>
                         </div>
                     </div>
-    
+
                     <div className="row">
-                        <Container>
-                            <ListGroup>
-                                {this.state.searchResults.map(({ id, title, release_date, overview, poster_path }) => (
-                                    <ListGroupItem key={id}>
-                                    <Row>
-                                        <Col xs="4">
-                                            <img src={this.state.imageBaseUrl + this.state.posterSizeXS + poster_path} style={{width: 120}} alt={title}></img>
-                                        </Col>
-                                        <Col xs="8">
-                                            {/* <Button 
-                                                className="select-btn"
-                                                color="secondary"
-                                                size="sm"
-                                                onClick={this.onSelectClick.bind(this, id)}
-                                                >Select
-                                            </Button>
-                                            &nbsp; */}
-                                            <Button variant="primary" onClick={this.onSelectClick.bind(this, id)}>{title}</Button> ({moment(release_date).format('YYYY')})
-                                            <p>{overview}</p>
-                                        </Col>
-                                    </Row>
-                                </ListGroupItem>
-                                ))}
-                            </ListGroup>
-                        </Container>
+                        {searchResultsContent}
                     </div>    
     
                 </div>
@@ -160,14 +130,16 @@ import {
     
     MovieSearch.propTypes = {
       errors: PropTypes.object.isRequired,
-      movie: PropTypes.object.isRequired
+      movie: PropTypes.object.isRequired,
+      movieSearchResults: PropTypes.array
     };
     
     const mapStateToProps = state => ({
       movie: state.movie,
+      movieSearchResults: state.movie.movieSearchResults,
       errors: state.errors
     });
     
-    export default connect(mapStateToProps, { getMovies })(
+    export default connect(mapStateToProps, { getMovies, searchForMovieByTitle })(
       withRouter(MovieSearch)
     );

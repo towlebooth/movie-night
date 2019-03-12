@@ -3,6 +3,7 @@ import {
     GET_MOVIES, 
     GET_MOVIE,
     GET_MOVIE_DETAILS_API,
+    MOVIE_SEARCH_BY_TITLE,
     DELETE_MOVIE, 
     MOVIES_LOADING,
     GET_ERRORS
@@ -109,6 +110,54 @@ const getMovieFromApi = async (imdbId) => {
     }
     
     return movieDetail;
+}
+
+export const searchForMovieByTitle = (title) => dispatch => {
+  dispatch(setMoviesLoading());
+  
+  searchForMovieByTitleFromApi(title)
+      .then(res =>            
+          dispatch({
+              type: MOVIE_SEARCH_BY_TITLE,
+              payload: res
+          })            
+      )
+      .catch(err =>
+          dispatch({
+              type: GET_ERRORS,
+              payload: err.response
+          })
+      );
+}
+
+const searchForMovieByTitleFromApi = async (title) => {
+    var searchResults = [];
+
+    const api_searchMovie_call =
+        await fetch(`${MOVIE_DB_BASE_URL}search/movie?api_key=${MOVIE_DB_API_KEY}&language=en-US&query=${title}&page=1&include_adult=false`);
+    const searchData = await api_searchMovie_call.json();
+
+    if (searchData.results) 
+    {
+        searchResults = searchData.results;
+
+        // limit search results to 5
+        searchResults = searchResults.slice(0,5);
+    }
+    
+    // configuration - images, etc
+    const configData = await getMovieConfigDataFromApi();
+    console.log(configData)
+    if (configData.images) {
+        var i;
+        for (i = 0; i < searchResults.length; i++) { 
+            searchResults[i].imageBaseUrl = configData.images.base_url;
+            searchResults[i].posterSizeXS = configData.images.poster_sizes[0];
+            searchResults[i].posterSizeS = configData.images.poster_sizes[1];
+        }
+    }
+    console.log(searchResults);
+    return searchResults;
 }
 
 const getMovieConfigDataFromApi = async () => {
