@@ -35,23 +35,23 @@ export const getMovieDetailsFromApi = (imdbId) => dispatch => {
         );
 }
 
-export const getMovieFromApiByTmdbId = (tmdbId) => dispatch => {
-  dispatch(setMoviesLoading());
-  console.log('made it to movieActions')
-  getMovieDetailsFromApiWithTmdbId(tmdbId)
-      .then(res =>            
-          dispatch({
-              type: GET_MOVIE_WITH_TMDBID_API,
-              payload: res
-          })            
-      )
-      .catch(err =>
-          dispatch({
-              type: GET_ERRORS,
-              payload: err.response.data
-          })
-      );
-}
+// export const getMovieFromApiByTmdbId = (tmdbId) => dispatch => {
+//   dispatch(setMoviesLoading());
+//   console.log('made it to movieActions')
+//   getMovieDetailsFromApiWithTmdbId(tmdbId)
+//       .then(res =>            
+//           dispatch({
+//               type: GET_MOVIE_WITH_TMDBID_API,
+//               payload: res
+//           })            
+//       )
+//       .catch(err =>
+//           dispatch({
+//               type: GET_ERRORS,
+//               payload: err.response.data
+//           })
+//       );
+// }
 
 const getMovieFromApi = async (imdbId) => {
     var movieDetail = {};

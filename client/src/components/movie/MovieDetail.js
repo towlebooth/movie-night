@@ -19,8 +19,11 @@ class MovieDetail extends Component {
         var movieDetail = {};
         var formattedYear = '';
         var crew = [];
+        var crewContent;
         var cast = [];
+        var castContent;
         var ratings = [];
+        var ratingsContent;
         if (this.props.movieDetail) {
             movieDetail = this.props.movieDetail;
 
@@ -38,49 +41,88 @@ class MovieDetail extends Component {
             }
 
             crew = movieDetail.crew;
+            if (crew && crew[0].credit_id) {
+                crewContent = (
+                    <div>
+                        <p>Select Crew:</p>
+                        <ListGroup>
+                            {crew.map(({ credit_id, name, job }) => (
+                                <ListGroupItem key={credit_id}>{name}: {job}</ListGroupItem>
+                            ))}
+                        </ListGroup>
+                    </div>
+                );
+            } else {
+                crewContent = (
+                    <div>
+                        <p>No crew found</p>
+                    </div>
+                );
+            }
             cast = movieDetail.cast;
+            if (cast && cast[0].cast_id) {
+                castContent = (
+                    <div>
+                        <p>Select Cast:</p>
+                        <ListGroup>
+                            {cast.map(({ cast_id, name, character }) => (
+                                <ListGroupItem key={cast_id}>{name}: {character}</ListGroupItem>
+                            ))}
+                        </ListGroup>
+                    </div>
+                );
+            } else {
+                castContent = (
+                    <div>
+                        <p>No cast found</p>
+                    </div>
+                );
+            }
             ratings = movieDetail.ratings;
+            if (ratings && ratings[0].Source) {
+                ratingsContent = (
+                    <div>
+                        <p>Ratings:</p>
+                        <ListGroup>
+                            {ratings.map(({ Source, Value }) => (
+                                <ListGroupItem>{Source}: {Value}</ListGroupItem>
+                            ))}
+                        </ListGroup>
+                    </div>
+                );
+            } else {
+                ratingsContent = (
+                    <div>
+                        <p>No ratings found</p>
+                    </div>
+                );
+            }
         }
 
-            return(
-                <div className='movieDetail'>
-                    <Row>
-                        <Col xs="12">
-                        <h3>{movieDetail.title} ({formattedYear})</h3>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col xs="4">
-                                <img src={movieDetail.imageBaseUrl + movieDetail.posterSizeL + movieDetail.poster_path} style={{width: 185}} alt={movieDetail.title}></img>
-                        </Col>
-                        <Col xs="8">
-                            <p>{movieDetail.overview}</p>
-                            <p>Runtime: {movieDetail.runtime} minutes</p>
-                            <p>Genres: {genres}</p>
-                            <p>Rated: {movieDetail.rated}</p>
-                            <p><a href={`https://www.imdb.com/title/${this.props.imdbId}`} target="_blank">IMDB</a></p>
-                            <p>Ratings:</p>
-                            <ListGroup>
-                                {ratings.map(({ Source, Value }) => (
-                                    <ListGroupItem>{Source}: {Value}</ListGroupItem>
-                                ))}
-                            </ListGroup>
-                            <p>Select Crew:</p>
-                            <ListGroup>
-                                {crew.map(({ credit_id, name, job }) => (
-                                    <ListGroupItem key={credit_id}>{name}: {job}</ListGroupItem>
-                                ))}
-                            </ListGroup>
-                            <p>Select Cast:</p>
-                            <ListGroup>
-                                {cast.map(({ cast_id, name, character }) => (
-                                    <ListGroupItem key={cast_id}>{name}: {character}</ListGroupItem>
-                                ))}
-                            </ListGroup>
-                        </Col>
-                    </Row>
-                </div>
-            );
+        return(
+            <div className='movieDetail'>
+                <Row>
+                    <Col xs="12">
+                    <h3>{movieDetail.title} ({formattedYear})</h3>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col xs="4">
+                            <img src={movieDetail.imageBaseUrl + movieDetail.posterSizeL + movieDetail.poster_path} style={{width: 185}} alt={movieDetail.title}></img>
+                    </Col>
+                    <Col xs="8">
+                        <p>{movieDetail.overview}</p>
+                        <p>Runtime: {movieDetail.runtime} minutes</p>
+                        <p>Genres: {genres}</p>
+                        <p>Rated: {movieDetail.rated}</p>
+                        <p><a href={`https://www.imdb.com/title/${this.props.imdbId}`} target="_blank">IMDB</a></p>
+                        {ratingsContent}
+                        {crewContent}
+                        {castContent}
+                    </Col>
+                </Row>
+            </div>
+        );
         
     }
 }
