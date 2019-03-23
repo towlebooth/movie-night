@@ -3,6 +3,7 @@ import {
     GET_MOVIES, 
     GET_MOVIE,
     GET_MOVIE_DETAILS_API,
+    GET_MOVIE_WITH_TMDBID_API,
     MOVIE_SEARCH_BY_TITLE,
     DELETE_MOVIE, 
     MOVIES_LOADING,
@@ -201,7 +202,7 @@ export const getMovies = () => dispatch => {
         );
 };
 
-// Get movie by title
+// Get movie from our db by title
 export const getMovieByTitle = title => dispatch => {
     dispatch(setMoviesLoading());
     axios
@@ -220,7 +221,7 @@ export const getMovieByTitle = title => dispatch => {
         );
   };
 
-  // Get movie by imdbId
+  // Get movie from our db by imdbId
 export const getMovieByImdbId = imdbId => dispatch => {
   dispatch(setMoviesLoading());
   axios
