@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getMovieNightByDate } from '../../actions/movieNightActions';
-import { getMovieByImdbId } from '../../actions/movieActions';
+//import { getMovieByImdbId } from '../../actions/movieActions';
 import MovieDetail from './../movie/MovieDetail';
 import moment from 'moment';
 
@@ -52,7 +52,7 @@ MovieNight.propTypes = {
     getMovieNightByDate: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
     movieNight: PropTypes.object.isRequired,
-    getMovieByImdbId: PropTypes.func.isRequired
+    //getMovieByImdbId: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -60,4 +60,4 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps, { getMovieNightByDate, getMovieByImdbId })(MovieNight);
+export default connect(mapStateToProps, { getMovieNightByDate })(MovieNight);

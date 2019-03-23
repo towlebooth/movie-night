@@ -12,7 +12,6 @@ const HostingOrder = require('../../models/HostingOrder');
 // @desc Get all hostingOrders
 // @access Public
 router.get('/', (req, res) => {
-    console.log('HO get')
     HostingOrder.find()
         //.sort({ order: -1 })  //descending
         .then(hostingOrders => res.json(hostingOrders))
@@ -23,7 +22,7 @@ router.get('/', (req, res) => {
 // @access  Public
 router.get('/all', (req, res) => {
     const errors = {};
-    console.log('HO get all')
+    
     HostingOrder.find()
       .then(hostingOrders => {
         if (!hostingOrders) {

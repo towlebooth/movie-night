@@ -1,7 +1,8 @@
 import { 
     GET_MOVIES, 
     GET_MOVIE, 
-    GET_MOVIE_DETAILS_API, 
+    GET_MOVIE_DETAILS_API,
+    GET_MOVIE_WITH_TMDBID_API,
     MOVIE_SEARCH_BY_TITLE,
     ADD_MOVIE, 
     DELETE_MOVIE, 
@@ -11,7 +12,7 @@ import {
 const initialState = {
     movies: [],
     movie: {},
-    movieDetaul: {},
+    movieDetail: {},
     movieSearchResults: {},
     loading: false
 }
@@ -34,6 +35,12 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 movieDetail: action.payload,
+                loading: false
+            }
+        case GET_MOVIE_WITH_TMDBID_API:
+            return {
+                ...state,
+                movieDetailTmdb: action.payload,
                 loading: false
             }
         case MOVIE_SEARCH_BY_TITLE:
