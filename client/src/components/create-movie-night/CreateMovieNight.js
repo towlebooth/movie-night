@@ -67,52 +67,39 @@ class CreateMovieNight extends Component {
         this.props.searchForMovieByTitle(titleForSearch);
     };
 
-    onSelectClick = async (id) => {
+    onSelectClick = async (id, choiceNumber) => {
+        console.log(choiceNumber);
         const api_call = 
         await fetch(`${MOVIE_DB_BASE_URL}movie/${id}?api_key=${MOVIE_DB_API_KEY}`);
         const data = await api_call.json();
-        //console.log(data);
+        console.log(data);
 
-        this.setState({
-                titleFirst: data.title,
-                releaseDateFirst: data.release_date,
-                imdbIdFirst: data.imdb_id,
-                tmdbIdFirst: data.id.toString(),
-                searchResults: [],
-                error: ""
-            });
-    }
-
-    onSelectClick2 = async (id) => {
-        const api_call = 
-        await fetch(`${MOVIE_DB_BASE_URL}movie/${id}?api_key=${MOVIE_DB_API_KEY}`);
-        const data = await api_call.json();
-        //console.log(data);
-
-        this.setState({
-                titleSecond: data.title,
-                releaseDateSecond: data.release_date,
-                imdbIdSecond: data.imdb_id,
-                tmdbIdSecond: data.id.toString(),
-                searchResults: [],
-                error: ""
-            });
-    }
-
-    onSelectClick3 = async (id) => {
-        const api_call = 
-        await fetch(`${MOVIE_DB_BASE_URL}movie/${id}?api_key=${MOVIE_DB_API_KEY}`);
-        const data = await api_call.json();
-        //console.log(data);
-
-        this.setState({
-                titleThird: data.title,
-                releaseDateThird: data.release_date,
-                imdbIdThird: data.imdb_id,
-                tmdbIdThird: data.id.toString(),
-                searchResults: [],
-                error: ""
-            });
+        switch(choiceNumber) {
+            default:
+                this.setState({
+                    titleFirst: data.title,
+                    releaseDateFirst: data.release_date,
+                    imdbIdFirst: data.imdb_id,
+                    tmdbIdFirst: data.id.toString(),
+                    error: ""
+                });
+            case 2:
+                this.setState({
+                    titleSecond: data.title,
+                    releaseDateSecond: data.release_date,
+                    imdbIdSecond: data.imdb_id,
+                    tmdbIdSecond: data.id.toString(),
+                    error: ""
+                });
+            case 3:
+                this.setState({
+                    titleThird: data.title,
+                    releaseDateThird: data.release_date,
+                    imdbIdThird: data.imdb_id,
+                    tmdbIdThird: data.id.toString(),
+                    error: ""
+                });
+        }
     }
 
     onSubmit = async (e)  =>{
@@ -277,7 +264,7 @@ class CreateMovieNight extends Component {
                                         className="select-btn"
                                         color="secondary"
                                         size="sm"
-                                        onClick={this.onSelectClick.bind(this, id)}
+                                        onClick={this.onSelectClick.bind(this, id, 1)}
                                         >Make Choice 1
                                     </Button>
                                     &nbsp;
@@ -285,7 +272,7 @@ class CreateMovieNight extends Component {
                                         className="select-btn2"
                                         color="secondary"
                                         size="sm"
-                                        onClick={this.onSelectClick2.bind(this, id)}
+                                        onClick={this.onSelectClick.bind(this, id, 2)}
                                         >Make Choice 2
                                     </Button>
                                     &nbsp;
@@ -293,7 +280,7 @@ class CreateMovieNight extends Component {
                                         className="select-btn3"
                                         color="secondary"
                                         size="sm"
-                                        onClick={this.onSelectClick3.bind(this, id)}
+                                        onClick={this.onSelectClick.bind(this, id, 3)}
                                         >Make Choice 3
                                     </Button>
                                     <p>{title} ({moment(release_date).format('YYYY')})</p>
