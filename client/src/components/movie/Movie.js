@@ -18,7 +18,6 @@ class Movie extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              {/* <h2>{movie.imdb}</h2> */}
               <MovieDetail imdbId={this.props.match.params.imdbId}></MovieDetail>
             </div>
           </div>

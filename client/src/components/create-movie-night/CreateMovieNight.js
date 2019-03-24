@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import TextFieldGroup from '../common/TextFieldGroup';
 import SelectListGroup from '../common/SelectListGroup';
 import { createMovieNight } from '../../actions/movieNightActions';
-import { createMovieNoRedirect, getMovies } from '../../actions/movieActions';
+import { createMovieNoRedirect, getMovies, searchForMovieByTitle } from '../../actions/movieActions';
 import { 
     MOVIE_DB_API_KEY, 
     MOVIE_DB_BASE_URL
@@ -64,43 +64,7 @@ class CreateMovieNight extends Component {
         e.preventDefault();
         const titleForSearch = e.target.elements.titleForSearch.value;
 
-        const api_searchMovie_call =
-            await fetch(`${MOVIE_DB_BASE_URL}search/movie?api_key=${MOVIE_DB_API_KEY}&language=en-US&query=${titleForSearch}&page=1&include_adult=false`);
-            const searchData = await api_searchMovie_call.json();
-
-            var searchResultId;
-
-            if (searchData.results) 
-            {
-                searchResultId = searchData.results[0].id;
-
-                // limit search results to 5
-                var results = searchData.results;
-                var limitedResults = results.slice(0,5);
-                this.setState({searchResults: limitedResults});
-            }
-
-        const api_configuration_call = 
-            await fetch(`${MOVIE_DB_BASE_URL}configuration?api_key=${MOVIE_DB_API_KEY}`);
-        const configData = await api_configuration_call.json();
-        //console.log(configData);
-        if (configData.images) {
-            this.setState({
-                imageBaseUrl: configData.images.base_url,
-                posterSizeXS: configData.images.poster_sizes[0],
-                posterSizeS: configData.images.poster_sizes[1]
-            });
-        } else {
-            this.setState({
-                imageBaseUrl: undefined,
-                posterSizeXS: undefined,
-                posterSizeS: undefined
-            });
-        }
-
-        const api_call = 
-            await fetch(`${MOVIE_DB_BASE_URL}movie/${searchResultId}?api_key=${MOVIE_DB_API_KEY}`);
-        const data = await api_call.json();
+        this.props.searchForMovieByTitle(titleForSearch);
     };
 
     onSelectClick = async (id) => {
@@ -259,6 +223,8 @@ class CreateMovieNight extends Component {
 
   render() {
     const { errors } = this.state;
+    var movieSearchResults = [];    
+    let searchResultsContent; 
 
     // Select options for host name
     const hostOptions = [
@@ -292,6 +258,56 @@ class CreateMovieNight extends Component {
         { label: 'Marcus Cinema, Oakdale', value: 'Marcus Cinema, Oakdale' },
         { label: 'Alamo Drafthouse, Woodbury', value: 'Alamo Drafthouse, Woodbury' }
     ];
+
+    if (this.props.movieSearchResults && this.props.movieSearchResults[0]) {
+        movieSearchResults = this.props.movieSearchResults;
+
+        searchResultsContent = (
+            <div className="row">
+                <Container>
+                    <ListGroup>
+                        {movieSearchResults.map(({ id, title, release_date, overview, poster_path, imageBaseUrl, posterSizeXS }) => (
+                            <ListGroupItem key={id}>
+                            <Row>
+                                <Col xs="4">
+                                    <img src={imageBaseUrl + posterSizeXS + poster_path} style={{width: 120}} alt={title}></img>
+                                </Col>
+                                <Col xs="8">
+                                    <Button 
+                                        className="select-btn"
+                                        color="secondary"
+                                        size="sm"
+                                        onClick={this.onSelectClick.bind(this, id)}
+                                        >Make Choice 1
+                                    </Button>
+                                    &nbsp;
+                                    <Button 
+                                        className="select-btn2"
+                                        color="secondary"
+                                        size="sm"
+                                        onClick={this.onSelectClick2.bind(this, id)}
+                                        >Make Choice 2
+                                    </Button>
+                                    &nbsp;
+                                    <Button 
+                                        className="select-btn3"
+                                        color="secondary"
+                                        size="sm"
+                                        onClick={this.onSelectClick3.bind(this, id)}
+                                        >Make Choice 3
+                                    </Button>
+                                    <p>{title} ({moment(release_date).format('YYYY')})</p>
+                                    <p>{overview}</p>
+                                </Col>
+                            </Row>
+                        </ListGroupItem>
+                        ))}
+                    </ListGroup>
+                </Container>
+            </div>
+        );
+
+    }
 
     return (
         <div className="create-movie-night">
@@ -359,48 +375,7 @@ class CreateMovieNight extends Component {
                                 &nbsp;
                             </div>
 
-                            <div className="row">
-                                <Container>
-                                    <ListGroup>
-                                        {this.state.searchResults.map(({ id, title, release_date, overview, poster_path }) => (
-                                            <ListGroupItem key={id}>
-                                            <Row>
-                                                <Col xs="4">
-                                                    <img src={this.state.imageBaseUrl + this.state.posterSizeXS + poster_path} style={{width: 120}} alt={title}></img>
-                                                </Col>
-                                                <Col xs="8">
-                                                    <Button 
-                                                        className="select-btn"
-                                                        color="secondary"
-                                                        size="sm"
-                                                        onClick={this.onSelectClick.bind(this, id)}
-                                                        >Make Choice 1
-                                                    </Button>
-                                                    &nbsp;
-                                                    <Button 
-                                                        className="select-btn2"
-                                                        color="secondary"
-                                                        size="sm"
-                                                        onClick={this.onSelectClick2.bind(this, id)}
-                                                        >Make Choice 2
-                                                    </Button>
-                                                    &nbsp;
-                                                    <Button 
-                                                        className="select-btn3"
-                                                        color="secondary"
-                                                        size="sm"
-                                                        onClick={this.onSelectClick3.bind(this, id)}
-                                                        >Make Choice 3
-                                                    </Button>
-                                                    <p>{title} ({moment(release_date).format('YYYY')})</p>
-                                                    <p>{overview}</p>
-                                                </Col>
-                                            </Row>
-                                        </ListGroupItem>
-                                        ))}
-                                    </ListGroup>
-                                </Container>
-                            </div>
+                            {searchResultsContent}
 
 
                             <h6>Choice 1</h6>
@@ -419,10 +394,6 @@ class CreateMovieNight extends Component {
                         </form>
                     </div>
                 </div>
-
-                
-
-
             </div>
         </div>
     );
@@ -432,15 +403,17 @@ class CreateMovieNight extends Component {
 CreateMovieNight.propTypes = {
   movieNight: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
-  movie: PropTypes.object.isRequired
+  movie: PropTypes.object.isRequired,
+  movieSearchResults: PropTypes.array
 };
 
 const mapStateToProps = state => ({
   movieNight: state.movieNight,
   movie: state.movie,
+  movieSearchResults: state.movie.movieSearchResults,
   errors: state.errors
 });
 
-export default connect(mapStateToProps, { createMovieNight, createMovieNoRedirect, getMovies })(
+export default connect(mapStateToProps, { createMovieNight, createMovieNoRedirect, getMovies, searchForMovieByTitle })(
   withRouter(CreateMovieNight)
 );
