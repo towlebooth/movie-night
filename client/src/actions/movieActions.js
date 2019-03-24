@@ -35,23 +35,92 @@ export const getMovieDetailsFromApi = (imdbId) => dispatch => {
         );
 }
 
-// export const getMovieFromApiByTmdbId = (tmdbId) => dispatch => {
-//   dispatch(setMoviesLoading());
-//   console.log('made it to movieActions')
-//   getMovieDetailsFromApiWithTmdbId(tmdbId)
-//       .then(res =>            
-//           dispatch({
-//               type: GET_MOVIE_WITH_TMDBID_API,
-//               payload: res
-//           })            
-//       )
-//       .catch(err =>
-//           dispatch({
-//               type: GET_ERRORS,
-//               payload: err.response.data
-//           })
-//       );
-// }
+export const getMovieFromApiByTmdbId = (tmdbId) => dispatch => {
+  dispatch(setMoviesLoading());
+  console.log('made it to movieActions')
+  getMovieDetailsFromApiWithTmdbId(tmdbId)
+      .then(res =>            
+          dispatch({
+              type: GET_MOVIE_WITH_TMDBID_API,
+              payload: res
+          })            
+      )
+      .catch(err =>
+          dispatch({
+              type: GET_ERRORS,
+              payload: err.response.data
+          })
+      );
+}
+
+const getMovieDetailsFromApiWithTmdbId = async (tmdbId) => {
+    // movie details
+    var movieDetail = {};
+    const api_call = 
+        await fetch(`${MOVIE_DB_BASE_URL}movie/${tmdbId}?api_key=${MOVIE_DB_API_KEY}`);
+    const data = await api_call.json();
+    movieDetail = data;
+
+    if (tmdbId) {
+        //movieDetail = data;
+        movieDetail.imdbId = data.imdb_id;          
+    }
+
+    // credits - cast and crew
+    const api_credits_call = 
+        await fetch(`${MOVIE_DB_BASE_URL}movie/${tmdbId}/credits?api_key=${MOVIE_DB_API_KEY}`);
+    const credits = await api_credits_call.json();
+    let cast = credits.cast;
+    const crew = credits.crew;
+
+    if (crew) {
+        var directors = crew.filter(function (c) {
+            return c.job === "Director";
+        });
+
+        var writers = crew.filter(function (c) {
+            return c.job === "Writer" ||
+                c.job === "Story" ||
+                c.job === "Screenplay";
+        });
+
+        var crewForDisplay = directors;
+        crewForDisplay.push.apply(directors, writers);
+        
+        if (crewForDisplay.length > 0) {
+            movieDetail.crew = crewForDisplay;
+        }
+    } 
+
+    if (cast && cast.length > 0) {
+        movieDetail.cast = cast.slice(0,10); // return top 10 cast
+    }
+
+    const api_omdb_call =
+        await fetch(`${OMDB_BASE_URL}apikey=${OMDB_API_KEY}&i=${data.imdb_id}`);
+    const omdbData = await api_omdb_call.json();
+
+    if (data.imdb_id && omdbData) {
+        movieDetail.rated = omdbData.Rated;
+        movieDetail.ratings = omdbData.Ratings;
+    }
+
+    // configuration - images, etc
+    const configData = await getMovieConfigDataFromApi();
+
+    if (configData.images) {
+        movieDetail.imageBaseUrl = configData.images.base_url;
+        movieDetail.posterSizeXS = configData.images.poster_sizes[0]; // w94
+        movieDetail.posterSizeS = configData.images.poster_sizes[1]; // w154
+        movieDetail.posterSizeM = configData.images.poster_sizes[2]; // w185
+        movieDetail.posterSizeL = configData.images.poster_sizes[3]; // w342
+        movieDetail.posterSizeXL = configData.images.poster_sizes[4]; // w500
+        movieDetail.posterSizeXXL = configData.images.poster_sizes[5]; // w780
+    }
+    
+    console.log(movieDetail)
+    return movieDetail;
+}
 
 const getMovieFromApi = async (imdbId) => {
     var movieDetail = {};
@@ -166,7 +235,7 @@ const searchForMovieByTitleFromApi = async (title) => {
     
     // configuration - images, etc
     const configData = await getMovieConfigDataFromApi();
-    console.log(configData)
+    //console.log(configData)
     if (configData.images) {
         var i;
         for (i = 0; i < searchResults.length; i++) { 
@@ -175,7 +244,7 @@ const searchForMovieByTitleFromApi = async (title) => {
             searchResults[i].posterSizeS = configData.images.poster_sizes[1];
         }
     }
-    console.log(searchResults);
+    //console.log(searchResults);
     return searchResults;
 }
 
@@ -262,7 +331,7 @@ export const createMovie = (movieData, history) => dispatch => {
 
 // save movie without redirecting to dashboard
 export const createMovieNoRedirect = (movieData) => dispatch => {
-  console.log(movieData);
+  //console.log(movieData);
     axios
         .post('/api/movies', movieData)
         .catch(err =>

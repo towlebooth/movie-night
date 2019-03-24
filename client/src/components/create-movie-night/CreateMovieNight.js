@@ -7,11 +7,11 @@ import PropTypes from 'prop-types';
 import TextFieldGroup from '../common/TextFieldGroup';
 import SelectListGroup from '../common/SelectListGroup';
 import { createMovieNight } from '../../actions/movieNightActions';
-import { createMovieNoRedirect, getMovies, searchForMovieByTitle } from '../../actions/movieActions';
-import { 
-    MOVIE_DB_API_KEY, 
-    MOVIE_DB_BASE_URL
- } from '../common/keys';
+import { createMovieNoRedirect, getMovies, searchForMovieByTitle, getMovieFromApiByTmdbId } from '../../actions/movieActions';
+// import { 
+//     MOVIE_DB_API_KEY, 
+//     MOVIE_DB_BASE_URL
+//  } from '../common/keys';
 
 class CreateMovieNight extends Component {
     constructor(props) {
@@ -69,36 +69,44 @@ class CreateMovieNight extends Component {
 
     onSelectClick = async (id, choiceNumber) => {
         console.log(choiceNumber);
-        const api_call = 
-        await fetch(`${MOVIE_DB_BASE_URL}movie/${id}?api_key=${MOVIE_DB_API_KEY}`);
-        const data = await api_call.json();
-        console.log(data);
+        this.props.getMovieFromApiByTmdbId(id)
+        // const api_call = 
+        // await fetch(`${MOVIE_DB_BASE_URL}movie/${id}?api_key=${MOVIE_DB_API_KEY}`);
+        // const data = await api_call.json();
+        // console.log(data);
 
-        switch(choiceNumber) {
-            default:
-                this.setState({
-                    titleFirst: data.title,
-                    releaseDateFirst: data.release_date,
-                    imdbIdFirst: data.imdb_id,
-                    tmdbIdFirst: data.id.toString(),
-                    error: ""
-                });
-            case 2:
-                this.setState({
-                    titleSecond: data.title,
-                    releaseDateSecond: data.release_date,
-                    imdbIdSecond: data.imdb_id,
-                    tmdbIdSecond: data.id.toString(),
-                    error: ""
-                });
-            case 3:
-                this.setState({
-                    titleThird: data.title,
-                    releaseDateThird: data.release_date,
-                    imdbIdThird: data.imdb_id,
-                    tmdbIdThird: data.id.toString(),
-                    error: ""
-                });
+        console.log(this.props.movieDetailTmdb)
+        var movieDetailTmdb;
+        if (this.props.movieDetailTmdb) {
+            movieDetailTmdb = this.props.movieDetailTmdb;
+            
+
+            switch(choiceNumber) {
+                case 1:
+                    this.setState({
+                        titleFirst: movieDetailTmdb.title,
+                        releaseDateFirst: movieDetailTmdb.release_date,
+                        imdbIdFirst: movieDetailTmdb.imdb_id,
+                        tmdbIdFirst: movieDetailTmdb.id.toString(),
+                        error: ""
+                    });
+                case 2:
+                    this.setState({
+                        titleSecond: movieDetailTmdb.title,
+                        releaseDateSecond: movieDetailTmdb.release_date,
+                        imdbIdSecond: movieDetailTmdb.imdb_id,
+                        tmdbIdSecond: movieDetailTmdb.id.toString(),
+                        error: ""
+                    });
+                case 3:
+                    this.setState({
+                        titleThird: movieDetailTmdb.title,
+                        releaseDateThird: movieDetailTmdb.release_date,
+                        imdbIdThird: movieDetailTmdb.imdb_id,
+                        tmdbIdThird: movieDetailTmdb.id.toString(),
+                        error: ""
+                    });
+            }
         }
     }
 
@@ -391,16 +399,18 @@ CreateMovieNight.propTypes = {
   movieNight: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
   movie: PropTypes.object.isRequired,
-  movieSearchResults: PropTypes.array
+  movieSearchResults: PropTypes.array,
+  movieDetailTmdb: PropTypes.object
 };
 
 const mapStateToProps = state => ({
   movieNight: state.movieNight,
   movie: state.movie,
   movieSearchResults: state.movie.movieSearchResults,
+  movieDetailTmdb: state.movie.movieDetailTmdb,
   errors: state.errors
 });
 
-export default connect(mapStateToProps, { createMovieNight, createMovieNoRedirect, getMovies, searchForMovieByTitle })(
+export default connect(mapStateToProps, { createMovieNight, createMovieNoRedirect, getMovies, searchForMovieByTitle, getMovieFromApiByTmdbId })(
   withRouter(CreateMovieNight)
 );
