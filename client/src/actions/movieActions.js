@@ -231,11 +231,16 @@ const searchForMovieByTitleFromApi = async (title) => {
 
         // limit search results to 5
         searchResults = searchResults.slice(0,5);
+
+        // get imdbId for each search result
+        for (const movie of searchResults) {
+            var imdbId = await getImdbIdFromApi(movie.id);
+            movie.imdb_id = imdbId;
+        }
     }
     
     // configuration - images, etc
     const configData = await getMovieConfigDataFromApi();
-    //console.log(configData)
     if (configData.images) {
         var i;
         for (i = 0; i < searchResults.length; i++) { 
@@ -251,6 +256,13 @@ const searchForMovieByTitleFromApi = async (title) => {
 const getMovieConfigDataFromApi = async () => {
     const api_configuration_call = await fetch(`${MOVIE_DB_BASE_URL}configuration?api_key=${MOVIE_DB_API_KEY}`);
     return await api_configuration_call.json();
+}
+
+const getImdbIdFromApi = async (tmdbId) => {
+    const api_call = 
+        await fetch(`${MOVIE_DB_BASE_URL}movie/${tmdbId}?api_key=${MOVIE_DB_API_KEY}`);
+    const data = await api_call.json();
+    return await data.imdb_id;
 }
 
 export const getMovies = () => dispatch => {

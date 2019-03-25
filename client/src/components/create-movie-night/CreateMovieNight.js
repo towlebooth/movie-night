@@ -67,46 +67,32 @@ class CreateMovieNight extends Component {
         this.props.searchForMovieByTitle(titleForSearch);
     };
 
-    onSelectClick = async (id, choiceNumber) => {
-        console.log(choiceNumber);
-        this.props.getMovieFromApiByTmdbId(id)
-        // const api_call = 
-        // await fetch(`${MOVIE_DB_BASE_URL}movie/${id}?api_key=${MOVIE_DB_API_KEY}`);
-        // const data = await api_call.json();
-        // console.log(data);
-
-        console.log(this.props.movieDetailTmdb)
-        var movieDetailTmdb;
-        if (this.props.movieDetailTmdb) {
-            movieDetailTmdb = this.props.movieDetailTmdb;
-            
-
-            switch(choiceNumber) {
-                case 1:
-                    this.setState({
-                        titleFirst: movieDetailTmdb.title,
-                        releaseDateFirst: movieDetailTmdb.release_date,
-                        imdbIdFirst: movieDetailTmdb.imdb_id,
-                        tmdbIdFirst: movieDetailTmdb.id.toString(),
-                        error: ""
-                    });
-                case 2:
-                    this.setState({
-                        titleSecond: movieDetailTmdb.title,
-                        releaseDateSecond: movieDetailTmdb.release_date,
-                        imdbIdSecond: movieDetailTmdb.imdb_id,
-                        tmdbIdSecond: movieDetailTmdb.id.toString(),
-                        error: ""
-                    });
-                case 3:
-                    this.setState({
-                        titleThird: movieDetailTmdb.title,
-                        releaseDateThird: movieDetailTmdb.release_date,
-                        imdbIdThird: movieDetailTmdb.imdb_id,
-                        tmdbIdThird: movieDetailTmdb.id.toString(),
-                        error: ""
-                    });
-            }
+    onSelectClick = async (id, choiceNumber, imdb_id, title, release_date) => {
+        switch(choiceNumber) {
+            case 1:
+                this.setState({
+                    titleFirst: title,
+                    releaseDateFirst: release_date,
+                    imdbIdFirst: imdb_id,
+                    tmdbIdFirst: id.toString(),
+                    error: ""
+                });
+            case 2:
+                this.setState({
+                    titleSecond: title,
+                    releaseDateSecond: release_date,
+                    imdbIdSecond: imdb_id,
+                    tmdbIdSecond: id.toString(),
+                    error: ""
+                });
+            case 3:
+                this.setState({
+                    titleThird: title,
+                    releaseDateThird: release_date,
+                    imdbIdThird: imdb_id,
+                    tmdbIdThird: id.toString(),
+                    error: ""
+                });
         }
     }
 
@@ -261,7 +247,7 @@ class CreateMovieNight extends Component {
             <div className="row">
                 <Container>
                     <ListGroup>
-                        {movieSearchResults.map(({ id, title, release_date, overview, poster_path, imageBaseUrl, posterSizeXS }) => (
+                        {movieSearchResults.map(({ id, title, release_date, overview, poster_path, imageBaseUrl, posterSizeXS, imdb_id }) => (
                             <ListGroupItem key={id}>
                             <Row>
                                 <Col xs="4">
@@ -272,7 +258,7 @@ class CreateMovieNight extends Component {
                                         className="select-btn"
                                         color="secondary"
                                         size="sm"
-                                        onClick={this.onSelectClick.bind(this, id, 1)}
+                                        onClick={this.onSelectClick.bind(this, id, 1, imdb_id, title, release_date)}
                                         >Make Choice 1
                                     </Button>
                                     &nbsp;
@@ -280,7 +266,7 @@ class CreateMovieNight extends Component {
                                         className="select-btn2"
                                         color="secondary"
                                         size="sm"
-                                        onClick={this.onSelectClick.bind(this, id, 2)}
+                                        onClick={this.onSelectClick.bind(this, id, 2, imdb_id, title, release_date)}
                                         >Make Choice 2
                                     </Button>
                                     &nbsp;
@@ -288,7 +274,7 @@ class CreateMovieNight extends Component {
                                         className="select-btn3"
                                         color="secondary"
                                         size="sm"
-                                        onClick={this.onSelectClick.bind(this, id, 3)}
+                                        onClick={this.onSelectClick.bind(this, id, 3, imdb_id, title, release_date)}
                                         >Make Choice 3
                                     </Button>
                                     <p>{title} ({moment(release_date).format('YYYY')})</p>
