@@ -6,10 +6,6 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import TextFieldGroup from '../common/TextFieldGroup';
 import { getMovies, searchForMovieByTitle } from '../../actions/movieActions';
-import { 
-    MOVIE_DB_API_KEY, 
-    MOVIE_DB_BASE_URL
- } from '../common/keys';
 
  class MovieSearch extends Component {
     constructor(props) {
@@ -35,12 +31,9 @@ import {
         }    
     }
 
-    onSelectClick = async (id) => {
-        const api_call = await fetch(`${MOVIE_DB_BASE_URL}movie/${id}?api_key=${MOVIE_DB_API_KEY}`);
-        const data = await api_call.json();
-
+    onSelectClick = async (imdb_id) => {
         // redirect to movie detail
-        this.props.history.push(`/movie/${data.imdb_id}`)
+        this.props.history.push(`/movie/${imdb_id}`)
     }
 
     getMovieFromApi = async (e) => {
@@ -71,14 +64,14 @@ import {
                         </Col>
                     </Row>
                     <ListGroup>
-                        {movieSearchResults.map(({ id, title, release_date, overview, poster_path, imageBaseUrl, posterSizeXS }) => (
+                        {movieSearchResults.map(({ id, title, release_date, overview, poster_path, imageBaseUrl, posterSizeXS, imdb_id }) => (
                             <ListGroupItem key={id}>
                             <Row>
                                 <Col xs="4">
                                     <img src={imageBaseUrl + posterSizeXS + poster_path} style={{width: 120}} alt={title}></img>
                                 </Col>
                                 <Col xs="8">
-                                    <Button variant="primary" onClick={this.onSelectClick.bind(this, id)}>{title}</Button> ({moment(release_date).format('YYYY')})
+                                    <Button variant="primary" onClick={this.onSelectClick.bind(this, imdb_id)}>{title}</Button> ({moment(release_date).format('YYYY')})
                                     <p>{overview}</p>
                                 </Col>
                             </Row>

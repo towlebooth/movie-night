@@ -8,10 +8,6 @@ import TextFieldGroup from '../common/TextFieldGroup';
 import SelectListGroup from '../common/SelectListGroup';
 import { createMovieNight } from '../../actions/movieNightActions';
 import { createMovieNoRedirect, getMovies, searchForMovieByTitle, getMovieFromApiByTmdbId } from '../../actions/movieActions';
-// import { 
-//     MOVIE_DB_API_KEY, 
-//     MOVIE_DB_BASE_URL
-//  } from '../common/keys';
 
 class CreateMovieNight extends Component {
     constructor(props) {
@@ -69,7 +65,7 @@ class CreateMovieNight extends Component {
 
     onSelectClick = async (id, choiceNumber, imdb_id, title, release_date) => {
         switch(choiceNumber) {
-            case 1:
+            default:
                 this.setState({
                     titleFirst: title,
                     releaseDateFirst: release_date,
@@ -77,6 +73,7 @@ class CreateMovieNight extends Component {
                     tmdbIdFirst: id.toString(),
                     error: ""
                 });
+                break;
             case 2:
                 this.setState({
                     titleSecond: title,
@@ -85,6 +82,7 @@ class CreateMovieNight extends Component {
                     tmdbIdSecond: id.toString(),
                     error: ""
                 });
+                break;
             case 3:
                 this.setState({
                     titleThird: title,
@@ -93,6 +91,7 @@ class CreateMovieNight extends Component {
                     tmdbIdThird: id.toString(),
                     error: ""
                 });
+                break;
         }
     }
 

@@ -11,8 +11,7 @@ class Movie extends Component {
   }
 
   render() {
-    const {movie} = this.props.movie;
-
+    
     return (
       <div className="dashboard">
         <div className="container">
