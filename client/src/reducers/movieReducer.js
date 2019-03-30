@@ -2,6 +2,7 @@ import {
     GET_MOVIES, 
     GET_MOVIE, 
     GET_MOVIE_DETAILS_API,
+    GET_MOVIE_CHOICES_API,
     GET_MOVIE_WITH_TMDBID_API,
     MOVIE_SEARCH_BY_TITLE,
     ADD_MOVIE, 
@@ -35,6 +36,12 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 movieDetail: action.payload,
+                loading: false
+            }
+            case GET_MOVIE_CHOICES_API:
+            return {
+                ...state,
+                movieChoices: action.payload,
                 loading: false
             }
         case GET_MOVIE_WITH_TMDBID_API:

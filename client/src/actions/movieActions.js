@@ -3,6 +3,7 @@ import {
     GET_MOVIES, 
     GET_MOVIE,
     GET_MOVIE_DETAILS_API,
+    GET_MOVIE_CHOICES_API,
     GET_MOVIE_WITH_TMDBID_API,
     MOVIE_SEARCH_BY_TITLE,
     DELETE_MOVIE, 
@@ -37,7 +38,6 @@ export const getMovieDetailsFromApi = (imdbId) => dispatch => {
 
 export const getMovieFromApiByTmdbId = (tmdbId) => dispatch => {
   dispatch(setMoviesLoading());
-  console.log('made it to movieActions')
   getMovieDetailsFromApiWithTmdbId(tmdbId)
       .then(res =>            
           dispatch({
@@ -118,8 +118,36 @@ const getMovieDetailsFromApiWithTmdbId = async (tmdbId) => {
         movieDetail.posterSizeXXL = configData.images.poster_sizes[5]; // w780
     }
     
-    console.log(movieDetail)
+    //console.log(movieDetail)
     return movieDetail;
+}
+
+export const getMovieChoicesFromApi = (imdbId) => dispatch => {
+    dispatch(setMoviesLoading());
+    getMoviesFromApi(imdbId)
+        .then(res =>            
+            dispatch({
+                type: GET_MOVIE_CHOICES_API,
+                payload: res
+            })            
+        )
+        .catch(err =>
+            dispatch({
+                type: GET_ERRORS,
+                payload: err
+            })
+        );
+  }
+
+//async function foo(things) {
+const getMoviesFromApi = async (imdbIds) => {
+    const results = [];
+    for (const imdbId of imdbIds) {
+      // asynchronous
+      results.push(getMovieFromApi(imdbId));
+    }
+    // wait until all asynchronous calls are complete
+    return await Promise.all(results);
 }
 
 const getMovieFromApi = async (imdbId) => {
@@ -196,7 +224,7 @@ const getMovieFromApi = async (imdbId) => {
             movieDetail.posterSizeXXL = configData.images.poster_sizes[5]; // w780
         }
     }
-    
+    //console.log(movieDetail)
     return movieDetail;
 }
 

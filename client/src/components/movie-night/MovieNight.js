@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { getMovieNightByDate } from '../../actions/movieNightActions';
 //import { getMovieByImdbId } from '../../actions/movieActions';
 import MovieDetail from './../movie/MovieDetail';
+import MovieChoiceList from './../movie/MovieChoiceList';
 import moment from 'moment';
 
 class MovieNight extends Component {
@@ -24,12 +25,15 @@ class MovieNight extends Component {
         )
     }
     else {
+      console.log(movieNight.movieChoicesRoundOne)
       movieNightContent = (
           <div>
               <h3>{moment.utc(movieNight.date).format('dddd, MMMM Do YYYY')}</h3>
-              <h5>{movieNight.host}</h5>
-              <h5>{movieNight.location}</h5>
+              <h5>Hosted by {movieNight.host} in {movieNight.location}</h5>
+              <h5>Movie Viewed:</h5>
               <MovieDetail imdbId={movieNight.movieViewed}></MovieDetail>
+              <h5>Choices:</h5>
+              <MovieChoiceList imdbIds={movieNight.movieChoicesRoundOne}></MovieChoiceList>
           </div>
       )
     }
