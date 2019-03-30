@@ -25,7 +25,6 @@ class MovieNight extends Component {
         )
     }
     else {
-      console.log(movieNight.movieChoicesRoundOne)
       movieNightContent = (
           <div>
               <h3>{moment.utc(movieNight.date).format('dddd, MMMM Do YYYY')}</h3>

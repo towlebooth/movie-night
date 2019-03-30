@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-//import { Container, ListGroup, ListGroupItem } from 'reactstrap';
-import { Container, Row, Col, ListGroup, ListGroupItem, Button } from 'reactstrap';
+//import { Container, Row, Col, ListGroup, ListGroupItem, Button } from 'reactstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
-//import { getHostingOrders } from '../../actions/hostingOrderActions';
 import { getMovieChoicesFromApi } from '../../actions/movieActions';
 import PropTypes from 'prop-types';
 
@@ -15,7 +13,6 @@ class MovieChoiceList extends Component {
 
     render() {
         let movieChoices  = [];
-        console.log(this.props.movieChoices);
         if (this.props && this.props.movieChoices) {
             movieChoices = this.props.movieChoices;
         }
@@ -28,10 +25,8 @@ class MovieChoiceList extends Component {
                    <br/>
                    <Link to={`/movie/${imdb_id}`}>{title}</Link> ({moment(release_date).format('YYYY')})
                    </div>
-                ))}
-               
-           </div>
-           
+                ))}               
+           </div>           
         );
     }
 }
