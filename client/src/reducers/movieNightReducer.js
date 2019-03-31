@@ -1,5 +1,6 @@
 import { 
-    GET_MOVIENIGHTS, 
+    GET_MOVIENIGHTS,
+    GET_MOVIENIGHTS_BY_HOST,
     GET_MOVIENIGHT, 
     ADD_MOVIENIGHT, 
     DELETE_MOVIENIGHT, 
@@ -15,6 +16,12 @@ const initialState = {
 export default function(state = initialState, action) {
     switch(action.type) {
         case GET_MOVIENIGHTS:
+            return {
+                ...state,
+                movieNights: action.payload,
+                loading: false
+            }
+        case GET_MOVIENIGHTS_BY_HOST:
             return {
                 ...state,
                 movieNights: action.payload,

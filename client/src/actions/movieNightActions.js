@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { 
-    GET_MOVIENIGHTS, 
+    GET_MOVIENIGHTS,
+    GET_MOVIENIGHTS_BY_HOST,
     GET_MOVIENIGHT, 
     DELETE_MOVIENIGHT, 
     MOVIENIGHTS_LOADING,
@@ -24,6 +25,25 @@ export const getMovieNights = () => dispatch => {
               payload: null
             })
           );
+};
+
+// get all movie nights for a particular host
+export const getMovieNightsByHost = host => dispatch => {
+  dispatch(setMovieNightsLoading());
+  axios
+      .get(`/api/movieNights/host/${host}`)
+      .then(res => 
+          dispatch({
+              type: GET_MOVIENIGHTS_BY_HOST,
+              payload: res.data
+          })
+      )
+      .catch(err =>
+          dispatch({
+            type: GET_MOVIENIGHTS,
+            payload: null
+          })
+        );
 };
 
 // Get movie night by date

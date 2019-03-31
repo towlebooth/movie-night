@@ -16,6 +16,24 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
         .then(movieNights => res.json(movieNights))
 });
 
+// @route   GET api/movieNight/host/:host
+// @desc    Get movieNights by host
+// @access  Public
+router.get('/host/:host', (req, res) => {
+    const errors = {};
+    MovieNight.find({ host: req.params.host })
+        .sort({ date: -1 })  // descending
+        .then(movieNights => {
+            if (!movieNights) {
+                errors.nomovienights = 'There are no movie nights with host: ' + req.params.host;
+                res.status(404).json(errors);
+            }
+    
+            res.json(movieNights);
+        })
+        .catch(err => res.status(404).json(err));
+  });
+
 // @route   GET api/movieNight/date/:date
 // @desc    Get movieNight by date
 // @access  Public

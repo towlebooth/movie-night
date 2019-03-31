@@ -4,12 +4,16 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
-import { getMovieNights, deleteMovieNight } from '../../actions/movieNightActions';
+import { getMovieNights, getMovieNightsByHost, deleteMovieNight } from '../../actions/movieNightActions';
 import PropTypes from 'prop-types';
 
 class MovieNightList extends Component {
     componentDidMount() {
-        this.props.getMovieNights();
+        if (this.props.match.params.host) {
+            this.props.getMovieNightsByHost(this.props.match.params.host);
+        } else {
+            this.props.getMovieNights();
+        }
     }
 
     onDeleteClick = (id) => {
@@ -18,6 +22,7 @@ class MovieNightList extends Component {
 
     render() {
         const { movieNights } = this.props.movieNight;
+        console.log(movieNights)
         return(
             <Container>
                 
@@ -46,7 +51,8 @@ class MovieNightList extends Component {
 }
 
 MovieNightList.propTypes = {
-    getMovieNights: PropTypes.func.isRequired, 
+    getMovieNights: PropTypes.func,
+    getMovieNightsByHost: PropTypes.func,
     movieNight: PropTypes.object.isRequired
 }
 
@@ -54,4 +60,4 @@ const mapStateToProps = (state) => ({
     movieNight: state.movieNight
 })
 
-export default connect(mapStateToProps, { getMovieNights, deleteMovieNight })(MovieNightList);
+export default connect(mapStateToProps, { getMovieNights, getMovieNightsByHost, deleteMovieNight })(MovieNightList);

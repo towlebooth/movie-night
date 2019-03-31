@@ -19,8 +19,7 @@ class HostingOrder extends Component {
         let movieNightHostingOrders = [];
 
         if (hostingOrders && movieNights) {
-            let recentMovieNights = movieNights.slice(0, 8);
-            //console.log(recentMovieNights);
+            let recentMovieNights = movieNights.slice(0, 10);
             hostingOrders.forEach((hostingOrder) => {
                              
                 var i;
@@ -43,7 +42,7 @@ class HostingOrder extends Component {
                 <ListGroup>
                     {movieNightHostingOrders.map(({ _id, host, mostRecentDate }) => (
                         <ListGroupItem key={_id}>
-                            {host} last hosted on <Link to={`/movieNight/${moment.utc(mostRecentDate).format('YYYY-MM-DD')}`}>{moment.utc(mostRecentDate).format('MMMM Do YYYY')}</Link> 
+                            <Link to={`/allMovieNights/${host}`}>{host}</Link>  last hosted on <Link to={`/movieNight/${moment.utc(mostRecentDate).format('YYYY-MM-DD')}`}>{moment.utc(mostRecentDate).format('MMMM Do YYYY')}</Link> 
                         </ListGroupItem>
                     ))}
                 </ListGroup>

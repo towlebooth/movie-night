@@ -18,6 +18,7 @@ import CreateMovieNight from './components/create-movie-night/CreateMovieNight';
 import Movie from './components/movie/Movie';
 import MovieSearch from './components/movie/MovieSearch';
 import MovieNight from './components/movie-night/MovieNight';
+import MovieNightList from './components/movie-night/MovieNightList';
 
 import { Provider } from 'react-redux';
 import store from './store';
@@ -61,6 +62,9 @@ class App extends Component {
                                 <PrivateRoute exact path="/dashboard" component={ Dashboard } />
                             </Switch>
                             <Switch>
+                                <PrivateRoute exact path="/allMovieNights" component={ MovieNightList } />
+                            </Switch>
+                            <Switch>
                                 <PrivateRoute exact path="/create-profile" component={ CreateProfile } />
                             </Switch>
                             <Switch>
@@ -74,6 +78,7 @@ class App extends Component {
                             </Switch>
                             <Route path="/movie/:imdbId" component={Movie} />
                             <Route path="/movieNight/:date" component={MovieNight} />
+                            <Route path="/allMovieNights/:host" component={MovieNightList} />
                         </div>                        
                         <Footer />
                     </div>

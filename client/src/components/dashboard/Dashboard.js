@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { getCurrentProfile } from '../../actions/profileActions';
-import MovieNightList from '../movie-night/MovieNightList';
+//import MovieNightList from '../movie-night/MovieNightList';
 import { Container } from 'reactstrap';
 import HostingOrder from '../hosting-order/HostingOrder';
 
@@ -18,8 +19,8 @@ class Dashboard extends Component {
     dashboardContent = 
       <Container>
         <HostingOrder />
-        <p></p>
-        <MovieNightList />
+        <p><Link to="/allMovieNights">All Movie Nights</Link></p>
+        {/* <MovieNightList /> */}
       </Container>;
 
     return (
@@ -27,7 +28,6 @@ class Dashboard extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              {/* <h1 className="display-4">Dashboard</h1> */}
               {dashboardContent}
             </div>
           </div>
