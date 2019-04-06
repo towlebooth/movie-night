@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col, ListGroup, ListGroupItem } from 'reactstrap';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getMovieDetailsFromApi } from '../../actions/movieActions';
@@ -18,17 +19,42 @@ class MovieDetail extends Component {
     render() {
         var movieDetail = {};
         var formattedYear = '';
+        var posterContent;
+        var movieNightViewedContent = '';
         var crew = [];
         var crewContent;
         var cast = [];
         var castContent;
         var ratings = [];
         var ratingsContent;
-        if (this.props.movieDetail) {
+        
+        if (this.props.movieDetail && this.props.movieDetail.release_date) {
             movieDetail = this.props.movieDetail;
-
+            console.log(movieDetail)
+            console.log(movieDetail.movieNightViewed)
             // format year
             formattedYear = (moment(movieDetail.release_date).format('YYYY'));
+
+            if (movieDetail.imageBaseUrl && movieDetail.posterSizeL && movieDetail.poster_path) {
+                posterContent = (
+                    <img src={movieDetail.imageBaseUrl + movieDetail.posterSizeL + movieDetail.poster_path} style={{width: 185}} alt={movieDetail.title}></img>
+                );
+            }
+            
+
+            if (movieDetail.movieNightViewed) {
+                movieNightViewedContent = (
+                    <div>
+                        <p>This movie was viewed on <Link to={`/movieNight/${moment.utc(movieDetail.movieNightViewed.date).format('YYYY-MM-DD')}`}>{moment.utc(movieDetail.movieNightViewed.date).format('dddd, MMMM Do YYYY')}</Link>.</p>
+                    </div>
+                );
+            } else {
+                movieNightViewedContent = (
+                    <div>
+                        <p>This movie has not been viewed yet.</p>
+                    </div>
+                );
+            }
 
             // format genres
             var genres = "";
@@ -108,9 +134,10 @@ class MovieDetail extends Component {
                 </Row>
                 <Row>
                     <Col xs="4">
-                            <img src={movieDetail.imageBaseUrl + movieDetail.posterSizeL + movieDetail.poster_path} style={{width: 185}} alt={movieDetail.title}></img>
+                            {posterContent}
                     </Col>
                     <Col xs="8">
+                        {movieNightViewedContent}
                         <p>{movieDetail.overview}</p>
                         <p>Runtime: {movieDetail.runtime} minutes</p>
                         <p>Genres: {genres}</p>

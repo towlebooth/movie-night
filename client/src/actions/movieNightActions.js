@@ -2,7 +2,8 @@ import axios from 'axios';
 import { 
     GET_MOVIENIGHTS,
     GET_MOVIENIGHTS_BY_HOST,
-    GET_MOVIENIGHT, 
+    GET_MOVIENIGHT,
+    GET_MOVIENIGHT_BY_MOVIE_VIEWED,
     DELETE_MOVIENIGHT, 
     MOVIENIGHTS_LOADING,
     GET_ERRORS
@@ -64,6 +65,26 @@ export const getMovieNightByDate = date => dispatch => {
           })
         );
   };
+
+// Get movie night by movie viewed IMDB ID
+export const getMovieNightByMovieViewed = movieViewed => dispatch => {
+  dispatch(setMovieNightsLoading());
+  console.log(movieViewed)
+  axios
+    .get(`/api/movieNights/movieViewed/${movieViewed}`)
+    .then(res =>
+      dispatch({
+        type: GET_MOVIENIGHT_BY_MOVIE_VIEWED,
+        payload: res.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+          type: GET_ERRORS,
+          payload: err
+        })
+      );
+};
  
 // delete movie night by id
 export const deleteMovieNight = (id) => dispatch => {

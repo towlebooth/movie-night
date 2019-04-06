@@ -53,8 +53,23 @@ export const getMovieFromApiByTmdbId = (tmdbId) => dispatch => {
       );
 }
 
+// get movie from api with IMDB ID
+const getMovieFromApi = async (imdbId) => {
+    // movie by imdbId
+    const api_searchMovie_call =
+        await fetch(`${MOVIE_DB_BASE_URL}find/${imdbId}?api_key=${MOVIE_DB_API_KEY}&language=en-US&external_source=imdb_id`);
+    const searchData = await api_searchMovie_call.json();
+        
+    if (searchData.movie_results[0] && searchData.movie_results[0].id) {
+        const searchResultTMDB_Id = searchData.movie_results[0].id;
+        const movieDetail = await getMovieDetailsFromApiWithTmdbId(searchResultTMDB_Id);
+        
+        return movieDetail;
+    }
+}
+
+// get movie from api with TMDB ID
 const getMovieDetailsFromApiWithTmdbId = async (tmdbId) => {
-    // movie details
     var movieDetail = {};
     const api_call = 
         await fetch(`${MOVIE_DB_BASE_URL}movie/${tmdbId}?api_key=${MOVIE_DB_API_KEY}`);
@@ -62,8 +77,16 @@ const getMovieDetailsFromApiWithTmdbId = async (tmdbId) => {
     movieDetail = data;
 
     if (tmdbId) {
-        //movieDetail = data;
         movieDetail.imdbId = data.imdb_id;          
+    }
+
+    if (movieDetail.imdbId) {
+        // movie night for this movie  TODO: can we call movieNightActions for this?
+        const movieNight = await getMovieNightForImdbId(movieDetail.imdbId);
+        
+        if (movieNight) {
+            movieDetail.movieNightViewed = movieNight;
+        }
     }
 
     // credits - cast and crew
@@ -116,9 +139,8 @@ const getMovieDetailsFromApiWithTmdbId = async (tmdbId) => {
         movieDetail.posterSizeL = configData.images.poster_sizes[3]; // w342
         movieDetail.posterSizeXL = configData.images.poster_sizes[4]; // w500
         movieDetail.posterSizeXXL = configData.images.poster_sizes[5]; // w780
-    }
+    }    
     
-    //console.log(movieDetail)
     return movieDetail;
 }
 
@@ -137,9 +159,9 @@ export const getMovieChoicesFromApi = (imdbId) => dispatch => {
                 payload: err
             })
         );
-  }
+}
 
-//async function foo(things) {
+// get array of movies from api for given array of IMDB IDs
 const getMoviesFromApi = async (imdbIds) => {
     const results = [];
     for (const imdbId of imdbIds) {
@@ -150,83 +172,13 @@ const getMoviesFromApi = async (imdbIds) => {
     return await Promise.all(results);
 }
 
-const getMovieFromApi = async (imdbId) => {
-    var movieDetail = {};
-
-    // movie by imdbId
-    const api_searchMovie_call =
-        await fetch(`${MOVIE_DB_BASE_URL}find/${imdbId}?api_key=${MOVIE_DB_API_KEY}&language=en-US&external_source=imdb_id`);
-    const searchData = await api_searchMovie_call.json();
-        
-    if (searchData.movie_results[0]) {
-        const searchResultId = searchData.movie_results[0].id;    
-
-        // movie details
-        const api_call = 
-            await fetch(`${MOVIE_DB_BASE_URL}movie/${searchResultId}?api_key=${MOVIE_DB_API_KEY}`);
-        const data = await api_call.json();
-        movieDetail = data;
-        
-        if (imdbId && searchResultId) {
-            movieDetail = data;
-            movieDetail.imdbId = data.imdb_id;          
-        }
-
-        // credits - cast and crew
-        const api_credits_call = 
-            await fetch(`${MOVIE_DB_BASE_URL}movie/${searchResultId}/credits?api_key=${MOVIE_DB_API_KEY}`);
-        const credits = await api_credits_call.json();
-        let cast = credits.cast;
-        const crew = credits.crew;
-
-        if (crew) {
-            var directors = crew.filter(function (c) {
-                return c.job === "Director";
-            });
-
-            var writers = crew.filter(function (c) {
-                return c.job === "Writer" ||
-                    c.job === "Story" ||
-                    c.job === "Screenplay";
-            });
-
-            var crewForDisplay = directors;
-            crewForDisplay.push.apply(directors, writers);
-            
-            if (crewForDisplay.length > 0) {
-                movieDetail.crew = crewForDisplay;
-            }
-        } 
-        
-        if (cast && cast.length > 0) {
-            movieDetail.cast = cast.slice(0,10); // return top 10 cast
-        }
-
-        const api_omdb_call =
-            await fetch(`${OMDB_BASE_URL}apikey=${OMDB_API_KEY}&i=${imdbId}`);
-        const omdbData = await api_omdb_call.json();
-
-        if (imdbId && omdbData) {
-            movieDetail.rated = omdbData.Rated;
-            movieDetail.ratings = omdbData.Ratings;
-        }
-
-        // configuration - images, etc
-        const configData = await getMovieConfigDataFromApi();
-        
-        if (configData.images) {
-            movieDetail.imageBaseUrl = configData.images.base_url;
-            movieDetail.posterSizeXS = configData.images.poster_sizes[0]; // w94
-            movieDetail.posterSizeS = configData.images.poster_sizes[1]; // w154
-            movieDetail.posterSizeM = configData.images.poster_sizes[2]; // w185
-            movieDetail.posterSizeL = configData.images.poster_sizes[3]; // w342
-            movieDetail.posterSizeXL = configData.images.poster_sizes[4]; // w500
-            movieDetail.posterSizeXXL = configData.images.poster_sizes[5]; // w780
-        }
-    }
-    //console.log(movieDetail)
-    return movieDetail;
-}
+const getMovieNightForImdbId = async (imdbId) => {
+    console.log(imdbId)
+    let res = await axios
+        .get(`/api/movieNights/movieViewed/${imdbId}`)
+        .catch();
+    return await res.data;
+};
 
 export const searchForMovieByTitle = (title) => dispatch => {
   dispatch(setMoviesLoading());

@@ -42,10 +42,25 @@ router.get('/date/:date', (req, res) => {
     MovieNight.findOne({ date: req.params.date })
       .then(movieNight => {
         if (!movieNight) {
-          errors.nomovienight = 'There is no movie night with this date: ' + req.params.date;
-          res.status(404).json(errors);
+            errors.nomovienight = 'There is no movie night with this date: ' + req.params.date;
+            res.status(404).json(errors);
         }
   
+        res.json(movieNight);
+      })
+      .catch(err => res.status(404).json(err));
+  });
+
+// @route   GET api/movieNight/movieViewed/:movieViewed
+// @desc    Get movieNight by movie viewed IMDB ID
+// @access  Public
+router.get('/movieViewed/:movieViewed', (req, res) => {
+    const errors = {};
+    MovieNight.findOne({ movieViewed: req.params.movieViewed })
+      .then(movieNight => {
+        if (!movieNight) {
+            // fail silently and send back null
+        }  
         res.json(movieNight);
       })
       .catch(err => res.status(404).json(err));
