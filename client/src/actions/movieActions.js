@@ -72,7 +72,7 @@ const getMovieFromApi = async (imdbId) => {
 const getMovieDetailsFromApiWithTmdbId = async (tmdbId) => {
     var movieDetail = {};
     const api_call = 
-        await fetch(`${MOVIE_DB_BASE_URL}movie/${tmdbId}?api_key=${MOVIE_DB_API_KEY}`);
+        await fetch(`${MOVIE_DB_BASE_URL}movie/${tmdbId}?api_key=${MOVIE_DB_API_KEY}&append_to_response=credits`);
     const data = await api_call.json();
     movieDetail = data;
 
@@ -90,11 +90,8 @@ const getMovieDetailsFromApiWithTmdbId = async (tmdbId) => {
     }
 
     // credits - cast and crew
-    const api_credits_call = 
-        await fetch(`${MOVIE_DB_BASE_URL}movie/${tmdbId}/credits?api_key=${MOVIE_DB_API_KEY}`);
-    const credits = await api_credits_call.json();
-    let cast = credits.cast;
-    const crew = credits.crew;
+    let cast = movieDetail.credits.cast;
+    const crew = movieDetail.credits.crew;
 
     if (crew) {
         var directors = crew.filter(function (c) {
@@ -173,7 +170,7 @@ const getMoviesFromApi = async (imdbIds) => {
 }
 
 const getMovieNightForImdbId = async (imdbId) => {
-    console.log(imdbId)
+    //console.log(imdbId)
     let res = await axios
         .get(`/api/movieNights/movieViewed/${imdbId}`)
         .catch();

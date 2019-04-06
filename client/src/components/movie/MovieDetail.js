@@ -30,8 +30,6 @@ class MovieDetail extends Component {
         
         if (this.props.movieDetail && this.props.movieDetail.release_date) {
             movieDetail = this.props.movieDetail;
-            console.log(movieDetail)
-            console.log(movieDetail.movieNightViewed)
             // format year
             formattedYear = (moment(movieDetail.release_date).format('YYYY'));
 
@@ -39,8 +37,7 @@ class MovieDetail extends Component {
                 posterContent = (
                     <img src={movieDetail.imageBaseUrl + movieDetail.posterSizeL + movieDetail.poster_path} style={{width: 185}} alt={movieDetail.title}></img>
                 );
-            }
-            
+            }            
 
             if (movieDetail.movieNightViewed) {
                 movieNightViewedContent = (
