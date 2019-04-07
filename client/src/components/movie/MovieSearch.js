@@ -6,6 +6,7 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import TextFieldGroup from '../common/TextFieldGroup';
 import { getMovies, searchForMovieByTitle } from '../../actions/movieActions';
+import './../../App.css';
 
  class MovieSearch extends Component {
     constructor(props) {
@@ -21,9 +22,7 @@ import { getMovies, searchForMovieByTitle } from '../../actions/movieActions';
         this.onChange = this.onChange.bind(this);
     }
 
-    componentDidMount() {  
-        
-    }
+    componentDidMount() {  }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.errors) {
@@ -67,10 +66,8 @@ import { getMovies, searchForMovieByTitle } from '../../actions/movieActions';
                         {movieSearchResults.map(({ id, title, release_date, overview, poster_path, imageBaseUrl, posterSizeXS, imdb_id }) => (
                             <ListGroupItem key={id}>
                             <Row>
-                                <Col xs="4">
-                                    <img src={imageBaseUrl + posterSizeXS + poster_path} style={{width: 120}} alt={title}></img>
-                                </Col>
-                                <Col xs="8">
+                                <Col xs="12">
+                                    <img src={imageBaseUrl + posterSizeXS + poster_path} style={{width: 120}} className={"floatLeft"} alt={title}></img>
                                     <Button variant="primary" onClick={this.onSelectClick.bind(this, imdb_id)}>{title}</Button> ({moment(release_date).format('YYYY')})
                                     <p>{overview}</p>
                                 </Col>
