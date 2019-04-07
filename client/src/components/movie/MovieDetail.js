@@ -7,6 +7,8 @@ import { getMovieDetailsFromApi } from '../../actions/movieActions';
 import { getMovieNights } from '../../actions/movieNightActions';
 import moment from 'moment';
 
+import './../../App.css';
+
 class MovieDetail extends Component {
     constructor(props) {
         super(props);
@@ -35,7 +37,7 @@ class MovieDetail extends Component {
 
             if (movieDetail.imageBaseUrl && movieDetail.posterSizeL && movieDetail.poster_path) {
                 posterContent = (
-                    <img src={movieDetail.imageBaseUrl + movieDetail.posterSizeL + movieDetail.poster_path} style={{width: 185}} alt={movieDetail.title}></img>
+                    <img src={movieDetail.imageBaseUrl + movieDetail.posterSizeL + movieDetail.poster_path} style={{width: 185}} className={"floatLeft"} alt={movieDetail.title}></img>
                 );
             }            
 
@@ -126,14 +128,12 @@ class MovieDetail extends Component {
             <div className='movieDetail'>
                 <Row>
                     <Col xs="12">
-                    <h3>{movieDetail.title} ({formattedYear})</h3>
+                        <h3>{movieDetail.title} ({formattedYear})</h3>
                     </Col>
                 </Row>
                 <Row>
-                    <Col xs="4">
-                            {posterContent}
-                    </Col>
-                    <Col xs="8">
+                    <Col xs="12">
+                        {posterContent}
                         {movieNightViewedContent}
                         <p>{movieDetail.overview}</p>
                         <p>Runtime: {movieDetail.runtime} minutes</p>

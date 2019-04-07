@@ -37,3 +37,8 @@ img {
 .form-control::placeholder {
   color: #bbb !important;
 }
+
+.floatLeft {
+  float: left;
+  margin: 10px;
+}
