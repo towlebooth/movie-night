@@ -26,14 +26,7 @@ class MovieList extends Component {
                         {movies.map(({ _id, title, releaseDate, imdbId }) => (
                             <CSSTransition key={_id} timeout={500} classNames="fade">
                                 <ListGroupItem>
-                                    <Button
-                                        className="remove-btn"
-                                        color="danger"
-                                        size="sm"
-                                        onClick={this.onDeleteClick.bind(this, _id)}
-                                        >&times;
-                                    </Button>
-                                    &nbsp;<Link to={`/movie/${imdbId}`}>{title}</Link> ({moment(releaseDate).format('YYYY')})
+                                    <Link to={`/movie/${imdbId}`}>{title}</Link> ({moment(releaseDate).format('YYYY')})
                                 </ListGroupItem>
                             </CSSTransition>
                         ))}

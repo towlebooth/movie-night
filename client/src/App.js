@@ -16,6 +16,7 @@ import CreateProfile from './components/create-profile/CreateProfile';
 import CreateMovie from './components/create-movie/CreateMovie';
 import CreateMovieNight from './components/create-movie-night/CreateMovieNight';
 import Movie from './components/movie/Movie';
+import MovieList from './components/movie/MovieList';
 import MovieSearch from './components/movie/MovieSearch';
 import MovieNight from './components/movie-night/MovieNight';
 import MovieNightList from './components/movie-night/MovieNightList';
@@ -75,6 +76,9 @@ class App extends Component {
                             </Switch>
                             <Switch>
                                 <PrivateRoute exact path="/movie-search" component={ MovieSearch } />
+                            </Switch>
+                            <Switch>
+                                <PrivateRoute exact path="/allMovies" component={ MovieList } />
                             </Switch>
                             <Route path="/movie/:imdbId" component={Movie} />
                             <Route path="/movieNight/:date" component={MovieNight} />

@@ -59,6 +59,10 @@ class Navbar extends Component {
                                 <Link className="nav-link" to="/movie-search"> Movie Search
                                 </Link>
                             </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/allMovies"> All Movies
+                                </Link>
+                            </li>
                         </ul>
                         {isAuthenticated ? authLinks : guestLinks}
                     </div>
