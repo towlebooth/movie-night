@@ -5,10 +5,13 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { getMovieNights, getMovieNightsByHost, deleteMovieNight } from '../../actions/movieNightActions';
+import { getMovies } from '../../actions/movieActions';
 import PropTypes from 'prop-types';
 
 class MovieNightList extends Component {
     componentDidMount() {
+        this.props.getMovies();
+        
         if (this.props.match.params.host) {
             this.props.getMovieNightsByHost(this.props.match.params.host);
         } else {
@@ -22,24 +25,38 @@ class MovieNightList extends Component {
 
     render() {
         const { movieNights } = this.props.movieNight;
-        console.log(movieNights)
+        const { movies } = this.props.movie;
+        let movieNightsForList = [];
+
+        if (movieNights && movies) {
+            movieNights.forEach((movieNight) => { 
+                var movieNightForList = {};
+                movieNightForList.date = movieNight.date;
+                movieNightForList.host = movieNight.host;
+                movieNightForList.location = movieNight.location;
+                movieNightForList.imdbId = movieNight.movieViewed;
+                var i;
+                for (i = 0; i < movies.length; i++) { 
+                    if (movies[i].imdbId === movieNight.movieViewed) {
+                        movieNightForList.title = movies[i].title;
+                        movieNightForList.releaseDate = movies[i].releaseDate;
+                        movieNightsForList.push(movieNightForList);
+                        break;
+                    }
+                }
+            });
+        }
+
+
         return(
             <Container>
                 
                 <ListGroup>
                     <TransitionGroup className="movie-night-list">
-                        {movieNights.map(({ _id, date, host, location }) => (
+                        {movieNightsForList.map(({ _id, date, host, location, imdbId, title, releaseDate }) => (
                             <CSSTransition key={_id} timeout={500} classNames="fade">
                                 <ListGroupItem>
-                                    {/* <Button
-                                        className="remove-btn"
-                                        color="danger"
-                                        size="sm"
-                                        onClick={this.onDeleteClick.bind(this, _id)}
-                                        >&times;
-                                    </Button>
-                                    &nbsp; */}
-                                    <Link to={`/movieNight/${moment.utc(date).format('YYYY-MM-DD')}`}>{moment.utc(date).format('YYYY-MM-DD')}</Link> | <Link to={`/allMovieNights/${host}`}>{host}</Link> | {location}
+                                    <Link to={`/movieNight/${moment.utc(date).format('YYYY-MM-DD')}`}>{moment.utc(date).format('YYYY-MM-DD')}</Link> | <Link to={`/allMovieNights/${host}`}>{host}</Link> | {location} | <Link to={`/movie/${imdbId}`}>{title}</Link> ({moment(releaseDate).format('YYYY')})
                                 </ListGroupItem>
                             </CSSTransition>
                         ))}
@@ -51,13 +68,16 @@ class MovieNightList extends Component {
 }
 
 MovieNightList.propTypes = {
+    getMovies: PropTypes.func,
     getMovieNights: PropTypes.func,
     getMovieNightsByHost: PropTypes.func,
+    movie:  PropTypes.object.isRequired,
     movieNight: PropTypes.object.isRequired
 }
 
 const mapStateToProps = (state) => ({
-    movieNight: state.movieNight
+    movieNight: state.movieNight,
+    movie: state.movie
 })
 
-export default connect(mapStateToProps, { getMovieNights, getMovieNightsByHost, deleteMovieNight })(MovieNightList);
+export default connect(mapStateToProps, { getMovies, getMovieNights, getMovieNightsByHost, deleteMovieNight })(MovieNightList);
