@@ -50,7 +50,13 @@ class MovieList extends Component {
                         {moviesForList.map(({ _id, title, releaseDate, imdbId, dateWatched }) => (
                             <CSSTransition key={_id} timeout={500} classNames="fade">
                                 <ListGroupItem>
-                                    <Link to={`/movie/${imdbId}`}>{title}</Link> ({moment(releaseDate).format('YYYY')}) watched <Link to={`/movieNight/${moment.utc(dateWatched).format('YYYY-MM-DD')}`}>{moment.utc(dateWatched).format('YYYY-MM-DD')}</Link>
+                                    <Link to={`/movie/${imdbId}`}>{title}</Link> ({moment(releaseDate).format('YYYY')})                                    
+                                    
+                                    {dateWatched ? (
+                                        <Link to={`/movieNight/${moment.utc(dateWatched).format('YYYY-MM-DD')}`}> {moment.utc(dateWatched).format('YYYY-MM-DD')}</Link>
+                                      ) : (
+                                        <label>&nbsp;not watched</label>
+                                      )}
                                 </ListGroupItem>
                             </CSSTransition>
                         ))}
