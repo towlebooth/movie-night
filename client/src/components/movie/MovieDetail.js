@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { getMovieDetailsFromApi } from '../../actions/movieActions';
 import { getMovieNights } from '../../actions/movieNightActions';
 import moment from 'moment';
-
 import './../../App.css';
 
 class MovieDetail extends Component {
@@ -139,7 +138,11 @@ class MovieDetail extends Component {
                         <p>Runtime: {movieDetail.runtime} minutes</p>
                         <p>Genres: {genres}</p>
                         <p>Rated: {movieDetail.rated}</p>
-                        <p><a href={`https://www.imdb.com/title/${this.props.imdbId}`} target="_blank">IMDB</a></p>
+                        <p><a href={`https://www.imdb.com/title/${this.props.imdbId}`} target="_blank">IMDB</a> | <a href={`https://www.themoviedb.org/movie/${this.props.movieDetail.tmdbId}`} target="_blank">TMDB</a></p>                        
+                    </Col>
+                </Row>
+                <Row>
+                    <Col xs="12">
                         {ratingsContent}
                         {crewContent}
                         {castContent}

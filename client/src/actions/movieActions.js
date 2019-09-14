@@ -77,7 +77,8 @@ const getMovieDetailsFromApiWithTmdbId = async (tmdbId) => {
     movieDetail = data;
 
     if (tmdbId) {
-        movieDetail.imdbId = data.imdb_id;          
+        movieDetail.imdbId = data.imdb_id;
+        movieDetail.tmdbId = tmdbId;        
     }
 
     if (movieDetail.imdbId) {
