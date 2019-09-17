@@ -47,7 +47,7 @@ class CreateMovieNight extends Component {
     }
 
     componentDidMount() {  
-        this.props.getMovies();
+        this.props.getMovies();    // TODO: is this needed?
     }
 
     componentWillReceiveProps(nextProps) {
@@ -143,6 +143,7 @@ class CreateMovieNight extends Component {
                 releaseDate: this.state.releaseDateFirst,
                 imdbId: this.state.imdbIdFirst,
                 tmdbId: this.state.tmdbIdFirst
+                // TODO: add genres, cast, crew
             };
             await this.saveMovie(movieData);
         }
@@ -154,6 +155,7 @@ class CreateMovieNight extends Component {
                 releaseDate: this.state.releaseDateSecond,
                 imdbId: this.state.imdbIdSecond,
                 tmdbId: this.state.tmdbIdSecond
+                // TODO: add genres, cast, crew
             };
             await this.saveMovie(movieData);
         }
@@ -165,6 +167,7 @@ class CreateMovieNight extends Component {
                 releaseDate: this.state.releaseDateThird,
                 imdbId: this.state.imdbIdThird,
                 tmdbId: this.state.tmdbIdThird
+                // TODO: add genres, cast, crew
             };
             await this.saveMovie(movieData);
         }
@@ -217,11 +220,11 @@ class CreateMovieNight extends Component {
         { label: 'Rick', value: 'Rick' },
         { label: 'Cathy', value: 'Cathy' },
         { label: 'Chad', value: 'Chad' },
+        { label: 'Theater - No Host', value: 'Theater' },
         { label: 'Stacey', value: 'Stacey' },
         { label: 'Zach', value: 'Zach' },
         { label: 'Laura', value: 'Laura' },
-        { label: 'Jennifer', value: 'Jennifer' },
-        { label: 'Theater', value: 'Theater' }
+        { label: 'Jennifer', value: 'Jennifer' }
     ];
 
     // Select options for location

@@ -3,7 +3,7 @@ import { Row, Col, ListGroup, ListGroupItem } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getMovieDetailsFromApi } from '../../actions/movieActions';
+import { getMovieDetailsFromApi, createMovieNoRedirect, createMovie } from '../../actions/movieActions';
 import { getMovieNights } from '../../actions/movieNightActions';
 import moment from 'moment';
 import './../../App.css';
@@ -11,11 +11,54 @@ import './../../App.css';
 class MovieDetail extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            movieToUpdatetoDB: undefined
+        };
     }
     
     componentDidMount = async () => {
         this.props.getMovieDetailsFromApi(this.props.imdbId);
     }
+
+    // TODO: Remove temp
+    /*
+    onSubmit = async (e)  =>{
+        e.preventDefault();
+        //console.log(this.state.movieToUpdatetoDB);
+        if (this.props.movieDetail && this.props.movieDetail.release_date) {
+            var movieDetail = {};
+            movieDetail = this.props.movieDetail;
+            //console.log(movieDetail);
+            //console.log(this.props.movie.movie);
+            
+            if (this.props.movie.movie && this.props.movie.movie._id) {
+                var movieToUpdate = this.props.movie.movie;
+                movieToUpdate.genres = movieDetail.genres;
+
+                if (movieDetail.crew) {
+                    var crewToAdd = [];
+                    movieDetail.crew.forEach((crewMember) => {
+                        crewToAdd.push(crewMember.id)
+                    });
+                    if (crewToAdd.length > 0){
+                        movieToUpdate.crew = crewToAdd;
+                    }
+                }
+                if (movieDetail.cast) {
+                    var castToAdd = [];
+                    movieDetail.cast.forEach((castMember) => {
+                        castToAdd.push(castMember.id)
+                    });
+                    if (castToAdd.length > 0){
+                        movieToUpdate.cast = castToAdd;
+                    }
+                }
+                console.log(movieToUpdate);
+                this.props.createMovieNoRedirect(movieToUpdate);
+            }
+        }
+    }
+    */
 
     render() {
         var movieDetail = {};
@@ -30,7 +73,10 @@ class MovieDetail extends Component {
         var ratingsContent;
         
         if (this.props.movieDetail && this.props.movieDetail.release_date) {
+
             movieDetail = this.props.movieDetail;
+            
+            
             // format year
             formattedYear = (moment(movieDetail.release_date).format('YYYY'));
 
@@ -148,6 +194,17 @@ class MovieDetail extends Component {
                         {castContent}
                     </Col>
                 </Row>
+            
+                {/* 
+                <form onSubmit={this.onSubmit}>                    
+                    <input
+                    type="submit"
+                    value="Submit"
+                    className="btn btn-info btn-block mt-4"
+                    />
+                </form>
+                */}
+                        
             </div>
         );
         
@@ -169,4 +226,4 @@ const mapStateToProps = (state) => ({
     movieDetail: state.movie.movieDetail
 })
 
-export default connect(mapStateToProps, { getMovieNights, getMovieDetailsFromApi })(MovieDetail);
+export default connect(mapStateToProps, { getMovieNights, getMovieDetailsFromApi, createMovieNoRedirect, createMovie })(MovieDetail);

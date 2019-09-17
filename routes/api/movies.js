@@ -97,67 +97,30 @@ router.post(
     passport.authenticate('jwt', { session: false }), 
     (req, res) => {
         const { errors, isValid } = validateMovieInput(req.body);
+        console.log(req.body);
+        //console.log("errors: " + errors);
 
         // check validation
-        if(!isValid) {
+        //if(!isValid) {
             // return any errors with 400 status
-            return res.status(400).json(errors);
-        }
+        //    console.log(errors);
+        //    return res.status(400).json(errors);
+        //}
         const movieFields = {};
+        
         //movieFields.user = req.user.id;
         if(req.body.title) movieFields.title = req.body.title;
         if(req.body.releaseDate) movieFields.releaseDate = req.body.releaseDate;
         if(req.body.imdbId) movieFields.imdbId = req.body.imdbId;
         if(req.body.tmdbId) movieFields.tmdbId = req.body.tmdbId;
-
-        // if(req.body.runTime) movieFields.runTime = req.body.runTime;
-        // if(req.body.posterUrl) movieFields.posterUrl = req.body.posterUrl;
-
-        // if(req.body.rottenTomatoesUrlKey) movieFields.rottenTomatoesUrlKey = req.body.rottenTomatoesUrlKey;
-        // if(req.body.rottenTomatoesTomatoMeter) movieFields.rottenTomatoesTomatoMeter = req.body.rottenTomatoesTomatoMeter;
-        // if(req.body.rottenTomatoesAudienceScore) movieFields.rottenTomatoesAudienceScore = req.body.rottenTomatoesAudienceScore;
-
-        // if(req.body.imdbId) movieFields.imdbId = req.body.imdbId;
-        // if(req.body.imdbRating) movieFields.imdbRating = req.body.imdbRating;
-
-        // // writers - split into array
-        // if(typeof req.body.writers !== 'undefined') {
-        //     movieFields.writers = req.body.writers.split(',');
-        // }
-        // // directors - split into array
-        // if(typeof req.body.directors !== 'undefined') {
-        //     movieFields.directors = req.body.directors.split(',');
-        // }
-        // // actors - split into array
-        // if(typeof req.body.actors !== 'undefined') {
-        //     movieFields.actors = req.body.actors.split(',');
-        // }
-        // // genres - split into array
-        // if(typeof req.body.genres !== 'undefined') {
-        //     movieFields.genres = req.body.genres.split(',');
-        // }
-
-        // // rottenTomatoes
-        // movieFields.rottenTomatoes = {};        
-        // if(req.body.rottenTomatoesUrlKey) movieFields.rottenTomatoes.urlKey = req.body.rottenTomatoesUrlKey;
-        // if(req.body.rottenTomatoesTomatoMeter) movieFields.rottenTomatoes.tomatoMeter = req.body.rottenTomatoesTomatoMeter;
-        // if(req.body.rottenTomatoesAudienceScore) movieFields.rottenTomatoes.audienceScore = req.body.rottenTomatoesAudienceScore;
-
-        // // imdb
-        // movieFields.imdb = {};        
-        // if(req.body.imdbId) movieFields.imdb.imdbId = req.body.imdbId;
-        // if(req.body.imdbRating) movieFields.imdb.imdbRating = req.body.imdbRating;
-
-        // movieRating
-        // TODO: THIS SEEMS INCORRECT - ARRAY OF THESE?  SEPERATE JOIN THING?
-        // movieFields.movieRating = {};        
-        // if(req.body.user) movieFields.movieRating.user = req.user.id;
-        // if(req.body.rating) movieFields.movieRating.rating = req.body.rating;
-        // if(req.body.comment) movieFields.movieRating.comment = req.body.comment;
+        if(req.body.genres) movieFields.genres = req.body.genres;
+        if(req.body.cast) movieFields.cast = req.body.cast;
+        if(req.body.crew) movieFields.crew = req.body.crew;
 
         Movie.findOne({ title: req.body.title })
             .then(movie => {
                 if(movie) {
+                  console.log("Found movie: " + movie.imdbId);
                     // update
                     Movie.findOneAndUpdate(
                         { imdbId: req.body.imdbId },
@@ -165,6 +128,7 @@ router.post(
                         { new: true }
                     )
                     .then(movie => res.json(movie));
+                    //movie.save();
                 } else { // create
                     // check if title exists
                     Movie.findOne({ imdbId: req.body.imdbId })

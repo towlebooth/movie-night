@@ -114,7 +114,8 @@ const getMovieDetailsFromApiWithTmdbId = async (tmdbId) => {
     } 
 
     if (cast && cast.length > 0) {
-        movieDetail.cast = cast.slice(0,10); // return top 10 cast
+        //movieDetail.cast = cast.slice(0,10); // return top 10 cast
+        movieDetail.cast = cast;
     }
 
     const api_omdb_call =

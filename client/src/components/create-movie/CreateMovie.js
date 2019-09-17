@@ -131,6 +131,8 @@ class CreateMovie extends Component {
             releaseDate: this.state.releaseDate,
             imdbId: this.state.imdbId,
             tmdbId: this.state.tmdbId
+            // TODO: add new fields: cast, crew, genres
+
             // writers: this.state.writers,
             // directors: this.state.directors,
             // actors: this.state.actors,

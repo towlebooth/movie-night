@@ -7,17 +7,13 @@ const MovieSchema = new Schema({
     releaseDate: { type: Date, required: true },
     imdbId: { type: String, required: true },
     tmdbId: { type: String },
-    // writers: [String],
-    // directors: [String],
-    // actors: [String],
-    // genres: [String],
-    // runTime: { type: Number },
-    // posterUrl: { type: String },
-    // rottenTomatoesUrlKey: {type: String},
-    // rottenTomatoesTomatoMeter: { type: Number},
-    // rottenTomatoesAudienceScore: { type: Number},
-    // imdbId: { type: String },
-    // imdbRating: { type: Number },
+    cast: [{ type: String }], // NOTE: these are tmdb.id
+    crew: [{ type: String }], // NOTE: these are tmdb.id
+    genres: [{
+        id: { type: String }, // from tmdb
+        name: { type: String }
+    }],
+    
     // movieRating: [{ 
     //     user: { type: Schema.Types.ObjectId, ref: 'users' },
     //     rating: { type: Number },
