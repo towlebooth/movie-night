@@ -88,23 +88,24 @@ import './../../App.css';
                 <div className="container">                
     
                     <div className="row">
-                        <div className="col-md-8 m-auto">
-                            <h1 className="display-4 text-center">Search For Movie</h1>
-                            <form onSubmit={this.getMovieFromApi}>
-                                <TextFieldGroup
-                                    placeholder="* Movie Title"
-                                    name="titleForSearch"
-                                    value={this.state.titleForSearch}
-                                    onChange={this.onChange}
-                                    error={errors.titleForSearch}
-                                />
-                                
-                                <input
-                                    type="submit"
-                                    value="Search"
-                                    className="btn btn-info btn-block mt-4"
-                                />
-                            </form>
+                        <div className="col-md-12 text-center">
+                            <h1 className="display-4 mb-4">Search for a Movie</h1>
+                            <div className="col-md-6 m-auto">
+                                <form onSubmit={this.getMovieFromApi}>
+                                    <TextFieldGroup
+                                        placeholder="* Movie Title"
+                                        name="titleForSearch"
+                                        value={this.state.titleForSearch}
+                                        onChange={this.onChange}
+                                        error={errors.titleForSearch}
+                                    />                                
+                                    <input
+                                        type="submit"
+                                        value="Search"
+                                        className="btn btn-info btn-block mt-4"
+                                    />
+                                </form>
+                            </div>
                         </div>
                     </div>
 

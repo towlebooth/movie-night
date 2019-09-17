@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { getCurrentProfile } from '../../actions/profileActions';
-//import MovieNightList from '../movie-night/MovieNightList';
 import { Container } from 'reactstrap';
 import HostingOrder from '../hosting-order/HostingOrder';
 
@@ -19,8 +18,8 @@ class Dashboard extends Component {
     dashboardContent = 
       <Container>
         <HostingOrder />
-        <p><Link to="/allMovieNights">All Movie Nights</Link></p>
-        {/* <MovieNightList /> */}
+        <p>&nbsp;</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<Link to="/allMovieNights">All Movie Nights</Link></p>
       </Container>;
 
     return (
