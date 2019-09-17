@@ -57,7 +57,7 @@ class Login extends Component {
                         <div className="col-md-12 text-center">
                             <h1 className="display-4 mb-4">Log In</h1>
                             <p className="lead">Sign in to your Movie Club account</p>
-                            <div className="col-md-8 m-auto">
+                            <div className="col-md-6 m-auto">
                                 <form onSubmit={this.onSubmit}>
                                     <TextFieldGroup
                                         placeholder="Email Address"
