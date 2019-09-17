@@ -51,12 +51,12 @@ class Login extends Component {
         const { errors } = this.state;
 
         return (
-            <div className="login">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-md-8 m-auto">
-                            <h1 className="display-4 text-center">Log In</h1>
-                            <p className="lead text-center">Sign in to your Movie Night account</p>
+            <div className="landing">
+                <div className="dark-overlay landing-inner text-light">
+                    <div className="container">
+                        <div className="col-md-12 text-center">
+                            <h1 className="display-3 mb-4">Log In</h1>
+                            <p className="lead">Sign in to your Movie Club account</p>
                             <form onSubmit={this.onSubmit}>
                                 <TextFieldGroup
                                     placeholder="Email Address"
@@ -81,15 +81,16 @@ class Login extends Component {
                                     className="btn btn-info btn-block mt-4" 
                                 />
                             </form>
+                                
+                            
                         </div>
                     </div>
                 </div>
             </div>
         )
     }
-}
-
-Login.propTypes = {
+}  
+Login.protoTypes = {
     loginUser: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
     errors: PropTypes.object.isRequired
