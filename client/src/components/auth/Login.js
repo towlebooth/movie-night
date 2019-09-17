@@ -55,34 +55,34 @@ class Login extends Component {
                 <div className="dark-overlay landing-inner text-light">
                     <div className="container">
                         <div className="col-md-12 text-center">
-                            <h1 className="display-3 mb-4">Log In</h1>
+                            <h1 className="display-4 mb-4">Log In</h1>
                             <p className="lead">Sign in to your Movie Club account</p>
-                            <form onSubmit={this.onSubmit}>
-                                <TextFieldGroup
-                                    placeholder="Email Address"
-                                    name="email"
-                                    type="email"
-                                    value={this.state.email}
-                                    onChange={this.onChange}
-                                    error={errors.email}
-                                />
+                            <div className="col-md-8 m-auto">
+                                <form onSubmit={this.onSubmit}>
+                                    <TextFieldGroup
+                                        placeholder="Email Address"
+                                        name="email"
+                                        type="email"
+                                        value={this.state.email}
+                                        onChange={this.onChange}
+                                        error={errors.email}
+                                    />
 
-                                <TextFieldGroup
-                                    placeholder="Password"
-                                    name="password"
-                                    type="password"
-                                    value={this.state.password}
-                                    onChange={this.onChange}
-                                    error={errors.password}
-                                />                                
-                                
-                                <input 
-                                    type="submit" 
-                                    className="btn btn-info btn-block mt-4" 
-                                />
-                            </form>
-                                
-                            
+                                    <TextFieldGroup
+                                        placeholder="Password"
+                                        name="password"
+                                        type="password"
+                                        value={this.state.password}
+                                        onChange={this.onChange}
+                                        error={errors.password}
+                                    />                                
+                                    
+                                    <input 
+                                        type="submit" 
+                                        className="btn btn-info btn-block mt-4" 
+                                    />
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
