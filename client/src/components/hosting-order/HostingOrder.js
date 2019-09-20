@@ -50,7 +50,7 @@ class HostingOrder extends Component {
                     <tbody>
                         {movieNightHostingOrders.map(({ _id, order, host, mostRecentDate }) => (
                         <tr>                            
-                            <td>{order}</td>
+                            <td>{order + 1}</td>
                             <td><Link to={`/allMovieNights/${host}`}>{host}</Link></td>
                             <td><Link to={`/movieNight/${moment.utc(mostRecentDate).format('YYYY-MM-DD')}`}>{moment.utc(mostRecentDate).format('MMMM Do YYYY')}</Link></td>
                         </tr>
