@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, ListGroup, ListGroupItem } from 'reactstrap';
+import { Container, ListGroup, ListGroupItem, Table } from 'reactstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
@@ -37,7 +37,28 @@ class HostingOrder extends Component {
             });
         }
         return(
-            <Container>                
+            <Container>
+                <h1 className="display-4 mb-4">Hosting Order</h1>
+                <Table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Host</th>
+                            <th>Movie Night Last Hosted</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {movieNightHostingOrders.map(({ _id, order, host, mostRecentDate }) => (
+                        <tr>                            
+                            <td>{order}</td>
+                            <td><Link to={`/allMovieNights/${host}`}>{host}</Link></td>
+                            <td><Link to={`/movieNight/${moment.utc(mostRecentDate).format('YYYY-MM-DD')}`}>{moment.utc(mostRecentDate).format('MMMM Do YYYY')}</Link></td>
+                        </tr>
+                        ))}
+                    </tbody>
+                </Table>
+                
+                {/*
                 <ListGroup>
                     {movieNightHostingOrders.map(({ _id, host, mostRecentDate }) => (
                         <ListGroupItem key={_id}>
@@ -45,6 +66,7 @@ class HostingOrder extends Component {
                         </ListGroupItem>
                     ))}
                 </ListGroup>
+                    */}
             </Container>
         );
     }

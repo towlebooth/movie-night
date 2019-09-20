@@ -183,10 +183,11 @@ class MovieDetail extends Component {
                         {movieNightViewedContent}
                         <p>{movieDetail.overview}</p>
                         <p>Runtime: {movieDetail.runtime} minutes</p>
-                        <p>Genres: {genresString}</p>
+                        <p>Genres: &nbsp;
                         {genres.map(({ _id, name }) => (
-                            <Link to={`/allMovies/${name}`}>{name} </Link> 
+                            <Link to={`/allMovies/${name}`}>{name}&nbsp;</Link> 
                         ))}
+                        </p>
                         <p>Rated: {movieDetail.rated}</p>
                         <p><a href={`https://www.imdb.com/title/${this.props.imdbId}`} target="_blank">IMDB</a> | <a href={`https://www.themoviedb.org/movie/${this.props.movieDetail.tmdbId}`} target="_blank">TMDB</a></p>                        
                     </Col>
