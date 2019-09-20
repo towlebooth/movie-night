@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { 
     GET_MOVIES, 
+    GET_MOVIES_BY_GENRE,
     GET_MOVIE,
     GET_MOVIE_DETAILS_API,
     GET_MOVIE_CHOICES_API,
@@ -261,6 +262,25 @@ export const getMovies = () => dispatch => {
             })
         );
 };
+
+// get all movies for a particular genre
+export const getMoviesByGenre = genre => dispatch => {
+    dispatch(setMoviesLoading());
+    axios
+        .get(`/api/movies/genre/${genre}`)
+        .then(res => 
+            dispatch({
+                type: GET_MOVIES_BY_GENRE,
+                payload: res.data
+            })
+        )
+        .catch(err =>
+            dispatch({
+              type: GET_MOVIES,
+              payload: null
+            })
+          );
+  };
 
 // Get movie from our db by title
 export const getMovieByTitle = title => dispatch => {

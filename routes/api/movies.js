@@ -89,6 +89,27 @@ router.get('/imdbId/:imdbId', (req, res) => {
     .catch(err => res.status(404).json(err));
 });
 
+// @route   GET api/movie/genre/:genre
+// @desc    Get movies by genre
+// @access  Public
+router.get('/genre/:genre', (req, res) => {
+  const errors = {};
+  console.log("genre from api: " + req.params.genre);
+  //console.log(Movie);
+  Movie.find({ 'genres.name': req.params.genre })
+      //.sort({ genre: -1 })  // descending
+      .sort({ releaseDate: -1 })  //descending
+      .then(movies => {
+          if (!movies) {
+              errors.nomovies = 'There are no movies with genre: ' + req.params.genre;
+              res.status(404).json(errors);
+          }
+          console.log(movies);
+          res.json(movies);
+      })
+      .catch(err => res.status(404).json(err));
+});
+
 // @route POST api/movies
 // @desc Create a movie
 // @access Private

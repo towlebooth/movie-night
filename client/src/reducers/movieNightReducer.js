@@ -34,7 +34,7 @@ export default function(state = initialState, action) {
                 movieNight: action.payload,
                 loading: false
             }
-            case GET_MOVIENIGHT_BY_MOVIE_VIEWED:
+        case GET_MOVIENIGHT_BY_MOVIE_VIEWED:
             return {
                 ...state,
                 movieNightViewed: action.payload,
