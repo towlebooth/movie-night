@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, ListGroup, ListGroupItem, Table } from 'reactstrap';
+import { Container, Table } from 'reactstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
@@ -38,13 +38,13 @@ class HostingOrder extends Component {
         }
         return(
             <Container>
-                <h1 className="display-4 mb-4">Hosting Order</h1>
+                <h1 className="display-5 mb-5">Hosting Order</h1>
                 <Table>
                     <thead>
                         <tr>
                             <th>#</th>
                             <th>Host</th>
-                            <th>Movie Night Last Hosted</th>
+                            <th>Last Movie Night</th>
                         </tr>
                     </thead>
                     <tbody>

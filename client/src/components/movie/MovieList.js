@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, ListGroup, ListGroupItem, Button } from 'reactstrap';
+import { Container, ListGroup, ListGroupItem } from 'reactstrap';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -32,6 +32,13 @@ class MovieList extends Component {
         //console.log('movies on movieList: ' + movies);
         const { movieNights } = this.props.movieNight;
         let moviesForList = [];
+        let subtitle = "";
+
+        if (this.props.match.params.genre) {
+            subtitle = this.props.match.params.genre;
+        } else {
+            subtitle = "All";
+        }
 
         if (movieNights && movies) {
             movies.forEach((movie) => { 
@@ -53,7 +60,9 @@ class MovieList extends Component {
             });
         }
         return(
-            <Container>                
+            <Container>              
+                <h1 className="display-5 mb-5">Club Movies</h1>
+                <label>{subtitle}</label>
                 <ListGroup>
                     <TransitionGroup className="movie-list">
                         {moviesForList.map(({ _id, title, releaseDate, imdbId, dateWatched }) => (

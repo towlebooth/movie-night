@@ -27,6 +27,13 @@ class MovieNightList extends Component {
         const { movieNights } = this.props.movieNight;
         const { movies } = this.props.movie;
         let movieNightsForList = [];
+        let subtitle = "";
+
+        if (this.props.match.params.host) {
+            subtitle = this.props.match.params.host;
+        } else {
+            subtitle = "All";
+        }
 
         if (movieNights && movies) {
             movieNights.forEach((movieNight) => { 
@@ -50,7 +57,8 @@ class MovieNightList extends Component {
 
         return(
             <Container>
-                
+                <h1 className="display-5 mb-5">Movie Nights</h1>
+                <label>{subtitle}</label>
                 <ListGroup>
                     <TransitionGroup className="movie-night-list">
                         {movieNightsForList.map(({ _id, date, host, location, imdbId, title, releaseDate }) => (
