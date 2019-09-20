@@ -71,11 +71,12 @@ class MovieDetail extends Component {
         var castContent;
         var ratings = [];
         var ratingsContent;
+        var genres = [];
         
         if (this.props.movieDetail && this.props.movieDetail.release_date) {
 
             movieDetail = this.props.movieDetail;
-            
+            genres = movieDetail.genres;
             
             // format year
             formattedYear = (moment(movieDetail.release_date).format('YYYY'));
@@ -99,15 +100,15 @@ class MovieDetail extends Component {
                     </div>
                 );
             }
-
+                //<Link to={`/allMovieNights/${host}`}>{host}</Link> 
             // format genres
-            var genres = "";
+            var genresString = "";
             if (movieDetail.genres && movieDetail.genres.length > 0) {
                 var genreArray = movieDetail.genres;
                 genreArray.forEach((genre) => {
-                    genres = genres + genre.name + ', '
+                    genresString = genresString + genre.name + ', '
                 });
-                genres = genres.slice(0, -2);
+                genresString = genresString.slice(0, -2);
             }
 
             crew = movieDetail.crew;
@@ -182,7 +183,10 @@ class MovieDetail extends Component {
                         {movieNightViewedContent}
                         <p>{movieDetail.overview}</p>
                         <p>Runtime: {movieDetail.runtime} minutes</p>
-                        <p>Genres: {genres}</p>
+                        <p>Genres: {genresString}</p>
+                        {genres.map(({ _id, name }) => (
+                            <Link to={`/allMovies/${name}`}>{name} </Link> 
+                        ))}
                         <p>Rated: {movieDetail.rated}</p>
                         <p><a href={`https://www.imdb.com/title/${this.props.imdbId}`} target="_blank">IMDB</a> | <a href={`https://www.themoviedb.org/movie/${this.props.movieDetail.tmdbId}`} target="_blank">TMDB</a></p>                        
                     </Col>

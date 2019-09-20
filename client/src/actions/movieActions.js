@@ -276,7 +276,7 @@ export const getMoviesByGenre = genre => dispatch => {
         )
         .catch(err =>
             dispatch({
-              type: GET_MOVIES,
+              type: GET_MOVIES_BY_GENRE,
               payload: null
             })
           );

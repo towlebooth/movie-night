@@ -16,7 +16,7 @@ class MovieList extends Component {
         //}
 
         if (this.props.match.params.genre) {
-            console.log('getting movies by ' + this.props.match.params.genre + ' from movieList view')
+            //console.log('getting movies by ' + this.props.match.params.genre + ' from movieList view')
             this.props.getMoviesByGenre(this.props.match.params.genre);
         } else {
             this.props.getMovies();
@@ -29,7 +29,7 @@ class MovieList extends Component {
 
     render() {
         const { movies } = this.props.movie;
-        console.log('movies on movieList: ' + movies);
+        //console.log('movies on movieList: ' + movies);
         const { movieNights } = this.props.movieNight;
         let moviesForList = [];
 

@@ -104,7 +104,7 @@ router.get('/genre/:genre', (req, res) => {
               errors.nomovies = 'There are no movies with genre: ' + req.params.genre;
               res.status(404).json(errors);
           }
-          console.log(movies);
+          //console.log(movies);
           res.json(movies);
       })
       .catch(err => res.status(404).json(err));
