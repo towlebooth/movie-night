@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Container, Table, ListGroup, ListGroupItem } from 'reactstrap';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { Container, Table } from 'reactstrap';
+import SelectListGroup from '../common/SelectListGroup';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
@@ -23,21 +23,50 @@ class MovieNightList extends Component {
         this.props.deleteMovieNight(id);
     }
 
+    onChange(e) {
+        //this.setState({ [e.target.name]: e.target.value });
+        console.log('Select clicked: ' + e.target.value)
+        if (e.target.value === 0 || e.target.value === 'All') {
+            window.location.href = '/allMovieNights/';
+        } else {
+        window.location.href = '/allMovieNights/' + e.target.value;
+        }
+    }
+
     render() {
         const { movieNights } = this.props.movieNight;
         const { movies } = this.props.movie;
         let movieNightsForList = [];
-        let subtitle = "";
+        let filter = "";
+
+        // Select options for host name
+        const hostOptions = [
+            { label: 'All Movie Nights', value: 'All' },
+            { label: 'Jackson', value: 'Jackson' },
+            { label: 'Angie', value: 'Angie' },
+            { label: 'Eric', value: 'Eric' },
+            { label: 'Jill', value: 'Jill' },
+            { label: 'Caroline', value: 'Caroline' },
+            { label: 'Rick', value: 'Rick' },
+            { label: 'Cathy', value: 'Cathy' },
+            { label: 'Chad', value: 'Chad' },
+            { label: 'Theater - No Host', value: 'Theater' },
+            { label: 'Stacey', value: 'Stacey' },
+            { label: 'Zach', value: 'Zach' },
+            { label: 'Laura', value: 'Laura' },
+            { label: 'Jennifer', value: 'Jennifer' }
+        ];
 
         if (this.props.match.params.host) {
-            subtitle = this.props.match.params.host;
+            filter = this.props.match.params.host;
         } else {
-            subtitle = "All";
+            filter = "All";
         }
 
         if (movieNights && movies) {
             movieNights.forEach((movieNight) => { 
                 var movieNightForList = {};
+                movieNightForList._id = movieNight._id;
                 movieNightForList.date = movieNight.date;
                 movieNightForList.host = movieNight.host;
                 movieNightForList.location = movieNight.location;
@@ -54,11 +83,20 @@ class MovieNightList extends Component {
             });
         }
 
-
         return(
             <Container>
                 <h1 className="display-5 mb-5">Movie Nights</h1>
-                <label>{subtitle}</label>
+                <label>Filter Movie Nights:</label>
+                <SelectListGroup
+                    placeholder="Host"
+                    name="host"
+                    value={filter}
+                    //onChange={this.onSelectClick.bind(this)}
+                    onChange={this.onChange}
+                    options={hostOptions}
+                    //error={errors.host}
+                    info=""
+                />
 
                 <Table>
                     <thead>
@@ -71,7 +109,7 @@ class MovieNightList extends Component {
                     </thead>
                     <tbody>
                         {movieNightsForList.map(({ _id, date, host, location, imdbId, title, releaseDate }) => (
-                        <tr>                            
+                        <tr key={_id}>                            
                             <td><Link to={`/movieNight/${moment.utc(date).format('YYYY-MM-DD')}`}>{moment.utc(date).format('YYYY-MM-DD')}</Link></td>
                             <td><Link to={`/allMovieNights/${host}`}>{host}</Link></td>
                             <td>{location}</td>
