@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, ListGroup, ListGroupItem } from 'reactstrap';
+import { Container, Table, ListGroup, ListGroupItem } from 'reactstrap';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -59,6 +59,30 @@ class MovieNightList extends Component {
             <Container>
                 <h1 className="display-5 mb-5">Movie Nights</h1>
                 <label>{subtitle}</label>
+
+                <Table>
+                    <thead>
+                        <tr>
+                            <th>Movie Night</th>
+                            <th>Host</th>
+                            <th>Location</th>
+                            <th>Movie Viewed</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {movieNightsForList.map(({ _id, date, host, location, imdbId, title, releaseDate }) => (
+                        <tr>                            
+                            <td><Link to={`/movieNight/${moment.utc(date).format('YYYY-MM-DD')}`}>{moment.utc(date).format('YYYY-MM-DD')}</Link></td>
+                            <td><Link to={`/allMovieNights/${host}`}>{host}</Link></td>
+                            <td>{location}</td>
+                            <td><Link to={`/movie/${imdbId}`}>{title}</Link> ({moment(releaseDate).format('YYYY')})</td>
+                        </tr>
+                        ))}
+                    </tbody>
+                </Table>
+
+                {/*
+                // the old non-table view
                 <ListGroup>
                     <TransitionGroup className="movie-night-list">
                         {movieNightsForList.map(({ _id, date, host, location, imdbId, title, releaseDate }) => (
@@ -70,6 +94,7 @@ class MovieNightList extends Component {
                         ))}
                     </TransitionGroup>
                 </ListGroup>
+                */}
             </Container>
         );
     }
