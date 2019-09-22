@@ -17,9 +17,12 @@ class HostingOrder extends Component {
         const { hostingOrders } = this.props.hostingOrder;
         const { movieNights } = this.props.movieNight;
         let movieNightHostingOrders = [];
+        let nextHostInOrder = {};
 
         if (hostingOrders && movieNights) {
-            let recentMovieNights = movieNights.slice(0, 10);
+            let recentMovieNights = movieNights.slice(0, 10);  
+
+            // build hosting order list
             hostingOrders.forEach((hostingOrder) => {                             
                 var i;
                 for (i = 0; i < recentMovieNights.length; i++) { 
@@ -29,12 +32,30 @@ class HostingOrder extends Component {
                             _id: hostingOrder._id, 
                             host: hostingOrder.host, 
                             order: hostingOrder.order, 
-                            mostRecentDate: orderDate};
+                            mostRecentDate: orderDate};            
                         movieNightHostingOrders.push(movieNightHostingOrder);
                         break;
                     }
                 }
             });
+
+            // find next host            
+            let mostTimeSinceHosted = movieNightHostingOrders.slice(0, 10);            
+            var hostingOrderByDate = mostTimeSinceHosted.sort(function(a, b) {
+                return new Date(b.mostRecentDate) - new Date(a.mostRecentDate);
+            });
+
+            mostTimeSinceHosted = hostingOrderByDate[hostingOrderByDate.length - 1];
+            if (mostTimeSinceHosted) {
+                movieNightHostingOrders.forEach((hostingOrderMovieNight) => {                    
+                        if (hostingOrderMovieNight._id === mostTimeSinceHosted._id) {
+                            hostingOrderMovieNight.isNext = true;
+                            nextHostInOrder = hostingOrderMovieNight;
+                        } else {
+                            hostingOrderMovieNight.isNext = false;
+                        }                    
+                });
+            }            
         }
         return(
             <Container>
@@ -48,17 +69,20 @@ class HostingOrder extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {movieNightHostingOrders.map(({ _id, order, host, mostRecentDate }) => (
+                        {movieNightHostingOrders.map(({ _id, order, host, mostRecentDate, isNext }) => (
                         <tr>                            
                             <td>{order + 1}</td>
-                            <td><Link to={`/allMovieNights/${host}`}>{host}</Link></td>
+                            <td><Link to={`/allMovieNights/${host}`}>{host}</Link> {isNext ? '*' : ''}</td>
                             <td><Link to={`/movieNight/${moment.utc(mostRecentDate).format('YYYY-MM-DD')}`}>{moment.utc(mostRecentDate).format('MMMM Do YYYY')}</Link></td>
                         </tr>
                         ))}
                     </tbody>
                 </Table>
+
+                <p>* Assuming there is no trade in progress, <Link to={`/allMovieNights/${nextHostInOrder.host}`}>{nextHostInOrder.host}</Link> is hosting next.</p>
                 
                 {/*
+                // the old, no table display
                 <ListGroup>
                     {movieNightHostingOrders.map(({ _id, host, mostRecentDate }) => (
                         <ListGroupItem key={_id}>
