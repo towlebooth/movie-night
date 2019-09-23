@@ -24,8 +24,7 @@ class MovieNightList extends Component {
     }
 
     onChange(e) {
-        //this.setState({ [e.target.name]: e.target.value });
-        console.log('Select clicked: ' + e.target.value)
+        //console.log('Select clicked: ' + e.target.value)
         if (e.target.value === 0 || e.target.value === 'All') {
             window.location.href = '/allMovieNights/';
         } else {
@@ -91,7 +90,6 @@ class MovieNightList extends Component {
                     placeholder="Host"
                     name="host"
                     value={filter}
-                    //onChange={this.onSelectClick.bind(this)}
                     onChange={this.onChange}
                     options={hostOptions}
                     //error={errors.host}
