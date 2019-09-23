@@ -103,8 +103,6 @@ class MovieList extends Component {
                     info=""
                 />
 
-                <label>#: {moviesForList.length}</label>
-
                 <Table>
                     <thead>
                         <tr>
