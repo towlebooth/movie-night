@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Container, Table, ListGroup, ListGroupItem } from 'reactstrap';
+import { Container, Table } from 'reactstrap';
 import SelectListGroup from '../common/SelectListGroup';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
@@ -117,7 +116,7 @@ class MovieList extends Component {
                             <td>{dateWatched ? (
                                         <Link to={`/movieNight/${moment.utc(dateWatched).format('YYYY-MM-DD')}`}> {moment.utc(dateWatched).format('YYYY-MM-DD')}</Link>
                                       ) : (
-                                        <label>&nbsp;not watched</label>
+                                        <label>&nbsp;not viewed</label>
                                       )}
                             </td>
                         </tr>
@@ -136,7 +135,7 @@ class MovieList extends Component {
                                     {dateWatched ? (
                                         <Link to={`/movieNight/${moment.utc(dateWatched).format('YYYY-MM-DD')}`}> {moment.utc(dateWatched).format('YYYY-MM-DD')}</Link>
                                       ) : (
-                                        <label>&nbsp;not watched</label>
+                                        <label>&nbsp;not viewed</label>
                                       )}
                                 </ListGroupItem>
                             </CSSTransition>

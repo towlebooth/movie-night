@@ -175,12 +175,13 @@ class MovieDetail extends Component {
                 <Row>
                     <Col xs="12">
                         <h3>{movieDetail.title} ({formattedYear})</h3>
+                        
+                        {movieNightViewedContent}
                     </Col>
                 </Row>
                 <Row>
                     <Col xs="12">
                         {posterContent}
-                        {movieNightViewedContent}
                         <p>{movieDetail.overview}</p>
                         <p>Runtime: {movieDetail.runtime} minutes</p>
                         <p>Genres: &nbsp;
