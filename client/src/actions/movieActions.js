@@ -173,7 +173,6 @@ const getMoviesFromApi = async (imdbIds) => {
 }
 
 const getMovieNightForImdbId = async (imdbId) => {
-    //console.log(imdbId)
     let res = await axios
         .get(`/api/movieNights/movieViewed/${imdbId}`)
         .catch();
@@ -217,6 +216,18 @@ const searchForMovieByTitleFromApi = async (title) => {
             var imdbId = await getImdbIdFromApi(movie.id);
             movie.imdb_id = imdbId;
         }
+
+        //searchResults.foreach((movieResult) => {
+        for (const movieResult of searchResults) {
+            if (movieResult.imdb_id) {
+                // movie night for this movie  TODO: can we call movieNightActions for this?
+                const movieNight = await getMovieNightForImdbId(movieResult.imdb_id);
+                
+                if (movieNight) {
+                    movieResult.movieNightViewed = movieNight.date;
+                }
+            }
+        };
     }
     
     // configuration - images, etc
@@ -229,7 +240,7 @@ const searchForMovieByTitleFromApi = async (title) => {
             searchResults[i].posterSizeS = configData.images.poster_sizes[1];
         }
     }
-    //console.log(searchResults);
+    
     return searchResults;
 }
 

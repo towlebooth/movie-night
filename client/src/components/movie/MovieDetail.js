@@ -174,8 +174,7 @@ class MovieDetail extends Component {
             <div className='movieDetail'>
                 <Row>
                     <Col xs="12">
-                        <h3>{movieDetail.title} ({formattedYear})</h3>
-                        
+                        <h3>{movieDetail.title} ({formattedYear})</h3>                        
                         {movieNightViewedContent}
                     </Col>
                 </Row>

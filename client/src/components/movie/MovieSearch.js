@@ -50,6 +50,7 @@ import './../../App.css';
         const { errors } = this.state;
         var movieSearchResults = [];    
         let searchResultsContent;   
+        let movieNightViewedContent;
 
         if (this.props.movieSearchResults && this.props.movieSearchResults[0]) {
             movieSearchResults = this.props.movieSearchResults;
@@ -63,13 +64,19 @@ import './../../App.css';
                         </Col>
                     </Row>
                     <ListGroup>
-                        {movieSearchResults.map(({ id, title, release_date, overview, poster_path, imageBaseUrl, posterSizeXS, imdb_id }) => (
+                        {movieSearchResults.map(({ id, title, release_date, overview, poster_path, imageBaseUrl, posterSizeXS, imdb_id, movieNightViewed }) => (
                             <ListGroupItem key={id}>
                             <Row>
                                 <Col xs="12">
                                     <img src={imageBaseUrl + posterSizeXS + poster_path} style={{width: 120}} className={"floatLeft"} alt={title}></img>
                                     <Button variant="primary" onClick={this.onSelectClick.bind(this, imdb_id)}>{title}</Button> ({moment(release_date).format('YYYY')})
                                     <p>{overview}</p>
+                                    {movieNightViewed ? (
+                                        //let viewedContent = <Link to={`/movieNight/${moment.utc(movieDetail.movieNightViewed.date).format('YYYY-MM-DD')}`}>{moment.utc(movieDetail.movieNightViewed.date).format('dddd, MMMM Do YYYY')}</Link>;
+                                        <p>This movie was viewed on {moment.utc(movieNightViewed).format('YYYY-MM-DD')}.</p>
+                                    ) : (
+                                        <p>This movie has not been viewed yet.</p>
+                                    )}
                                 </Col>
                             </Row>
                         </ListGroupItem>
