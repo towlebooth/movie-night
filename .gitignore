@@ -1,2 +1,5 @@
 # Dependency directories
 node_modules
+
+config/keys.js
+components/common/keys.js
