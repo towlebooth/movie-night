@@ -40,7 +40,7 @@ app.use('/api/hostingOrders', hostingOrders);
 // Serve static assets in Producion
 if (process.env.NODE_ENV === 'production') {
     // set static folder
-    app.use(espress.static('client/build'));
+    app.use(express.static('client/build'));
     app.get('*', (req, res) => {
         res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
     })
