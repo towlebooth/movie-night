@@ -2,4 +2,4 @@
 node_modules
 
 config/keys.js
-#client/src/components/common/keys.js
+client/src/components/common/keys.js
