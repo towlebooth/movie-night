@@ -100,7 +100,7 @@ class MovieDetail extends Component {
                     </div>
                 );
             }
-                //<Link to={`/allMovieNights/${host}`}>{host}</Link> 
+            
             // format genres
             var genresString = "";
             if (movieDetail.genres && movieDetail.genres.length > 0) {
