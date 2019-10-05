@@ -63,6 +63,8 @@ class MovieDetail extends Component {
     render() {
         var movieDetail = {};
         var formattedYear = '';
+        var overviewContent;
+        var runtimeContent;
         var posterContent;
         var movieNightViewedContent = '';
         var crew = [];
@@ -72,12 +74,36 @@ class MovieDetail extends Component {
         var ratings = [];
         var ratingsContent;
         var genres = [];
+        var genreContent;
+        var imdbLinkContent;
+        var tmdbLinkContent;
+        var ratedContent;
         
         if (this.props.movieDetail && this.props.movieDetail.release_date) {
 
             movieDetail = this.props.movieDetail;
-            genres = movieDetail.genres;
+            overviewContent = (<p>{movieDetail.overview}</p>);
             
+            genres = movieDetail.genres;
+            genreContent = (
+                <p>Genres: &nbsp;
+                    {genres.map(({ _id, name }) => (
+                        <Link to={`/allMovies/${name}`}>{name}&nbsp;</Link> 
+                    ))}
+                </p>);
+
+            runtimeContent = (<p>Runtime: {movieDetail.runtime} minutes</p>);
+
+            ratedContent = (<p>Rated: {movieDetail.rated}</p>);
+
+            if (this.props.imdbId) {
+                imdbLinkContent = <a href={`https://www.imdb.com/title/${this.props.imdbId}`} target="_blank">IMDB</a>
+            }
+            
+            if (this.props.movieDetail.tmdbId) {
+                tmdbLinkContent = <a href={`https://www.themoviedb.org/movie/${this.props.movieDetail.tmdbId}`} target="_blank">TMDB</a>
+            }
+
             // format year
             formattedYear = (moment(movieDetail.release_date).format('YYYY'));
 
@@ -99,16 +125,6 @@ class MovieDetail extends Component {
                         <p>This movie has not been viewed yet.</p>
                     </div>
                 );
-            }
-            
-            // format genres
-            var genresString = "";
-            if (movieDetail.genres && movieDetail.genres.length > 0) {
-                var genreArray = movieDetail.genres;
-                genreArray.forEach((genre) => {
-                    genresString = genresString + genre.name + ', '
-                });
-                genresString = genresString.slice(0, -2);
             }
 
             crew = movieDetail.crew;
@@ -169,6 +185,21 @@ class MovieDetail extends Component {
                 );
             }
         }
+        else // can't find movie from api (could be a tv show) - use basic info from our db
+        {
+            movieDetail = this.props.movieBasic;
+            // format year
+            formattedYear = (moment(movieDetail.releaseDate).format('YYYY'));
+
+            if (movieDetail.imdbId) {
+                imdbLinkContent = <a href={`https://www.imdb.com/title/${movieDetail.imdbId}`} target="_blank">IMDB</a>
+            }
+            
+            // TODO: handle tv vs. movie better
+            if (movieDetail.tmdbId) {
+                 tmdbLinkContent = <a href={`https://www.themoviedb.org/tv/${movieDetail.tmdbId}`} target="_blank">TMDB</a>
+            }
+        }
 
         return(
             <div className='movieDetail'>
@@ -181,15 +212,11 @@ class MovieDetail extends Component {
                 <Row>
                     <Col xs="12">
                         {posterContent}
-                        <p>{movieDetail.overview}</p>
-                        <p>Runtime: {movieDetail.runtime} minutes</p>
-                        <p>Genres: &nbsp;
-                        {genres.map(({ _id, name }) => (
-                            <Link to={`/allMovies/${name}`}>{name}&nbsp;</Link> 
-                        ))}
-                        </p>
-                        <p>Rated: {movieDetail.rated}</p>
-                        <p><a href={`https://www.imdb.com/title/${this.props.imdbId}`} target="_blank">IMDB</a> | <a href={`https://www.themoviedb.org/movie/${this.props.movieDetail.tmdbId}`} target="_blank">TMDB</a></p>                        
+                        {overviewContent}
+                        {runtimeContent}
+                        {genreContent}
+                        {ratedContent}
+                        <p>{imdbLinkContent} | {tmdbLinkContent}</p>
                     </Col>
                 </Row>
                 <Row>
@@ -219,7 +246,8 @@ class MovieDetail extends Component {
 MovieDetail.propTypes = {
     getMovieNights: PropTypes.func.isRequired,
     getMovieDetailsFromApi: PropTypes.func.isRequired,
-    movieDetail: PropTypes.object.isRequired,
+    movieDetail: PropTypes.object,
+    movieBasic: PropTypes.object,
     imdbId: PropTypes.string,
     movie: PropTypes.object.isRequired,
     movieNight: PropTypes.object
@@ -228,7 +256,8 @@ MovieDetail.propTypes = {
 const mapStateToProps = (state) => ({
     movie: state.movie,
     movieNight: state.movieNight,
-    movieDetail: state.movie.movieDetail
+    movieDetail: state.movie.movieDetail,
+    movieBasic: state.movie.movie
 })
 
 export default connect(mapStateToProps, { getMovieNights, getMovieDetailsFromApi, createMovieNoRedirect, createMovie })(MovieDetail);
