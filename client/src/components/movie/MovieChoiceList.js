@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-//import { Container, Row, Col, ListGroup, ListGroupItem, Button } from 'reactstrap';
+import { Table, Container, Row, Col, ListGroup, ListGroupItem, Button } from 'reactstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
@@ -19,13 +19,19 @@ class MovieChoiceList extends Component {
 
         return(
            <div>
-                {movieChoices.map(({id, title, release_date, poster_path, imageBaseUrl, posterSizeXS, imdb_id }) => (
-                   <div>
-                   <img src={imageBaseUrl + posterSizeXS + poster_path} style={{width: 94}} alt={title}></img>
-                   <br/>
-                   <Link to={`/movie/${imdb_id}`}>{title}</Link> ({moment(release_date).format('YYYY')})
-                   </div>
-                ))}               
+                <Table>
+                    <tbody>
+                        <tr>
+                            {movieChoices.map(({id, title, release_date, poster_path, imageBaseUrl, posterSizeXS, imdb_id }) => (
+                                <td key={id}>
+                                    <img src={imageBaseUrl + posterSizeXS + poster_path} style={{width: 94}} alt={title}></img>
+                                    <br/>
+                                    <Link to={`/movie/${imdb_id}`}>{title}</Link> ({moment(release_date).format('YYYY')})
+                                </td>                            
+                            ))}
+                        </tr>
+                    </tbody>
+                </Table>           
            </div>           
         );
     }
