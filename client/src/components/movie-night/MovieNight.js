@@ -29,10 +29,10 @@ class MovieNight extends Component {
           <div>
               <h3>{moment.utc(movieNight.date).format('dddd, MMMM Do YYYY')}</h3>
               <h5>Hosted by <Link to={`/allMovieNights/${movieNight.host}`}>{movieNight.host}</Link> in {movieNight.location}</h5>
-              <h5>Movie Viewed:</h5>
-              <MovieDetail imdbId={movieNight.movieViewed}></MovieDetail>
               <h5>Choices:</h5>
               <MovieChoiceList imdbIds={movieNight.movieChoicesRoundOne}></MovieChoiceList>
+              <h5>Movie Viewed:</h5>
+              <MovieDetail imdbId={movieNight.movieViewed}></MovieDetail>
           </div>
       )
     }
@@ -54,7 +54,7 @@ class MovieNight extends Component {
 MovieNight.propTypes = {
     getMovieNightByDate: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
-    movieNight: PropTypes.object.isRequired,
+    movieNight: PropTypes.object.isRequired
     //getMovieByImdbId: PropTypes.func.isRequired
 };
 
