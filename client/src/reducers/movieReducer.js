@@ -45,7 +45,7 @@ export default function(state = initialState, action) {
                 movieDetail: action.payload,
                 loading: false
             }
-            case GET_MOVIE_CHOICES_API:
+        case GET_MOVIE_CHOICES_API:
             return {
                 ...state,
                 movieChoices: action.payload,
