@@ -133,8 +133,8 @@ class MovieDetail extends Component {
                     <div>
                         <p>Select Crew:</p>
                         <ListGroup>
-                            {crew.map(({ credit_id, name, job }) => (
-                                <ListGroupItem key={credit_id}>{name}: {job}</ListGroupItem>
+                            {crew.map(({ id, name, job }) => (
+                                <ListGroupItem key={id}><Link to={`/castCrew/${id}`}>{name}</Link>: {job}</ListGroupItem>
                             ))}
                         </ListGroup>
                     </div>

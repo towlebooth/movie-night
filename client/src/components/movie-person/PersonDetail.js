@@ -23,8 +23,19 @@ class PersonDetail extends Component {
 
     render() {
         var personDetail = {};
+        var imdbLinkContent;
+        var tmdbLinkContent;
+
         if (this.props.person.personDetail && this.props.person.personDetail.tmdbId) {
             personDetail = this.props.person.personDetail;
+
+            if (personDetail.imdbId) {
+                imdbLinkContent = <a href={`https://www.imdb.com/name/${personDetail.imdbId}`} target="_blank">IMDB</a>
+            }
+            
+            if (personDetail.tmdbId) {
+                tmdbLinkContent = <a href={`https://www.themoviedb.org/person/${personDetail.tmdbId}`} target="_blank">TMDB</a>
+            }
             console.log("personDetail on PersonDetail: " + personDetail.name);
 
             // var personMovies = await this.props.getMoviesByPerson(this.props.personTmdbId);
@@ -36,7 +47,9 @@ class PersonDetail extends Component {
 
         return(
             <div className='personDetail'>
-                <label>{personDetail.name}</label>
+                <h2>{personDetail.name}</h2>
+                <p>Birthday: {personDetail.birthday}</p>
+                <p>{imdbLinkContent} | {tmdbLinkContent}</p>
             </div>
         );
         
