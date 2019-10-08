@@ -217,7 +217,6 @@ const searchForMovieByTitleFromApi = async (title) => {
             movie.imdb_id = imdbId;
         }
 
-        //searchResults.foreach((movieResult) => {
         for (const movieResult of searchResults) {
             if (movieResult.imdb_id) {
                 // movie night for this movie  TODO: can we call movieNightActions for this?
@@ -312,7 +311,7 @@ export const getMovieByTitle = title => dispatch => {
         );
   };
 
-  // Get movie from our db by imdbId
+// Get movie from our db by imdbId
 export const getMovieByImdbId = imdbId => dispatch => {
   dispatch(setMoviesLoading());
   axios

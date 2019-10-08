@@ -49,8 +49,7 @@ import './../../App.css';
     render() {
         const { errors } = this.state;
         var movieSearchResults = [];    
-        let searchResultsContent;   
-        let movieNightViewedContent;
+        let searchResultsContent; 
 
         if (this.props.movieSearchResults && this.props.movieSearchResults[0]) {
             movieSearchResults = this.props.movieSearchResults;

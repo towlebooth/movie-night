@@ -1,6 +1,7 @@
 import { 
     GET_MOVIES, 
     GET_MOVIES_BY_GENRE,
+    GET_MOVIES_BY_PERSON,
     GET_MOVIE, 
     GET_MOVIE_DETAILS_API,
     GET_MOVIE_CHOICES_API,
@@ -32,7 +33,13 @@ export default function(state = initialState, action) {
                     ...state,
                     movies: action.payload,
                     loading: false
-                }
+            }
+        case GET_MOVIES_BY_PERSON:
+                return {
+                    ...state,
+                    personMovies: action.payload,
+                    loading: false
+            }
         case GET_MOVIE:
             return {
                 ...state,
@@ -73,7 +80,7 @@ export default function(state = initialState, action) {
                 ...state,
                 movies: [action.payload, ...state.movies]
             }
-            case MOVIES_LOADING:
+        case MOVIES_LOADING:
             return {
                 ...state,
                 loading: true

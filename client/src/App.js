@@ -28,6 +28,7 @@ import PrivateRoute from './components/common/PrivateRoute';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
+import CastCrew from './components/movie-person/CastCrew';
 
 // check for token
 if (localStorage.jwtToken) {
@@ -89,6 +90,7 @@ class App extends Component {
                             <Route path="/movie/:imdbId" component={Movie} />
                             <Route path="/movieNight/:date" component={MovieNight} />
                             <Route path="/allMovieNights/:host" component={MovieNightList} />
+                            <Route path="/castCrew/:personTmdbId" component={CastCrew} />
                         </div>                        
                         <Footer />
                     </div>

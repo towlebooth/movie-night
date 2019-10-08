@@ -94,14 +94,86 @@ router.get('/imdbId/:imdbId', (req, res) => {
 // @access  Public
 router.get('/genre/:genre', (req, res) => {
   const errors = {};
-  console.log("genre from api: " + req.params.genre);
-  //console.log(Movie);
   Movie.find({ 'genres.name': req.params.genre })
       //.sort({ genre: -1 })  // descending
       .sort({ releaseDate: -1 })  //descending
       .then(movies => {
           if (!movies) {
               errors.nomovies = 'There are no movies with genre: ' + req.params.genre;
+              res.status(404).json(errors);
+          }
+          //console.log(movies);
+          res.json(movies);
+      })
+      .catch(err => res.status(404).json(err));
+});
+
+// @route   GET api/movie/person/:personTmdbId
+// @desc    Get movies by person (cast and crew)
+// @access  Public
+router.get('/person/:personTmdbId', (req, res) => {
+  const errors = {};
+  var movies = [];
+  var distinctMovies;
+  Movie.find({ 'cast': req.params.personTmdbId })
+      .sort({ releaseDate: -1 })  //descending
+      .then(castMovies => {
+          Movie.find({ 'crew': req.params.personTmdbId })
+              .sort({ releaseDate: -1 })  //descending
+              .then(crewMovies => {
+                  if (castMovies) {
+                      // there are movies that match for both cast and crew  
+                      movies.push(castMovies);
+                      const result = movies.concat(crewMovies) // [{a: 1}, {b: 2}, {a: 1}]
+                      distinctMovies = [...new Set(result.map(movie => movie.imdbId))]
+                  } else {
+                      if (crewMovies) {
+                          // there are only movies that match to crew
+                          distinctMovies.push(crewMovies)
+                      }
+                  }
+                  if (!movies) {
+                      errors.nomovies = 'There are no movies with person: ' + req.params.personTmdbId;
+                      res.status(404).json(errors);
+                  }
+                  //console.log(movies);
+                  res.json(movies);
+              })
+          
+      })
+      .catch(err => res.status(404).json(err));
+});
+
+// @route   GET api/movie/castMember/:personTmdbId
+// @desc    Get movies by castMember
+// @access  Public
+router.get('/castMember/:personTmdbId', (req, res) => {
+  const errors = {};
+  Movie.find({ 'cast': req.params.personTmdbId })
+      //.sort({ genre: -1 })  // descending
+      .sort({ releaseDate: -1 })  //descending
+      .then(movies => {
+          if (!movies) {
+              errors.nomovies = 'There are no movies with castMember: ' + req.params.personTmdbId;
+              res.status(404).json(errors);
+          }
+          //console.log(movies);
+          res.json(movies);
+      })
+      .catch(err => res.status(404).json(err));
+});
+
+// @route   GET api/movie/crewMember/:personTmdbId
+// @desc    Get movies by crewMember
+// @access  Public
+router.get('/crewMember/:personTmdbId', (req, res) => {
+  const errors = {};
+  Movie.find({ 'crew': req.params.personTmdbId })
+      //.sort({ genre: -1 })  // descending
+      .sort({ releaseDate: -1 })  //descending
+      .then(movies => {
+          if (!movies) {
+              errors.nomovies = 'There are no movies with crewMember: ' + req.params.personTmdbId;
               res.status(404).json(errors);
           }
           //console.log(movies);

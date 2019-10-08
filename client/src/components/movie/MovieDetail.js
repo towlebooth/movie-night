@@ -147,13 +147,14 @@ class MovieDetail extends Component {
                 );
             }
             cast = movieDetail.cast;
-            if (cast && cast[0].cast_id) {
+            if (cast && cast[0].id) {
                 castContent = (
                     <div>
                         <p>Select Cast:</p>
                         <ListGroup>
-                            {cast.map(({ cast_id, name, character }) => (
-                                <ListGroupItem key={cast_id}>{name}: {character}</ListGroupItem>
+                            {cast.map(({ id, name, character }) => (
+                                // <Link to={`/castCrew/${cast_id}`}>{title}</Link>
+                                <ListGroupItem key={id}><Link to={`/castCrew/${id}`}>{name}</Link>: {character}</ListGroupItem>
                             ))}
                         </ListGroup>
                     </div>
