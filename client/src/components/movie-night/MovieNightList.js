@@ -101,7 +101,7 @@ class MovieNightList extends Component {
                         <tr>
                             <th>Movie Night</th>
                             <th>Host</th>
-                            <th>Location</th>
+                            {/* <th>Location</th> */}
                             <th>Movie Viewed</th>
                         </tr>
                     </thead>
@@ -110,7 +110,7 @@ class MovieNightList extends Component {
                         <tr key={_id}>                            
                             <td><Link to={`/movieNight/${moment.utc(date).format('YYYY-MM-DD')}`}>{moment.utc(date).format('YYYY-MM-DD')}</Link></td>
                             <td><Link to={`/allMovieNights/${host}`}>{host}</Link></td>
-                            <td>{location}</td>
+                            {/* <td>{location}</td> */}
                             <td><Link to={`/movie/${imdbId}`}>{title}</Link> ({moment(releaseDate).format('YYYY')})</td>
                         </tr>
                         ))}
