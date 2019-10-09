@@ -1,5 +1,5 @@
 {
-  "name": "mern-movie-night",
+  "name": "movie-night",
   "version": "1.0.0",
   "description": "Application to add, update and view films for movie night",
   "main": "server.js",
