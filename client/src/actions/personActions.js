@@ -23,47 +23,99 @@ export const getPersonFromApiByTmdbId = (tmdbId) => dispatch => {
         .catch(err =>
             dispatch({
                 type: GET_ERRORS,
-                payload: err.response.data
+                payload: err
             })
         );
   }
 
 // get person from api with TMDB ID
 const getPersonDetailsFromApiWithTmdbId = async (tmdbId) => {
-    //console.log('personActions: ' + tmdbId);
     var personDetail = {};
     if (tmdbId) {
         const api_call = 
-            //https://api.themoviedb.org/3/person/30020?api_key=dce8edd730194999ced0051496bc554e
             await fetch(`${MOVIE_DB_BASE_URL}person/${tmdbId}?api_key=${MOVIE_DB_API_KEY}`);
         const data = await api_call.json();
         personDetail = data;
-        //console.log('personDetail.name: ' + personDetail.name);
-        //console.log('personDetail.id: ' + personDetail.id);
-        if (tmdbId) {
+        if (personDetail && data.imdb_id) {
             personDetail.imdbId = data.imdb_id;
             personDetail.tmdbId = data.id;        
         }
-        console.log('personDetail.tmdbId in action: ' + personDetail.tmdbId);
 
-         if (personDetail.tmdbId) {
-            const personMovies = await getMoviesByPerson2(personDetail.tmdbId);
-            //console.log(personMovies);
+        if (personDetail.tmdbId) {
+            const personMovieCreditsFromApi = await getMovieCreditsForPersonFromApi(personDetail.tmdbId);
+            if (personMovieCreditsFromApi) {
+                personDetail.movieCredits = personMovieCreditsFromApi;
+            }
+
+            const personMovies = await getMoviesByPerson(personDetail.tmdbId);
             if (personMovies) {
                 personDetail.movies = personMovies[0];
             }
-         }
+        }
+
+        // configuration - images, etc
+        const configData = await getMovieConfigDataFromApi();
+
+        if (configData.images) {
+            personDetail.imageBaseUrl = configData.images.base_url;
+            personDetail.posterSizeXS = configData.images.poster_sizes[0]; // w94
+            personDetail.posterSizeS = configData.images.poster_sizes[1]; // w154
+            personDetail.posterSizeM = configData.images.poster_sizes[2]; // w185
+            personDetail.posterSizeL = configData.images.poster_sizes[3]; // w342
+            personDetail.posterSizeXL = configData.images.poster_sizes[4]; // w500
+            personDetail.posterSizeXXL = configData.images.poster_sizes[5]; // w780
+        }    
     }
     return personDetail;
 }
 
-const getMoviesByPerson2 = async (personTmdbId) => {
-    //console.log('personTmdbId in action2: ' + personTmdbId);
+// get movie credits for this person from tmdb
+const getMovieCreditsForPersonFromApi = async (personTmdbId) => {
+    const api_call =
+        await fetch(`${MOVIE_DB_BASE_URL}person/${personTmdbId}/movie_credits?api_key=${MOVIE_DB_API_KEY}`);
+        const credits = await api_call.json();
+        
+        if (credits.cast[0] && credits.cast[0].id) {
+            // get imdbId for each cast member
+            for (const castCredit of credits.cast) {
+                castCredit.imdbId = await getImdbIdFromApi(castCredit.id);
+            }
+        }
+
+        if (credits.crew[0] && credits.crew[0].id) {
+            // get imdbId for each crew member
+            for (const crewCredit of credits.crew) {
+                crewCredit.imdbId = await getImdbIdFromApi(crewCredit.id);
+            }
+        }
+    return credits;
+}
+
+// get imdbId from api for a tmdbId
+const getImdbIdFromApi = async (tmdbId) => {
+    //var imdbId;
+    if (tmdbId) {
+        const api_call = 
+            await fetch(`${MOVIE_DB_BASE_URL}movie/${tmdbId}?api_key=${MOVIE_DB_API_KEY}&append_to_response=credits`);
+        const movieFromApi = await api_call.json();
+        console.log(movieFromApi.title + ' ' + movieFromApi.imdb_id);
+        return movieFromApi.imdb_id;
+    }
+    return null;
+}
+
+// get movies for this person from our database
+const getMoviesByPerson = async (personTmdbId) => {
     let res = await axios
         .get(`/api/movies/person/${personTmdbId}`)
         .catch();
     return await res.data;
 };
+
+const getMovieConfigDataFromApi = async () => {
+    const api_configuration_call = await fetch(`${MOVIE_DB_BASE_URL}configuration?api_key=${MOVIE_DB_API_KEY}`);
+    return await api_configuration_call.json();
+}
 
 // // get all movies from our database for a particular person - cast/crew/etc.
 // export const getMoviesByPerson = personTmdbId => dispatch => {
