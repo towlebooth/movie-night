@@ -106,10 +106,14 @@ const getImdbIdFromApi = async (tmdbId) => {
 
 // get movies for this person from our database
 const getMoviesByPerson = async (personTmdbId) => {
-    let res = await axios
-        .get(`/api/movies/person/${personTmdbId}`)
-        .catch();
-    return await res.data;
+    if (personTmdbId) {
+        let res = await axios
+            .get(`/api/movies/person/${personTmdbId}`)
+            .catch();
+        return await res.data;
+    } else {
+        return null;
+    }
 };
 
 const getMovieConfigDataFromApi = async () => {

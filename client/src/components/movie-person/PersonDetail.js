@@ -106,7 +106,7 @@ class PersonDetail extends Component {
                     );
                 }
 
-                if (creditsCrewForList && creditsCrewForList[0].imdbId) {
+                if (creditsCrewForList && creditsCrewForList[0] && creditsCrewForList[0].imdbId) {
                     crewContent = (
                         <div>
                             <p>Select Crew Credits:</p>
