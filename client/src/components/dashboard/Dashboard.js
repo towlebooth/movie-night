@@ -18,8 +18,8 @@ class Dashboard extends Component {
     dashboardContent = 
       <Container>
         <HostingOrder />
-        <p>&nbsp;</p>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<Link to="/allMovieNights">All Movie Nights</Link></p>
+        {/* <p>&nbsp;</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<Link to="/allMovieNights">All Movie Nights</Link></p> */}
       </Container>;
 
     return (
