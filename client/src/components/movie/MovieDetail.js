@@ -150,7 +150,7 @@ class MovieDetail extends Component {
             if (cast && cast[0].id) {
                 castContent = (
                     <div>
-                        <p>Select Cast:</p>
+                        <p>Cast:</p>
                         <ListGroup>
                             {cast.map(({ id, name, character }) => (
                                 // <Link to={`/castCrew/${cast_id}`}>{title}</Link>
@@ -219,11 +219,34 @@ class MovieDetail extends Component {
                         {ratedContent}
                         <p>{imdbLinkContent} | {tmdbLinkContent}</p>
                     </Col>
+                </Row>                
+                <Row>
+                    <Col xs="12">
+                        &nbsp;
+                    </Col>
                 </Row>
                 <Row>
                     <Col xs="12">
                         {ratingsContent}
+                    </Col>
+                </Row>
+                <Row>
+                    <Col xs="12">
+                        &nbsp;
+                    </Col>
+                </Row>
+                <Row>
+                    <Col xs="12">
                         {crewContent}
+                    </Col>
+                </Row>
+                <Row>
+                    <Col xs="12">
+                        &nbsp;
+                    </Col>
+                </Row>
+                <Row>
+                    <Col xs="12">
                         {castContent}
                     </Col>
                 </Row>

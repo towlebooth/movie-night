@@ -95,7 +95,7 @@ import './../../App.css';
     
                     <div className="row">
                         <div className="col-md-12 text-center">
-                            <h1 className="display-4 mb-4">Search for a Movie</h1>
+                            <h1 className="display-5 mb-5">Search for a Movie</h1>
                             <div className="col-md-6 m-auto">
                                 <form onSubmit={this.getMovieFromApi}>
                                     <TextFieldGroup
