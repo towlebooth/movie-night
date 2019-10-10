@@ -17,8 +17,10 @@ class PersonDetail extends Component {
 
     render() {
         var personDetail = {};
+        var nameContent;
         var imdbLinkContent;
         var tmdbLinkContent;
+        var linkContent;
         var posterContent;
         var biographyContent;
         var creditsCastForList = [];
@@ -30,136 +32,143 @@ class PersonDetail extends Component {
             personDetail = this.props.person.personDetail;
 
             if (personDetail.imdbId) {
+                nameContent = <h3>{personDetail.name}</h3>
                 imdbLinkContent = <a href={`https://www.imdb.com/name/${personDetail.imdbId}`} target="_blank">IMDB</a>
                 tmdbLinkContent = <a href={`https://www.themoviedb.org/person/${personDetail.tmdbId}`} target="_blank">TMDB</a>
-            
+                linkContent = <p>{imdbLinkContent} | {tmdbLinkContent}</p>
+                
                 if (personDetail.imageBaseUrl && personDetail.posterSizeL && personDetail.profile_path) {
                     posterContent = (
                         <img src={personDetail.imageBaseUrl + personDetail.posterSizeL + personDetail.profile_path} style={{width: 185}} className={"floatLeft"} alt={personDetail.name}></img>
                     );
                 }
-                
-                if (personDetail.movieCredits.cast && personDetail.movies) {
-                    personDetail.movieCredits.cast.forEach((castCredit) => { 
-                        var creditForList = {};
-                        creditForList.tmdbId = castCredit.id;
-                        creditForList.releaseDate = castCredit.release_date;
-                        creditForList.title = castCredit.title;
-                        creditForList.imdbId = castCredit.imdbId;
-                        creditForList.character = castCredit.character;
-                        var i;
-                        for (i = 0; i < personDetail.movies.length; i++) { 
-                            if (personDetail.movies[i].imdbId === castCredit.imdbId) {
-                                creditForList.viewed = "Viewed in Movie Club";
-                                break;
-                            } else {
-                                creditForList.viewed = "Not Viewed Yet";
-                            } 
-                        }
-                        //console.log('creditForList: ' + creditForList.title)
-                        creditsCastForList.push(creditForList);
-                    });
-                }
-
-                if (personDetail.movieCredits.crew && personDetail.movies) {
-                    personDetail.movieCredits.crew.forEach((crewCredit) => { 
-                        var creditForList = {};
-                        creditForList.tmdbId = crewCredit.id;
-                        creditForList.releaseDate = crewCredit.release_date;
-                        creditForList.title = crewCredit.title;
-                        creditForList.imdbId = crewCredit.imdbId;
-                        creditForList.job = crewCredit.job;
-                        var i;
-                        for (i = 0; i < personDetail.movies.length; i++) { 
-                            if (personDetail.movies[i].imdbId === crewCredit.imdbId) {
-                                creditForList.viewed = "Viewed in Movie Club";
-                                break;
-                            } else {
-                                creditForList.viewed = "Not Viewed Yet";
-                            }                            
-                        }
-                        //console.log('creditForList: ' + creditForList.title)
-                        creditsCrewForList.push(creditForList);
-                    });
-                }
 
                 if (personDetail.biography) {
                     biographyContent = <p>{personDetail.biography}</p>
                 }
+                
+                // // acting credits (cast)
+                // if (personDetail.movieCredits.cast && personDetail.movies) {
+                //     personDetail.movieCredits.cast.forEach((castCredit) => { 
+                //         var creditForList = {};
+                //         creditForList.tmdbId = castCredit.id;
+                //         creditForList.releaseDate = castCredit.release_date;
+                //         creditForList.title = castCredit.title;
+                //         creditForList.imdbId = castCredit.imdbId;
+                //         creditForList.character = castCredit.character;
+                //         var i;
+                //         for (i = 0; i < personDetail.movies.length; i++) { 
+                //             if (personDetail.movies[i].imdbId === castCredit.imdbId) {
+                //                 creditForList.viewed = "Viewed in Movie Club";
+                //                 break;
+                //             } else {
+                //                 creditForList.viewed = "Not Viewed Yet";
+                //             } 
+                //         }
+                //         //console.log('creditForList: ' + creditForList.title)
+                //         creditsCastForList.push(creditForList);
 
-                if (creditsCastForList && creditsCastForList[0].imdbId) {
-                    castContent = (
-                        <div>
-                            <p>Acting Credits:</p>
-                            <ListGroup>
-                                {creditsCastForList.map(({ tmdbId, imdbId, character, title, releaseDate, viewed }) => (
-                                    <ListGroupItem key={tmdbId}><Link to={`/movie/${imdbId}`}>{title}</Link> ({moment(releaseDate).format('YYYY')}): {character} | {viewed}</ListGroupItem>
-                                ))}
-                            </ListGroup>
-                        </div>
-                    );
-                } else {
-                    castContent = (
-                        <div>
-                            <p>No acting credits found</p>
-                        </div>
-                    );
-                }
+                //         // sort by date
+                //         if (creditsCastForList && creditsCastForList.length > 0) {
+                //             creditsCastForList.sort(function(a, b) {
+                //                 a = new Date(a.releaseDate);
+                //                 b = new Date(b.releaseDate);
+                //                 return a>b ? -1 : a<b ? 1 : 0;
+                //             });
+                //         }
+                //     });
+                // }
 
-                if (creditsCrewForList && creditsCrewForList[0] && creditsCrewForList[0].imdbId) {
-                    crewContent = (
-                        <div>
-                            <p>Select Crew Credits:</p>
-                            <ListGroup>
-                                {creditsCrewForList.map(({ tmdbId, imdbId, job, title, releaseDate, viewed }) => (
-                                    <ListGroupItem key={tmdbId}><Link to={`/movie/${imdbId}`}>{title}</Link> ({moment(releaseDate).format('YYYY')}): {job} | {viewed}</ListGroupItem>
-                                ))}
-                            </ListGroup>
-                        </div>
-                    );
-                } else {
-                    crewContent = (
-                        <div>
-                            <p>No crew credits found</p>
-                        </div>
-                    );
-                }
+                // // writing and directing credits (crew)
+                // if (personDetail.movieCredits.crew && personDetail.movies) {
+                //     personDetail.movieCredits.crew.forEach((crewCredit) => { 
+                //         var creditForList = {};
+                //         creditForList.tmdbId = crewCredit.id;
+                //         creditForList.releaseDate = crewCredit.release_date;
+                //         creditForList.title = crewCredit.title;
+                //         creditForList.imdbId = crewCredit.imdbId;
+                //         creditForList.job = crewCredit.job;
+                //         var i;
+                //         for (i = 0; i < personDetail.movies.length; i++) { 
+                //             if (personDetail.movies[i].imdbId === crewCredit.imdbId) {
+                //                 creditForList.viewed = "Viewed in Movie Club";
+                //                 break;
+                //             } else {
+                //                 creditForList.viewed = "Not Viewed Yet";
+                //             }                            
+                //         }
+                //         creditsCrewForList.push(creditForList);
+
+                //         // sort by date
+                //         if (creditsCrewForList && creditsCrewForList.length > 0) {
+                //             creditsCrewForList.sort(function(a, b) {
+                //                 a = new Date(a.releaseDate);
+                //                 b = new Date(b.releaseDate);
+                //                 return a>b ? -1 : a<b ? 1 : 0;
+                //             });
+                //         }
+                //     });
+                // }
+
+                
+
+            //     if (creditsCastForList && creditsCastForList[0] && creditsCastForList[0].imdbId) {
+            //         castContent = (
+            //             <div>
+            //                 <p>Acting Credits:</p>
+            //                 <ListGroup>
+            //                     {creditsCastForList.map(({ tmdbId, imdbId, character, title, releaseDate, viewed }) => (
+            //                         <ListGroupItem key={tmdbId}><Link to={`/movie/${imdbId}`}>{title}</Link> ({moment(releaseDate).format('YYYY')}): {character} | {viewed}</ListGroupItem>
+            //                     ))}
+            //                 </ListGroup>
+            //             </div>
+            //         );
+            //     } else {
+            //         castContent = (
+            //             <div>
+            //                 <p>No acting credits found</p>
+            //             </div>
+            //         );
+            //     }
+
+            //     if (creditsCrewForList && creditsCrewForList[0] && creditsCrewForList[0].imdbId) {
+            //         crewContent = (
+            //             <div>
+            //                 <p>Writing and Directing Credits:</p>
+            //                 <ListGroup>
+            //                     {creditsCrewForList.map(({ tmdbId, imdbId, job, title, releaseDate, viewed }) => (
+            //                         <ListGroupItem key={tmdbId}><Link to={`/movie/${imdbId}`}>{title}</Link> ({moment(releaseDate).format('YYYY')}): {job} | {viewed}</ListGroupItem>
+            //                     ))}
+            //                 </ListGroup>
+            //             </div>
+            //         );
+            //     } else {
+            //         crewContent = (
+            //             <div>
+            //                 <p>No writing or directing credits found</p>
+            //             </div>
+            //         );
+            //     }
             }
 
-            // if (movieNights && movies) {
-            //     movies.forEach((movie) => { 
-            //         var movieForList = {};
-            //         movieForList._id = movie._id;
-            //         movieForList.releaseDate = movie.releaseDate;
-            //         movieForList.title = movie.title;
-            //         movieForList.imdbId = movie.imdbId;
-            //         var i;
-            //         for (i = 0; i < movieNights.length; i++) { 
-            //             if (movieNights[i].movieViewed === movie.imdbId) {
-            //                 movieForList.dateWatched = movieNights[i].date;
-            //                 break;
-            //             } else {
-            //                 movieForList.dateWatched = null;
-            //             }                    
-                        
-            //         }
-            //         moviesForList.push(movieForList);
-            //     });
-            // }
+            
+        } else {
+            // no record found
+            nameContent = <p>No record found</p>
         }
 
         return(
             <div className='personDetail'>
                 <Row>
                     <Col xs="12">
-                        <h3>{personDetail.name}</h3>
+                        {nameContent}
                     </Col>
                 </Row>
                 <Row>
                     <Col xs="12">
                         {posterContent}
                         {biographyContent}                    
-                        <p>{imdbLinkContent} | {tmdbLinkContent}</p>
+                        {linkContent}
                     </Col>
                 </Row>
                 <Row>

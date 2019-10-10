@@ -41,17 +41,17 @@ const getPersonDetailsFromApiWithTmdbId = async (tmdbId) => {
             personDetail.tmdbId = data.id;        
         }
 
-        if (personDetail.tmdbId) {
-            const personMovieCreditsFromApi = await getMovieCreditsForPersonFromApi(personDetail.tmdbId);
-            if (personMovieCreditsFromApi) {
-                personDetail.movieCredits = personMovieCreditsFromApi;
-            }
+        // if (personDetail.tmdbId) {
+        //     const personMovieCreditsFromApi = await getMovieCreditsForPersonFromApi(personDetail.tmdbId);
+        //     if (personMovieCreditsFromApi) {
+        //         personDetail.movieCredits = personMovieCreditsFromApi;
+        //     }
 
-            const personMovies = await getMoviesByPerson(personDetail.tmdbId);
-            if (personMovies) {
-                personDetail.movies = personMovies[0];
-            }
-        }
+        //     const personMovies = await getMoviesByPerson(personDetail.tmdbId);
+        //     if (personMovies) {
+        //         personDetail.movies = personMovies[0];
+        //     }
+        // }
 
         // configuration - images, etc
         const configData = await getMovieConfigDataFromApi();
@@ -80,14 +80,36 @@ const getMovieCreditsForPersonFromApi = async (personTmdbId) => {
             for (const castCredit of credits.cast) {
                 castCredit.imdbId = await getImdbIdFromApi(castCredit.id);
             }
-        }
+        }        
 
         if (credits.crew[0] && credits.crew[0].id) {
-            // get imdbId for each crew member
-            for (const crewCredit of credits.crew) {
-                crewCredit.imdbId = await getImdbIdFromApi(crewCredit.id);
+            var directors = credits.crew.filter(function (c) {
+                return c.job === "Director";
+            });
+
+            var writers = credits.crew.filter(function (c) {
+                return c.job === "Writer" ||
+                    c.job === "Story" ||
+                    c.job === "Screenplay";
+            });
+
+            var crewForDisplay = directors;
+            crewForDisplay.push.apply(directors, writers);
+            //console.log('crewForDisplay: ' + crewForDisplay.length);
+            credits.crew = [];
+            if (crewForDisplay.length > 0) {
+                credits.crew = crewForDisplay;
+            } 
+            //console.log('crewForDisplay: ' + crewForDisplay.length);
+            
+            if (credits.crew[0] && credits.crew[0].id) { // check again since we might have removed all of them - producers etc
+                // get imdbId for each crew member
+                for (const crewCredit of credits.crew) {
+                    crewCredit.imdbId = await getImdbIdFromApi(crewCredit.id);
+                }
             }
         }
+        
     return credits;
 }
 

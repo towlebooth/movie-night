@@ -131,7 +131,7 @@ class MovieDetail extends Component {
             if (crew && crew[0].credit_id) {
                 crewContent = (
                     <div>
-                        <p>Select Crew:</p>
+                        <p>Writers and Directors:</p>
                         <ListGroup>
                             {crew.map(({ id, name, job }) => (
                                 <ListGroupItem key={id}><Link to={`/castCrew/${id}`}>{name}</Link>: {job}</ListGroupItem>
