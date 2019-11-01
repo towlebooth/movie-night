@@ -24,7 +24,7 @@ class MovieList extends Component {
     }
 
     onChange(e) {
-        console.log('Select clicked: ' + e.target.value)
+        //console.log('Select clicked: ' + e.target.value)
         if (e.target.value === 0 || e.target.value === 'All') {
             window.location.href = '/allMovies/';
         } else {

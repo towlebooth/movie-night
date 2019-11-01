@@ -41,17 +41,17 @@ const getPersonDetailsFromApiWithTmdbId = async (tmdbId) => {
             personDetail.tmdbId = data.id;        
         }
 
-        // if (personDetail.tmdbId) {
-        //     const personMovieCreditsFromApi = await getMovieCreditsForPersonFromApi(personDetail.tmdbId);
-        //     if (personMovieCreditsFromApi) {
-        //         personDetail.movieCredits = personMovieCreditsFromApi;
-        //     }
+        if (personDetail.tmdbId) {
+            const personMovieCreditsFromApi = await getMovieCreditsForPersonFromApi(personDetail.tmdbId);
+            if (personMovieCreditsFromApi) {
+                personDetail.movieCredits = personMovieCreditsFromApi;
+            }
 
-        //     const personMovies = await getMoviesByPerson(personDetail.tmdbId);
-        //     if (personMovies) {
-        //         personDetail.movies = personMovies[0];
-        //     }
-        // }
+            const personMovies = await getMoviesByPerson(personDetail.tmdbId);
+            if (personMovies) {
+                personDetail.movies = personMovies[0];
+            }
+        }
 
         // configuration - images, etc
         const configData = await getMovieConfigDataFromApi();
@@ -74,13 +74,26 @@ const getMovieCreditsForPersonFromApi = async (personTmdbId) => {
     const api_call =
         await fetch(`${MOVIE_DB_BASE_URL}person/${personTmdbId}/movie_credits?api_key=${MOVIE_DB_API_KEY}`);
         const credits = await api_call.json();
+        console.log('credits.cast.length: ' + credits.cast.length);
+        console.log('credits.crew.length: ' + credits.crew.length);
         
-        if (credits.cast[0] && credits.cast[0].id) {
-            // get imdbId for each cast member
-            for (const castCredit of credits.cast) {
-                castCredit.imdbId = await getImdbIdFromApi(castCredit.id);
+         if (credits.cast[0] && credits.cast[0].id) {
+            credits.cast.forEach((castCredit) => {
+                castCredit.tmdbId = castCredit.id;
+            });
+
+            if (credits.cast && credits.cast.length > 0) {
+                credits.cast.sort(function(a, b) {
+                    a = new Date(a.release_date);
+                    b = new Date(b.release_date);
+                    return a>b ? -1 : a<b ? 1 : 0;
+                });
             }
-        }        
+        //     // get imdbId for each cast member
+        //     for (const castCredit of credits.cast) {
+        //         castCredit.imdbId = await getImdbIdFromApi(castCredit.id);
+        //     }
+         }        
 
         if (credits.crew[0] && credits.crew[0].id) {
             var directors = credits.crew.filter(function (c) {
@@ -93,21 +106,48 @@ const getMovieCreditsForPersonFromApi = async (personTmdbId) => {
                     c.job === "Screenplay";
             });
 
-            var crewForDisplay = directors;
-            crewForDisplay.push.apply(directors, writers);
+            var crewForDisplay = [];
+            directors.forEach((directorCredit) => {
+                directorCredit.key = directorCredit.id + directorCredit.job; // used in front end
+                crewForDisplay.push(directorCredit);
+            });
+
+            writers.forEach((writerCredit) => {
+                writerCredit.key = writerCredit.id + writerCredit.job; // used in front end
+                crewForDisplay.pushIfNotExist(writerCredit, function(c) { 
+                    return c.tmdbId === writerCredit.tmdbId && c.job === writerCredit.job; 
+                });
+            });
+            
+            
+            //crewForDisplay.push(directors, writers);
             //console.log('crewForDisplay: ' + crewForDisplay.length);
             credits.crew = [];
             if (crewForDisplay.length > 0) {
+                crewForDisplay.forEach((crewCredit) => {
+                    crewCredit.tmdbId = crewCredit.id;
+                });
                 credits.crew = crewForDisplay;
             } 
             //console.log('crewForDisplay: ' + crewForDisplay.length);
-            
-            if (credits.crew[0] && credits.crew[0].id) { // check again since we might have removed all of them - producers etc
-                // get imdbId for each crew member
-                for (const crewCredit of credits.crew) {
-                    crewCredit.imdbId = await getImdbIdFromApi(crewCredit.id);
-                }
+
+            if (credits.crew && credits.crew.length > 0) {
+                credits.crew.sort(function(a, b) {
+                    a = new Date(a.release_date);
+                    b = new Date(b.release_date);
+                    return a>b ? -1 : a<b ? 1 : 0;
+                });
             }
+            
+            // if (credits.crew[0] && credits.crew[0].id) { // check again since we might have removed all of them - producers etc
+            //     // get imdbId for each crew member
+            //     for (const crewCredit of credits.crew) {
+            //         crewCredit.imdbId = await getImdbIdFromApi(crewCredit.id);
+            //     }
+            // }
+
+            console.log('credits.cast.length 3: ' + credits.cast.length);
+            console.log('credits.crew.length 3: ' + credits.crew.length);
         }
         
     return credits;
@@ -167,3 +207,20 @@ export const setPersonsLoading = () => {
         type: PERSONS_LOADING
     }
 };
+
+// check if an element exists in array using a comparer function
+// comparer : function(currentElement)
+Array.prototype.inArray = function(comparer) { 
+    for(var i=0; i < this.length; i++) { 
+        if(comparer(this[i])) return true; 
+    }
+    return false; 
+}; 
+
+// adds an element to the array if it does not already exist using a comparer 
+// function
+Array.prototype.pushIfNotExist = function(element, comparer) { 
+    if (!this.inArray(comparer)) {
+        this.push(element);
+    }
+}; 

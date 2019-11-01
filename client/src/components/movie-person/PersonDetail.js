@@ -46,109 +46,128 @@ class PersonDetail extends Component {
                 if (personDetail.biography) {
                     biographyContent = <p>{personDetail.biography}</p>
                 }
-                
-                // // acting credits (cast)
-                // if (personDetail.movieCredits.cast && personDetail.movies) {
-                //     personDetail.movieCredits.cast.forEach((castCredit) => { 
-                //         var creditForList = {};
-                //         creditForList.tmdbId = castCredit.id;
-                //         creditForList.releaseDate = castCredit.release_date;
-                //         creditForList.title = castCredit.title;
-                //         creditForList.imdbId = castCredit.imdbId;
-                //         creditForList.character = castCredit.character;
-                //         var i;
-                //         for (i = 0; i < personDetail.movies.length; i++) { 
-                //             if (personDetail.movies[i].imdbId === castCredit.imdbId) {
-                //                 creditForList.viewed = "Viewed in Movie Club";
-                //                 break;
-                //             } else {
-                //                 creditForList.viewed = "Not Viewed Yet";
-                //             } 
-                //         }
-                //         //console.log('creditForList: ' + creditForList.title)
-                //         creditsCastForList.push(creditForList);
 
-                //         // sort by date
-                //         if (creditsCastForList && creditsCastForList.length > 0) {
-                //             creditsCastForList.sort(function(a, b) {
-                //                 a = new Date(a.releaseDate);
-                //                 b = new Date(b.releaseDate);
-                //                 return a>b ? -1 : a<b ? 1 : 0;
-                //             });
-                //         }
-                //     });
+                // movies from club we've watched
+                // var creditForList = {};
+                // var i;
+                // for (i = 0; i < personDetail.movies.length; i++) { 
+                //     if (personDetail.movies[i].imdbId === castCredit.imdbId) {
+                //         creditForList.viewed = "Viewed in Movie Club";
+                //         break;
+                //     } else {
+                //         creditForList.viewed = "Not Viewed Yet";
+                //     } 
                 // }
+                
+                // acting credits (cast)
+                if (personDetail.movieCredits.cast && personDetail.movies) {
+                    personDetail.movieCredits.cast.forEach((castCredit) => { 
+                        var creditForList = {};
+                        creditForList.tmdbId = castCredit.tmdbId;
+                        creditForList.releaseDate = castCredit.release_date;
+                        creditForList.title = castCredit.title;
+                        //creditForList.imdbId = castCredit.imdbId;
+                        creditForList.character = castCredit.character;
+                        var i;
+                        for (i = 0; i < personDetail.movies.length; i++) {
+                            personDetail.movies[i].cast.forEach((castMovie) => {
+                                //console.log("castMovie = " + castMovie + " | " + "castCredit.tmdbId: " + castCredit.tmdbId);
+                                if (castMovie === castCredit.tmdbId) {
+                                    console.log("match found in cast loop person detail")
+                                    creditForList.viewed = "Viewed in Movie Club";
+                                    //break;
+                                } else {
+                                    creditForList.viewed = "Not Viewed Yet";
+                                } 
+                            });
+                        }
+                        //console.log('creditForList: ' + creditForList.title)
+                        creditsCastForList.push(creditForList);
 
-                // // writing and directing credits (crew)
-                // if (personDetail.movieCredits.crew && personDetail.movies) {
-                //     personDetail.movieCredits.crew.forEach((crewCredit) => { 
-                //         var creditForList = {};
-                //         creditForList.tmdbId = crewCredit.id;
-                //         creditForList.releaseDate = crewCredit.release_date;
-                //         creditForList.title = crewCredit.title;
-                //         creditForList.imdbId = crewCredit.imdbId;
-                //         creditForList.job = crewCredit.job;
-                //         var i;
-                //         for (i = 0; i < personDetail.movies.length; i++) { 
-                //             if (personDetail.movies[i].imdbId === crewCredit.imdbId) {
-                //                 creditForList.viewed = "Viewed in Movie Club";
-                //                 break;
-                //             } else {
-                //                 creditForList.viewed = "Not Viewed Yet";
-                //             }                            
-                //         }
-                //         creditsCrewForList.push(creditForList);
+                        // sort by date
+                        // if (creditsCastForList && creditsCastForList.length > 0) {
+                        //     creditsCastForList.sort(function(a, b) {
+                        //         a = new Date(a.releaseDate);
+                        //         b = new Date(b.releaseDate);
+                        //         return a>b ? -1 : a<b ? 1 : 0;
+                        //     });
+                        // }
+                    });
+                }
 
-                //         // sort by date
-                //         if (creditsCrewForList && creditsCrewForList.length > 0) {
-                //             creditsCrewForList.sort(function(a, b) {
-                //                 a = new Date(a.releaseDate);
-                //                 b = new Date(b.releaseDate);
-                //                 return a>b ? -1 : a<b ? 1 : 0;
-                //             });
-                //         }
-                //     });
-                // }
+                console.log("personDetail.movieCredits.crew.length: " + personDetail.movieCredits.crew.length);
+                // writing and directing credits (crew)
+                if (personDetail.movieCredits.crew && personDetail.movies) {
+                    personDetail.movieCredits.crew.forEach((crewCredit) => { 
+                        var creditForList = {};
+                        creditForList.tmdbId = crewCredit.tmdbId;
+                        creditForList.releaseDate = crewCredit.release_date;
+                        creditForList.title = crewCredit.title;
+                        creditForList.key = crewCredit.key;
+                        //creditForList.imdbId = crewCredit.imdbId;
+                        creditForList.job = crewCredit.job;
+                        var i;
+                        for (i = 0; i < personDetail.movies.length; i++) { 
+                            if (personDetail.movies[i].tmdbId === crewCredit.tmdbId) {
+                                creditForList.viewed = "Viewed in Movie Club";
+                                break;
+                            } else {
+                                creditForList.viewed = "Not Viewed Yet";
+                            }                            
+                        }
+                        creditsCrewForList.push(creditForList);
+
+                        // sort by date
+                        // if (creditsCrewForList && creditsCrewForList.length > 0) {
+                        //     creditsCrewForList.sort(function(a, b) {
+                        //         a = new Date(a.releaseDate);
+                        //         b = new Date(b.releaseDate);
+                        //         return a>b ? -1 : a<b ? 1 : 0;
+                        //     });
+                        // }
+                    });
+                }
 
                 
+                if (creditsCastForList && creditsCastForList[0] && creditsCastForList[0].tmdbId) {
+                    castContent = (
+                        <div>
+                            <p>Acting Credits:</p>
+                            <ListGroup>
+                                {creditsCastForList.map(({ tmdbId, character, title, releaseDate, viewed }) => (
+                                    <ListGroupItem key={tmdbId}><Link to={`/movieByTmdb/${tmdbId}`}>{title}</Link> ({moment(releaseDate).format('YYYY')}): {character} | {viewed}</ListGroupItem>
+                                ))}
+                            </ListGroup>
+                        </div>
+                    );
+                } else {
+                    castContent = (
+                        <div>
+                            <p>No acting credits found</p>
+                        </div>
+                    );
+                }
 
-            //     if (creditsCastForList && creditsCastForList[0] && creditsCastForList[0].imdbId) {
-            //         castContent = (
-            //             <div>
-            //                 <p>Acting Credits:</p>
-            //                 <ListGroup>
-            //                     {creditsCastForList.map(({ tmdbId, imdbId, character, title, releaseDate, viewed }) => (
-            //                         <ListGroupItem key={tmdbId}><Link to={`/movie/${imdbId}`}>{title}</Link> ({moment(releaseDate).format('YYYY')}): {character} | {viewed}</ListGroupItem>
-            //                     ))}
-            //                 </ListGroup>
-            //             </div>
-            //         );
-            //     } else {
-            //         castContent = (
-            //             <div>
-            //                 <p>No acting credits found</p>
-            //             </div>
-            //         );
-            //     }
+                console.log("creditsCrewForList.length: " + creditsCrewForList.length);
 
-            //     if (creditsCrewForList && creditsCrewForList[0] && creditsCrewForList[0].imdbId) {
-            //         crewContent = (
-            //             <div>
-            //                 <p>Writing and Directing Credits:</p>
-            //                 <ListGroup>
-            //                     {creditsCrewForList.map(({ tmdbId, imdbId, job, title, releaseDate, viewed }) => (
-            //                         <ListGroupItem key={tmdbId}><Link to={`/movie/${imdbId}`}>{title}</Link> ({moment(releaseDate).format('YYYY')}): {job} | {viewed}</ListGroupItem>
-            //                     ))}
-            //                 </ListGroup>
-            //             </div>
-            //         );
-            //     } else {
-            //         crewContent = (
-            //             <div>
-            //                 <p>No writing or directing credits found</p>
-            //             </div>
-            //         );
-            //     }
+                if (creditsCrewForList && creditsCrewForList[0] && creditsCrewForList[0].tmdbId) {
+                    crewContent = (
+                        <div>
+                            <p>Writing and Directing Credits:</p>
+                            <ListGroup>
+                                {creditsCrewForList.map(({ key, tmdbId, job, title, releaseDate, viewed }) => (
+                                    <ListGroupItem key={key}><Link to={`/movieByTmdb/${tmdbId}`}>{title}</Link> ({moment(releaseDate).format('YYYY')}): {job} | {viewed}</ListGroupItem>
+                                ))}
+                            </ListGroup>
+                        </div>
+                    );
+                } else {
+                    crewContent = (
+                        <div>
+                            <p>No writing or directing credits found</p>
+                        </div>
+                    );
+                }
             }
 
             

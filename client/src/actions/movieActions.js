@@ -248,7 +248,7 @@ const getMovieConfigDataFromApi = async () => {
     return await api_configuration_call.json();
 }
 
-const getImdbIdFromApi = async (tmdbId) => {
+export const getImdbIdFromApi = async (tmdbId) => {
     const api_call = 
         await fetch(`${MOVIE_DB_BASE_URL}movie/${tmdbId}?api_key=${MOVIE_DB_API_KEY}`);
     const data = await api_call.json();

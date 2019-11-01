@@ -5,7 +5,6 @@ import setAuthToken from './utils/setAuthToken';
 import { setCurrentUser, logoutUser } from './actions/authActions';
 import { clearCurrentProfile } from './actions/profileActions';
 
-//import AppNavbar from './components/AppNavbar';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import Landing from './components/layout/Landing';
@@ -16,6 +15,7 @@ import CreateProfile from './components/create-profile/CreateProfile';
 import CreateMovie from './components/create-movie/CreateMovie';
 import CreateMovieNight from './components/create-movie-night/CreateMovieNight';
 import Movie from './components/movie/Movie';
+import MovieByTmdb from './components/movie/MovieByTmdb';
 import MovieList from './components/movie/MovieList';
 import MovieSearch from './components/movie/MovieSearch';
 import MovieNight from './components/movie-night/MovieNight';
@@ -88,6 +88,7 @@ class App extends Component {
                             </Switch>
                             <Route path="/allMovies/:genre" component={MovieList} />
                             <Route path="/movie/:imdbId" component={Movie} />
+                            <Route path="/movieByTmdb/:tmdbId" component={MovieByTmdb} />
                             <Route path="/movieNight/:date" component={MovieNight} />
                             <Route path="/allMovieNights/:host" component={MovieNightList} />
                             <Route path="/castCrew/:personTmdbId" component={CastCrew} />
