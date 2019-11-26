@@ -4,7 +4,10 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getPersonFromApiByTmdbId } from '../../actions/personActions';
+import { getMovieFromApiByTmdbId } from '../../actions/movieActions';
 import moment from 'moment';
+import { Button } from 'reactstrap';
+import { withRouter } from 'react-router-dom';
 import './../../App.css';
 
 class PersonDetail extends Component {
@@ -14,6 +17,19 @@ class PersonDetail extends Component {
     
     componentDidMount = async () => {
     }
+
+    onButtonClick = async (tmdbId) => {
+        
+        //tmdbId.preventDefault();
+        console.log("!!tmdbId: " + tmdbId)
+        await this.props.getMovieFromApiByTmdbId(tmdbId);
+        if (this.props.movie.movieDetailTmdb && this.props.movie.movieDetailTmdb.imdbId) {
+            console.log("!!this.props.movie.movieDetailTmdb.imdbId: " + this.props.movie.movieDetailTmdb.imdbId)
+          var url = '/movie/' + this.props.movie.movieDetailTmdb.imdbId;
+          console.log("!!url: " + url)
+          this.props.history.push(url);        
+        }
+      }
 
     render() {
         var personDetail = {};
@@ -135,7 +151,11 @@ class PersonDetail extends Component {
                             <p>Acting Credits:</p>
                             <ListGroup>
                                 {creditsCastForList.map(({ tmdbId, character, title, releaseDate, viewed }) => (
-                                    <ListGroupItem key={tmdbId}><Link to={`/movieByTmdb/${tmdbId}`}>{title}</Link> ({moment(releaseDate).format('YYYY')}): {character} | {viewed}</ListGroupItem>
+                                    <ListGroupItem key={tmdbId}>
+                                        <Link to={`/movieByTmdb/${tmdbId}`}>
+                                            {title}
+                                        </Link> ({moment(releaseDate).format('YYYY')}): {character} | {viewed}
+                                    </ListGroupItem>
                                 ))}
                             </ListGroup>
                         </div>
@@ -156,7 +176,12 @@ class PersonDetail extends Component {
                             <p>Writing and Directing Credits:</p>
                             <ListGroup>
                                 {creditsCrewForList.map(({ key, tmdbId, job, title, releaseDate, viewed }) => (
-                                    <ListGroupItem key={key}><Link to={`/movieByTmdb/${tmdbId}`}>{title}</Link> ({moment(releaseDate).format('YYYY')}): {job} | {viewed}</ListGroupItem>
+                                    <ListGroupItem key={key}>
+                                        <form>
+                                            <Button color="link" onClick={this.onButtonClick.bind(this, tmdbId)}>Link</Button>
+                                        </form>
+                                        <Link to={`/movieByTmdb/${tmdbId}`}>{title}</Link> ({moment(releaseDate).format('YYYY')}): {job} | {viewed}
+                                    </ListGroupItem>
                                 ))}
                             </ListGroup>
                         </div>
@@ -205,15 +230,26 @@ class PersonDetail extends Component {
 
 PersonDetail.propTypes = {
     getPersonFromApiByTmdbId: PropTypes.func.isRequired,
+    getMovieFromApiByTmdbId: PropTypes.func.isRequired,
     //getMoviesByPerson: PropTypes.func.isRequired,
     person: PropTypes.object.isRequired,
-    movie: PropTypes.object
+    movie: PropTypes.object,
+    movieDetailTmdb: PropTypes.object
 }
 
 const mapStateToProps = (state) => ({
     person: state.person,
     movie: state.movie,
+    movieDetailTmdb: state.movie.movieDetail,
     //personDetail: state.person.personDetail
 })
 
-export default connect(mapStateToProps, { getPersonFromApiByTmdbId })(PersonDetail);
+export default connect(mapStateToProps, { getPersonFromApiByTmdbId, getMovieFromApiByTmdbId })(
+    withRouter(PersonDetail)
+);
+
+//export default withRouter(connect(mapStateToProps, matchDispatchToProps)(ChildView));
+
+// export default connect(mapStateToProps, { createMovieNight, createMovieNoRedirect, getMovies, searchForMovieByTitle, getMovieFromApiByTmdbId })(
+//     withRouter(CreateMovieNight)
+//   );
