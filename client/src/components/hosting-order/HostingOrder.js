@@ -40,20 +40,22 @@ class HostingOrder extends Component {
             });
 
             // find next host            
-            let mostTimeSinceHosted = movieNightHostingOrders.slice(0, 10);            
-            var hostingOrderByDate = mostTimeSinceHosted.sort(function(a, b) {
+            let hostingOrderCollection = movieNightHostingOrders.slice(0, 10);
+            var hostingOrderByDate = hostingOrderCollection.sort(function(a, b) {
                 return new Date(b.mostRecentDate) - new Date(a.mostRecentDate);
             });
 
-            mostTimeSinceHosted = hostingOrderByDate[hostingOrderByDate.length - 1];
-            if (mostTimeSinceHosted) {
+            //let mostTimeSinceHosted = hostingOrderByDate[hostingOrderByDate.length - 1];  // was correct until after a trade
+            let mostTimeSinceHosted = hostingOrderByDate[6];
+            if (mostTimeSinceHosted) {                
+                //console.log("mostTimeSinceHosted: " + mostTimeSinceHosted.host)
                 movieNightHostingOrders.forEach((hostingOrderMovieNight) => {                    
-                        if (hostingOrderMovieNight._id === mostTimeSinceHosted._id) {
-                            hostingOrderMovieNight.isNext = true;
-                            nextHostInOrder = hostingOrderMovieNight;
-                        } else {
-                            hostingOrderMovieNight.isNext = false;
-                        }                    
+                    if (hostingOrderMovieNight._id === mostTimeSinceHosted._id) {
+                        hostingOrderMovieNight.isNext = true;
+                        nextHostInOrder = hostingOrderMovieNight;
+                    } else {
+                        hostingOrderMovieNight.isNext = false;
+                    }                    
                 });
             }            
         }
@@ -70,7 +72,7 @@ class HostingOrder extends Component {
                     </thead>
                     <tbody>
                         {movieNightHostingOrders.map(({ _id, order, host, mostRecentDate, isNext }) => (
-                        <tr>                            
+                        <tr key={_id}>                            
                             <td>{order + 1}</td>
                             <td><Link to={`/allMovieNights/${host}`}>{host}</Link> {isNext ? '*' : ''}</td>
                             <td><Link to={`/movieNight/${moment.utc(mostRecentDate).format('YYYY-MM-DD')}`}>{moment.utc(mostRecentDate).format('MMMM Do YYYY')}</Link></td>
