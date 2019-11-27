@@ -135,7 +135,7 @@ class PersonDetail extends Component {
                             <p>Acting Credits:</p>
                             <ListGroup>
                                 {creditsCastForList.map(({ tmdbId, character, title, releaseDate, viewed }) => (
-                                    <ListGroupItem key={tmdbId}><Link to={`/movieByTmdb/${tmdbId}`}>{title}</Link> ({moment(releaseDate).format('YYYY')}): {character} | {viewed}</ListGroupItem>
+                                    <ListGroupItem key={tmdbId}>{title} ({moment(releaseDate).format('YYYY')}): {character}</ListGroupItem>
                                 ))}
                             </ListGroup>
                         </div>
@@ -156,7 +156,7 @@ class PersonDetail extends Component {
                             <p>Writing and Directing Credits:</p>
                             <ListGroup>
                                 {creditsCrewForList.map(({ key, tmdbId, job, title, releaseDate, viewed }) => (
-                                    <ListGroupItem key={key}><Link to={`/movieByTmdb/${tmdbId}`}>{title}</Link> ({moment(releaseDate).format('YYYY')}): {job} | {viewed}</ListGroupItem>
+                                    <ListGroupItem key={key}>{title} ({moment(releaseDate).format('YYYY')}): {job}</ListGroupItem>
                                 ))}
                             </ListGroup>
                         </div>
