@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Row, Col, ListGroup, ListGroupItem } from 'reactstrap';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getPersonFromApiByTmdbId } from '../../actions/personActions';
@@ -18,9 +17,7 @@ class PersonDetail extends Component {
     componentDidMount = async () => {
     }
 
-    onButtonClick = async (tmdbId) => {
-        
-        //tmdbId.preventDefault();
+    onButtonClick = async (tmdbId) => {        
         console.log("!!tmdbId: " + tmdbId)
         await this.props.getMovieFromApiByTmdbId(tmdbId);
         if (this.props.movie.movieDetailTmdb && this.props.movie.movieDetailTmdb.imdbId) {
@@ -152,9 +149,9 @@ class PersonDetail extends Component {
                             <ListGroup>
                                 {creditsCastForList.map(({ tmdbId, character, title, releaseDate, viewed }) => (
                                     <ListGroupItem key={tmdbId}>
-                                        <Link to={`/movieByTmdb/${tmdbId}`}>
-                                            {title}
-                                        </Link> ({moment(releaseDate).format('YYYY')}): {character} | {viewed}
+                                        <form>
+                                            <Button color="link" onClick={this.onButtonClick.bind(this, tmdbId)}>{title}</Button> ({moment(releaseDate).format('YYYY')}): {character} | {viewed}
+                                        </form>
                                     </ListGroupItem>
                                 ))}
                             </ListGroup>
@@ -178,9 +175,8 @@ class PersonDetail extends Component {
                                 {creditsCrewForList.map(({ key, tmdbId, job, title, releaseDate, viewed }) => (
                                     <ListGroupItem key={key}>
                                         <form>
-                                            <Button color="link" onClick={this.onButtonClick.bind(this, tmdbId)}>Link</Button>
+                                            <Button color="link" onClick={this.onButtonClick.bind(this, tmdbId)}>{title}</Button> ({moment(releaseDate).format('YYYY')}): {job} | {viewed}
                                         </form>
-                                        <Link to={`/movieByTmdb/${tmdbId}`}>{title}</Link> ({moment(releaseDate).format('YYYY')}): {job} | {viewed}
                                     </ListGroupItem>
                                 ))}
                             </ListGroup>
@@ -247,9 +243,3 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, { getPersonFromApiByTmdbId, getMovieFromApiByTmdbId })(
     withRouter(PersonDetail)
 );
-
-//export default withRouter(connect(mapStateToProps, matchDispatchToProps)(ChildView));
-
-// export default connect(mapStateToProps, { createMovieNight, createMovieNoRedirect, getMovies, searchForMovieByTitle, getMovieFromApiByTmdbId })(
-//     withRouter(CreateMovieNight)
-//   );
