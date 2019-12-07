@@ -45,8 +45,8 @@ class HostingOrder extends Component {
                 return new Date(b.mostRecentDate) - new Date(a.mostRecentDate);
             });
 
-            //let mostTimeSinceHosted = hostingOrderByDate[hostingOrderByDate.length - 1];  // was correct until after a trade
-            let mostTimeSinceHosted = hostingOrderByDate[6];
+            let mostTimeSinceHosted = hostingOrderByDate[hostingOrderByDate.length - 1];  // was correct until after a trade
+            //let mostTimeSinceHosted = hostingOrderByDate[6];
             if (mostTimeSinceHosted) {                
                 //console.log("mostTimeSinceHosted: " + mostTimeSinceHosted.host)
                 movieNightHostingOrders.forEach((hostingOrderMovieNight) => {                    
