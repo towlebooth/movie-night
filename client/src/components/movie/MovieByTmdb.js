@@ -44,9 +44,6 @@ class MovieByTmdb extends Component {
       var url = '/movie/' + this.props.movie.movieDetailTmdb.imdbId;
       this.props.history.push(url);        
     }
-
-    // okay, so the above works.  Can we get it to work from the movie title click on person detail?  Add form
-
   }
 
   render() {

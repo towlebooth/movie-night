@@ -153,7 +153,7 @@ const getMovieCreditsForPersonFromApi = async (personTmdbId) => {
     return credits;
 }
 
-// get imdbId from api for a tmdbId
+// get movie imdbId from api for a tmdbId
 const getImdbIdFromApi = async (tmdbId) => {
     //var imdbId;
     if (tmdbId) {
