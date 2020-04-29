@@ -71,6 +71,10 @@ class Navbar extends Component {
                                 <Link className="nav-link" to="/allMovies"> All Club Movies
                                 </Link>
                             </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/releaseNote"> Release Notes
+                                </Link>
+                            </li>
                         </ul>
                         {isAuthenticated ? authLinks : guestLinks}
                     </div>
