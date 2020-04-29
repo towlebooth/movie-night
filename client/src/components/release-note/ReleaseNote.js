@@ -24,6 +24,13 @@ class ReleaseNote extends Component {
                 releaseNotesForList.push(releaseNote);
             });
         }
+        if(releaseNotesForList.length === 0) {
+            return (
+                <Container>              
+                    <h3 className="display-5 mb-5">No Release Notes Found</h3>                    
+                </Container>
+            );
+        }
         return(
             <Container>              
                 <h1 className="display-5 mb-5">Release Notes</h1>
