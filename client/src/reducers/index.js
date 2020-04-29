@@ -6,6 +6,7 @@ import personReducer from './personReducer';
 import authReducer from './authReducer';
 import errorReducer from './errorReducer';
 import profileReducer from './profileReducer';
+import releaseNoteReducer from './releaseNoteReducer';
 
 export default combineReducers({
     movie: movieReducer,
@@ -14,5 +15,6 @@ export default combineReducers({
     person: personReducer,
     auth: authReducer,
     errors: errorReducer,
-    profile: profileReducer
+    profile: profileReducer,
+    releaseNote: releaseNoteReducer
 });

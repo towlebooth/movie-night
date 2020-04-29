@@ -1,6 +1,5 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
 const passport = require('passport');
 const path = require('path');
 
@@ -8,13 +7,12 @@ const movieNights = require('./routes/api/movieNights');
 const movies = require('./routes/api/movies');
 const users = require('./routes/api/users');
 const hostingOrders = require('./routes/api/hostingOrders');
+const releaseNotes = require('./routes/api/releaseNotes');
 
 
 const app = express();
 
-// Bodyparser Middlewear
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(express.json());
 
 // DB config
 const db = require('./config/keys').mongoURI;
@@ -36,6 +34,7 @@ app.use('/api/movieNights', movieNights);
 app.use('/api/movies', movies);
 app.use('/api/users', users);
 app.use('/api/hostingOrders', hostingOrders);
+app.use('/api/releaseNotes', releaseNotes);
 
 // Serve static assets in Producion
 if (process.env.NODE_ENV === 'production') {

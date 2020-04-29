@@ -21,6 +21,7 @@ import MovieSearch from './components/movie/MovieSearch';
 import MovieNight from './components/movie-night/MovieNight';
 import MovieNightList from './components/movie-night/MovieNightList';
 import HostingOrder from './components/hosting-order/HostingOrder';
+import ReleaseNote from './components/release-note/ReleaseNote';
 
 import { Provider } from 'react-redux';
 import store from './store';
@@ -85,6 +86,9 @@ class App extends Component {
                             </Switch>
                             <Switch>
                                 <PrivateRoute exact path="/hostingOrder" component={ HostingOrder } />
+                            </Switch>
+                            <Switch>
+                                <PrivateRoute exact path="/releaseNote" component={ ReleaseNote } />
                             </Switch>
                             <Route path="/allMovies/:genre" component={MovieList} />
                             <Route path="/movie/:imdbId" component={Movie} />
