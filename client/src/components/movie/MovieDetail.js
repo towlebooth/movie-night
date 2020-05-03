@@ -97,11 +97,11 @@ class MovieDetail extends Component {
             ratedContent = (<p>Rated: {movieDetail.rated}</p>);
 
             if (this.props.imdbId) {
-                imdbLinkContent = <a href={`https://www.imdb.com/title/${this.props.imdbId}`} target="_blank">IMDB</a>
+                imdbLinkContent = <a href={`https://www.imdb.com/title/${this.props.imdbId}`} target="_blank" rel="noopener noreferrer">IMDB</a>
             }
             
             if (this.props.movieDetail.tmdbId) {
-                tmdbLinkContent = <a href={`https://www.themoviedb.org/movie/${this.props.movieDetail.tmdbId}`} target="_blank">TMDB</a>
+                tmdbLinkContent = <a href={`https://www.themoviedb.org/movie/${this.props.movieDetail.tmdbId}`} target="_blank" rel="noopener noreferrer">TMDB</a>
             }
 
             // format year
@@ -193,12 +193,12 @@ class MovieDetail extends Component {
             formattedYear = (moment(movieDetail.releaseDate).format('YYYY'));
 
             if (movieDetail.imdbId) {
-                imdbLinkContent = <a href={`https://www.imdb.com/title/${movieDetail.imdbId}`} target="_blank">IMDB</a>
+                imdbLinkContent = <a href={`https://www.imdb.com/title/${movieDetail.imdbId}`} target="_blank" rel="noopener noreferrer">IMDB</a>
             }
             
             // TODO: handle tv vs. movie better
             if (movieDetail.tmdbId) {
-                 tmdbLinkContent = <a href={`https://www.themoviedb.org/tv/${movieDetail.tmdbId}`} target="_blank">TMDB</a>
+                 tmdbLinkContent = <a href={`https://www.themoviedb.org/tv/${movieDetail.tmdbId}`} target="_blank" rel="noopener noreferrer">TMDB</a>
             }
         }
 

@@ -19,25 +19,6 @@ const User = require('../../models/User');
 router.get('/test', (req, res) => res.json({msg: "Users Works"})
 );
 
-// @route   GET api/users/all
-// @desc    Get all users (that are hosts)
-// @access  Public
-router.get('/all', (req, res) => {
-    const errors = {};
-    
-    // excludes users in db that are not hosts
-    User.where('hostingOrder').ne(null)
-      .then(users => {
-        if (!users) {
-          errors.noUsers = 'There are no users';
-          return res.status(404).json(errors);
-        }
-  
-        res.json(users);
-      })
-      .catch(err => res.status(404).json({ users: 'There are no users' }));
-  });
-
 // @route GET api/users/register
 // @desc Register user
 // @access Public
