@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col, ListGroup, ListGroupItem } from 'reactstrap';
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getPersonFromApiByTmdbId } from '../../actions/personActions';
@@ -8,9 +8,9 @@ import moment from 'moment';
 import './../../App.css';
 
 class PersonDetail extends Component {
-    constructor(props) {
-        super(props);
-    }
+    // constructor(props) {
+    //     super(props);
+    // }
     
     componentDidMount = async () => {
     }
@@ -33,8 +33,8 @@ class PersonDetail extends Component {
 
             if (personDetail.imdbId) {
                 nameContent = <h3>{personDetail.name}</h3>
-                imdbLinkContent = <a href={`https://www.imdb.com/name/${personDetail.imdbId}`} target="_blank">IMDB</a>
-                tmdbLinkContent = <a href={`https://www.themoviedb.org/person/${personDetail.tmdbId}`} target="_blank">TMDB</a>
+                imdbLinkContent = <a href={`https://www.imdb.com/name/${personDetail.imdbId}`} target="_blank" rel="noopener noreferrer">IMDB</a>
+                tmdbLinkContent = <a href={`https://www.themoviedb.org/person/${personDetail.tmdbId}`} target="_blank" rel="noopener noreferrer">TMDB</a>
                 linkContent = <p>{imdbLinkContent} | {tmdbLinkContent}</p>
                 
                 if (personDetail.imageBaseUrl && personDetail.posterSizeL && personDetail.profile_path) {
@@ -95,7 +95,7 @@ class PersonDetail extends Component {
                     });
                 }
 
-                console.log("personDetail.movieCredits.crew.length: " + personDetail.movieCredits.crew.length);
+                //console.log("personDetail.movieCredits.crew.length: " + personDetail.movieCredits.crew.length);
                 // writing and directing credits (crew)
                 if (personDetail.movieCredits.crew && personDetail.movies) {
                     personDetail.movieCredits.crew.forEach((crewCredit) => { 
@@ -148,7 +148,7 @@ class PersonDetail extends Component {
                     );
                 }
 
-                console.log("creditsCrewForList.length: " + creditsCrewForList.length);
+                //console.log("creditsCrewForList.length: " + creditsCrewForList.length);
 
                 if (creditsCrewForList && creditsCrewForList[0] && creditsCrewForList[0].tmdbId) {
                     crewContent = (

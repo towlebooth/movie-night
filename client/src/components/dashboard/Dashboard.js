@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 import { getCurrentProfile } from '../../actions/profileActions';
 import { Container } from 'reactstrap';
 import HostingOrder from '../hosting-order/HostingOrder';
+import StreamingServices from '../streaming-services/StreamingServices';
 
 class Dashboard extends Component {
   componentDidMount() {
@@ -18,8 +19,8 @@ class Dashboard extends Component {
     dashboardContent = 
       <Container>
         <HostingOrder />
-        {/* <p>&nbsp;</p>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<Link to="/allMovieNights">All Movie Nights</Link></p> */}
+        <br /><br />
+        <StreamingServices />
       </Container>;
 
     return (

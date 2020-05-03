@@ -6,6 +6,7 @@ const path = require('path');
 const movieNights = require('./routes/api/movieNights');
 const movies = require('./routes/api/movies');
 const users = require('./routes/api/users');
+const userDetails = require('./routes/api/userDetails');
 const hostingOrders = require('./routes/api/hostingOrders');
 const releaseNotes = require('./routes/api/releaseNotes');
 
@@ -19,7 +20,7 @@ const db = require('./config/keys').mongoURI;
 
 // Connect to Mongo
 mongoose
-    .connect(db, { useNewUrlParser: true })
+    .connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB Connected...'))
     .catch(err => console.log(err));
 
@@ -33,6 +34,7 @@ require('./config/passport')(passport);
 app.use('/api/movieNights', movieNights);
 app.use('/api/movies', movies);
 app.use('/api/users', users);
+app.use('/api/userDetails', userDetails);
 app.use('/api/hostingOrders', hostingOrders);
 app.use('/api/releaseNotes', releaseNotes);
 

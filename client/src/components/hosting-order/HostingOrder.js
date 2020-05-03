@@ -3,40 +3,46 @@ import { Container, Table } from 'reactstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
-import { getHostingOrders } from '../../actions/hostingOrderActions';
+import { getUserDetails } from '../../actions/userDetailActions';
 import { getMovieNights } from '../../actions/movieNightActions';
 import PropTypes from 'prop-types';
 
 class HostingOrder extends Component {
     componentDidMount() {
-        this.props.getHostingOrders();
+        this.props.getUserDetails();
         this.props.getMovieNights();
     }
 
     render() {
-        const { hostingOrders } = this.props.hostingOrder;
+        let hostingOrders = this.props.userDetail.userDetails;
         const { movieNights } = this.props.movieNight;
         let movieNightHostingOrders = [];
         let nextHostInOrder = {};
+        var orderContent;
 
         if (hostingOrders && movieNights) {
-            let recentMovieNights = movieNights.slice(0, 10);  
-
+            let recentMovieNights = movieNights.slice(0, 10);
+            
             // build hosting order list
-            hostingOrders.forEach((hostingOrder) => {                             
+            hostingOrders.forEach((hostingOrder) => {
                 var i;
                 for (i = 0; i < recentMovieNights.length; i++) { 
-                    if (recentMovieNights[i].host === hostingOrder.host) {
+                    if (recentMovieNights[i].host === hostingOrder.firstName) {
                         var orderDate = moment.utc(recentMovieNights[i].date).format('YYYY-MM-DD')
                         var movieNightHostingOrder = {
                             _id: hostingOrder._id, 
-                            host: hostingOrder.host, 
-                            order: hostingOrder.order, 
+                            host: hostingOrder.firstName, 
+                            order: hostingOrder.hostingOrder, 
                             mostRecentDate: orderDate};            
                         movieNightHostingOrders.push(movieNightHostingOrder);
                         break;
                     }
                 }
+            });
+
+            // sort by order number
+            var sortedMovieNightHostingOrders = movieNightHostingOrders.sort(function(a, b) {
+                return new Date(a.order) - new Date(b.order);
             });
 
             // find next host            
@@ -57,57 +63,60 @@ class HostingOrder extends Component {
                         hostingOrderMovieNight.isNext = false;
                     }                    
                 });
-            }            
+            }
+            
+            orderContent = (
+                <div>
+                    <Container>
+                    <h1 className="display-5 mb-5">Hosting Order</h1>
+                    <Table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Host</th>
+                                <th>Last Movie Night</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {sortedMovieNightHostingOrders.map(({ _id, order, host, mostRecentDate, isNext }) => (
+                            <tr key={_id}>                            
+                                <td>{parseInt(order) + 1}</td>
+                                <td><Link to={`/allMovieNights/${host}`}>{host}</Link> {isNext ? '*' : ''}</td>
+                                <td><Link to={`/movieNight/${moment.utc(mostRecentDate).format('YYYY-MM-DD')}`}>{moment.utc(mostRecentDate).format('MMMM Do YYYY')}</Link></td>
+                            </tr>
+                            ))}
+                        </tbody>
+                    </Table>
+
+                    <p>* Assuming there is no trade in progress, <Link to={`/allMovieNights/${nextHostInOrder.host}`}>{nextHostInOrder.host}</Link> is hosting next.</p> 
+                    
+                    </Container>
+                </div>
+            );
+            
+        } else {
+            orderContent = (
+                <div>No content found.</div>
+            );
         }
         return(
-            <Container>
-                <h1 className="display-5 mb-5">Hosting Order</h1>
-                <Table>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Host</th>
-                            <th>Last Movie Night</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {movieNightHostingOrders.map(({ _id, order, host, mostRecentDate, isNext }) => (
-                        <tr key={_id}>                            
-                            <td>{order + 1}</td>
-                            <td><Link to={`/allMovieNights/${host}`}>{host}</Link> {isNext ? '*' : ''}</td>
-                            <td><Link to={`/movieNight/${moment.utc(mostRecentDate).format('YYYY-MM-DD')}`}>{moment.utc(mostRecentDate).format('MMMM Do YYYY')}</Link></td>
-                        </tr>
-                        ))}
-                    </tbody>
-                </Table>
-
-                <p>* Assuming there is no trade in progress, <Link to={`/allMovieNights/${nextHostInOrder.host}`}>{nextHostInOrder.host}</Link> is hosting next.</p>
-                
-                {/*
-                // the old, no table display
-                <ListGroup>
-                    {movieNightHostingOrders.map(({ _id, host, mostRecentDate }) => (
-                        <ListGroupItem key={_id}>
-                            <Link to={`/allMovieNights/${host}`}>{host}</Link> last hosted on <Link to={`/movieNight/${moment.utc(mostRecentDate).format('YYYY-MM-DD')}`}>{moment.utc(mostRecentDate).format('MMMM Do YYYY')}</Link> 
-                        </ListGroupItem>
-                    ))}
-                </ListGroup>
-                    */}
-            </Container>
+            <div>
+                {orderContent}
+            </div>
         );
     }
 }
 
 HostingOrder.propTypes = {
-    getHostingOrders: PropTypes.func.isRequired, 
-    hostingOrder: PropTypes.object.isRequired,
+    getUserDetails: PropTypes.func.isRequired, 
+    userDetail: PropTypes.object.isRequired,
     getMovieNights: PropTypes.func,
     movieNight: PropTypes.object
 }
 
 const mapStateToProps = (state) => ({
-    hostingOrder: state.hostingOrder,
+    userDetail: state.userDetail,
     movieNight: state.movieNight
 })
 
-export default connect(mapStateToProps, { getHostingOrders, getMovieNights })(HostingOrder);
+export default connect(mapStateToProps, { getUserDetails, getMovieNights })(HostingOrder);

@@ -56,19 +56,15 @@ class Navbar extends Component {
                     <div className="collapse navbar-collapse" id="mobile-nav">
                         <ul className="navbar-nav mr-auto">
                             <li className="nav-item">
-                                <Link className="nav-link" to="/hostingOrder"> Hosting Order
-                                </Link>
-                            </li>
-                            <li className="nav-item">
                                 <Link className="nav-link" to="/allMovieNights"> All Movie Nights
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link" to="/movie-search"> Movie Search
+                                <Link className="nav-link" to="/allMovies"> All Club Movies
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link" to="/allMovies"> All Club Movies
+                                <Link className="nav-link" to="/movie-search"> Movie Search
                                 </Link>
                             </li>
                             <li className="nav-item">

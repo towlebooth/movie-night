@@ -74,8 +74,8 @@ const getMovieCreditsForPersonFromApi = async (personTmdbId) => {
     const api_call =
         await fetch(`${MOVIE_DB_BASE_URL}person/${personTmdbId}/movie_credits?api_key=${MOVIE_DB_API_KEY}`);
         const credits = await api_call.json();
-        console.log('credits.cast.length: ' + credits.cast.length);
-        console.log('credits.crew.length: ' + credits.crew.length);
+        //console.log('credits.cast.length: ' + credits.cast.length);
+        //console.log('credits.crew.length: ' + credits.crew.length);
         
          if (credits.cast[0] && credits.cast[0].id) {
             credits.cast.forEach((castCredit) => {
@@ -146,25 +146,25 @@ const getMovieCreditsForPersonFromApi = async (personTmdbId) => {
             //     }
             // }
 
-            console.log('credits.cast.length 3: ' + credits.cast.length);
-            console.log('credits.crew.length 3: ' + credits.crew.length);
+            //console.log('credits.cast.length 3: ' + credits.cast.length);
+            //console.log('credits.crew.length 3: ' + credits.crew.length);
         }
         
     return credits;
 }
 
-// get imdbId from api for a tmdbId
-const getImdbIdFromApi = async (tmdbId) => {
-    //var imdbId;
-    if (tmdbId) {
-        const api_call = 
-            await fetch(`${MOVIE_DB_BASE_URL}movie/${tmdbId}?api_key=${MOVIE_DB_API_KEY}&append_to_response=credits`);
-        const movieFromApi = await api_call.json();
-        console.log(movieFromApi.title + ' ' + movieFromApi.imdb_id);
-        return movieFromApi.imdb_id;
-    }
-    return null;
-}
+// get movie imdbId from api for a tmdbId
+// const getImdbIdFromApi = async (tmdbId) => {
+//     //var imdbId;
+//     if (tmdbId) {
+//         const api_call = 
+//             await fetch(`${MOVIE_DB_BASE_URL}movie/${tmdbId}?api_key=${MOVIE_DB_API_KEY}&append_to_response=credits`);
+//         const movieFromApi = await api_call.json();
+//         console.log(movieFromApi.title + ' ' + movieFromApi.imdb_id);
+//         return movieFromApi.imdb_id;
+//     }
+//     return null;
+// }
 
 // get movies for this person from our database
 const getMoviesByPerson = async (personTmdbId) => {

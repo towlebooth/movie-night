@@ -7,6 +7,17 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
+    firstName: {
+        type: String,
+        required: true
+    },
+    lastName: {
+        type: String
+    },
+    hostingOrder: {
+        type: String
+    },
+    streamingServices: [{ type: String }],
     email: {
         type: String,
         required: true
