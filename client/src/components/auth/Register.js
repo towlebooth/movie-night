@@ -10,6 +10,8 @@ class Register extends Component {
         super();
         this.state = {
             name: '',
+            firstName: '',
+            lastName: '',
             email: '',
             password: '',
             password2: '',
@@ -40,10 +42,14 @@ class Register extends Component {
         e.preventDefault();
         const newUser = {
             name: this.state.name,
+            firstName: this.state.firstName,
+            lastName: this.state.lastName,
             email: this.state.email,
             password: this.state.password,
             password2: this.state.password2,
         }
+        console.log("New User: " + newUser.name);
+        console.log("New User First: " + newUser.firstName);
         this.props.registerUser(newUser, this.props.history);        
     }
 
@@ -54,9 +60,9 @@ class Register extends Component {
             <div className="landing">
                 <div className="dark-overlay landing-inner text-light">
                     <div className="container">
-                        <div className="col-md-12 text-center">
-                            <h1 className="display-4 mb-4">Sign Up</h1>
-                            {/* <p>I'm sorry, Movie Club is not taking new memebers at this time.</p> */}
+                        <div className="col-md-12 text-center">                            
+                            <p>I'm sorry, Movie Club is not taking new memebers at this time.</p>
+                            {/* <h1 className="display-4 mb-4">Sign Up</h1>
                             <p className="lead">Create your Movie Night account</p>
                             <div className="col-md-6 m-auto">
                                 <form noValidate onSubmit={this.onSubmit}>
@@ -66,6 +72,20 @@ class Register extends Component {
                                         value={this.state.name}
                                         onChange={this.onChange}
                                         error={errors.name}
+                                    />
+                                    <TextFieldGroup
+                                        placeholder="First Name"
+                                        name="firstName"
+                                        value={this.state.firstName}
+                                        onChange={this.onChange}
+                                        error={errors.firstName}
+                                    />
+                                    <TextFieldGroup
+                                        placeholder="Last Name"
+                                        name="lastName"
+                                        value={this.state.lastName}
+                                        onChange={this.onChange}
+                                        error={errors.lastName}
                                     />
                                     <TextFieldGroup
                                         placeholder="Email"
@@ -97,7 +117,7 @@ class Register extends Component {
                                         className="btn btn-info btn-block mt-4" 
                                     />
                                 </form>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>
