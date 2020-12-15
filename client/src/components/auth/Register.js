@@ -10,6 +10,8 @@ class Register extends Component {
         super();
         this.state = {
             name: '',
+            firstName: '',
+            lastName: '',
             email: '',
             password: '',
             password2: '',
@@ -40,10 +42,14 @@ class Register extends Component {
         e.preventDefault();
         const newUser = {
             name: this.state.name,
+            firstName: this.state.firstName,
+            lastName: this.state.lastName,
             email: this.state.email,
             password: this.state.password,
             password2: this.state.password2,
         }
+        console.log("New User: " + newUser.name);
+        console.log("New User First: " + newUser.firstName);
         this.props.registerUser(newUser, this.props.history);        
     }
 
@@ -66,6 +72,20 @@ class Register extends Component {
                                         value={this.state.name}
                                         onChange={this.onChange}
                                         error={errors.name}
+                                    />
+                                    <TextFieldGroup
+                                        placeholder="First Name"
+                                        name="firstName"
+                                        value={this.state.firstName}
+                                        onChange={this.onChange}
+                                        error={errors.firstName}
+                                    />
+                                    <TextFieldGroup
+                                        placeholder="Last Name"
+                                        name="lastName"
+                                        value={this.state.lastName}
+                                        onChange={this.onChange}
+                                        error={errors.lastName}
                                     />
                                     <TextFieldGroup
                                         placeholder="Email"
