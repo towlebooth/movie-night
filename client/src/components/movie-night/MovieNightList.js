@@ -46,6 +46,7 @@ class MovieNightList extends Component {
             { label: 'Eric', value: 'Eric' },
             { label: 'Jill', value: 'Jill' },
             { label: 'Caroline', value: 'Caroline' },
+            { label: 'Mary', value: 'Mary' },
             { label: 'Rick', value: 'Rick' },
             { label: 'Cathy', value: 'Cathy' },
             { label: 'Chad', value: 'Chad' },
